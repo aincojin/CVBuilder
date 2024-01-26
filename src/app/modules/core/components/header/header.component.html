@@ -1,0 +1,25 @@
+<div class="wrapper">
+  <div class="logo">
+    <img class="logo__image" src="assets/images/header-logo.svg" alt="logo" />
+    <p class="logo__name">Ant Design</p>
+  </div>
+  <div class="toolbar">
+    <span class="toolbar__icon" nz-icon nzType="search" nzTheme="outline"></span>
+    <a nz-dropdown [nzDropdownMenu]="menu">
+      <span class="toolbar__icon" nz-icon nzType="global" nzTheme="outline"></span>
+    </a>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li nz-menu-item (click)="changeLanguage('en')">{{ "LANGUAGE.EN" | translate }}</li>
+        <li nz-menu-item (click)="changeLanguage('ru')">{{ "LANGUAGE.RU" | translate }}</li>
+      </ul>
+    </nz-dropdown-menu>
+    <span
+      class="toolbar__icon"
+      nz-icon
+      nzType="logout"
+      nzTheme="outline"
+      (click)="onLogout()"
+    ></span>
+  </div>
+</div>

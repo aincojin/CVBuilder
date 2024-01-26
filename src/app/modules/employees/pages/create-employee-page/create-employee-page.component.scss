@@ -1,0 +1,16 @@
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/placeholders";
+
+:host {
+  @extend %fullSize;
+  display: block;
+  background-color: $white;
+  padding: 30px 40px;
+  .page {
+    @extend %fullSize;
+    nz-tabset {
+      @extend %fullSize;
+    }
+  }
+}

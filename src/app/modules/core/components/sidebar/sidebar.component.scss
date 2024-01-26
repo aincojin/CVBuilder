@@ -1,0 +1,18 @@
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/placeholders";
+
+:host {
+  @extend %fullSize;
+  display: block;
+  .menu {
+    @extend %fullSize;
+    @extend %flexColumn;
+    .menu__bottom {
+      margin-top: auto;
+      nz-divider {
+        margin: 0;
+      }
+    }
+  }
+}

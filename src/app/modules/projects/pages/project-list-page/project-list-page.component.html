@@ -1,0 +1,6 @@
+<div class="page">
+  <button class="primary-btn" nz-button [nzType]="'primary'">Add Employee</button>
+  <div class="table">
+    <cvgen-base-table [columns]="columns" [data]="employeeList$ | async"></cvgen-base-table>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="ant-form-item-control-input">
+  <nz-form-item>
+    <nz-form-label nzRequired>{{ "LABEL." + label | translate }}</nz-form-label>
+    <nz-form-control>
+      <nz-input-group>
+        <textarea nz-input nzAutosize [formControl]="textControl" (blur)="onInputBlur()"></textarea>
+        <ng-container *ngIf="textControl.touched">
+          <div *ngIf="ngControl.errors && (ngControl.errors | validationError) as errorKey">
+            {{ validationErr[errorKey] | translate }}
+          </div>
+        </ng-container>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+</div>

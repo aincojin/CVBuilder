@@ -1,0 +1,22 @@
+<div class="wrapper">
+  <nz-table class="table" [nzData]="data">
+    <thead>
+      <tr>
+        <th *ngFor="let column of columns">
+          {{ column.displayName | translate }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data">
+        <td *ngFor="let column of columns">
+          @if (column.valueField === "department" || column.valueField === "specialization") {
+            {{ item[column.valueField].name }}
+          } @else {
+            {{ item[column.valueField] }}
+          }
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

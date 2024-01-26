@@ -1,0 +1,16 @@
+<div class="ant-form-item-control-input">
+  <nz-form-item>
+    <nz-form-label nzRequired>{{ "LABEL." + label | translate }}</nz-form-label>
+    <nz-form-control>
+      <nz-input-group>
+        <!-- TODO blur doesnt work for nz-range-picker for some reason:( -->
+        <nz-range-picker [formControl]="dateRangeControl" (blur)="onInputBlur()"></nz-range-picker>
+        <ng-container *ngIf="dateRangeControl.touched">
+          <div *ngIf="ngControl.errors && (ngControl.errors | validationError) as errorKey">
+            {{ validationErr[errorKey] | translate }}
+          </div>
+        </ng-container>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+</div>

@@ -1,0 +1,70 @@
+<div class="tab">
+  <div class="tab__list">
+    <ul class="tab__menu" nz-menu [nzMode]="'vertical'">
+      <li class="tab__menu-item" nz-menu-item *ngFor="let cv of cvData">
+        <div class="tab__menu-item__content">
+          <span class="tab__menu-item--open">{{ cv.cvName }}</span>
+          <span class="tab__menu-item--delete" nz-icon nzType="delete"></span>
+        </div>
+        <nz-divider></nz-divider>
+      </li>
+    </ul>
+    <button class="tab__list-add-btn" nz-button type="reset">
+      <span nz-icon nzType="plus" nzTheme="outline"></span>
+    </button>
+  </div>
+  <div class="tab__content">
+    <div class="tab__form-wrapper">
+      <form [formGroup]="baseForm" (ngSubmit)="onSubmit()">
+        <div nz-row [nzGutter]="[30, 16]">
+          <div nz-col [nzSpan]="8">
+            <cvgen-input [label]="'EMAIL'" inputType="email" formControlName="email"></cvgen-input>
+          </div>
+          <div nz-col [nzSpan]="8">
+            <cvgen-input
+              [label]="'LAST_NAME'"
+              inputType="text"
+              formControlName="lastName"
+            ></cvgen-input>
+          </div>
+          <div nz-col [nzSpan]="8">
+            <cvgen-input [label]="'SKILLS'" inputType="text" formControlName="skills"></cvgen-input>
+          </div>
+          <div nz-col [nzSpan]="8">
+            <cvgen-input
+              [label]="'SPECIALIZATION'"
+              inputType="text"
+              formControlName="specialization"
+            ></cvgen-input>
+          </div>
+          <div nz-col [nzSpan]="8">
+            <cvgen-input
+              [label]="'DEPARTMENT'"
+              inputType="text"
+              formControlName="department"
+            ></cvgen-input>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="tab__projects">
+      <nz-button-group class="tab__projects-actions">
+        <button class="tab__projects-add-btn" nz-button [nzType]="'primary'">
+          {{ "BUTTON.ADD_PROJECT" | translate }}
+        </button>
+      </nz-button-group>
+      <nz-collapse>
+        <nz-collapse-panel *ngFor="let project of projectsData" [nzHeader]="project.projectName">
+          <cvgen-project-form></cvgen-project-form>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </div>
+
+    <nz-button-group class="tab__projects-actions">
+      <button nz-button type="submit" [nzType]="'default'">
+        {{ "BUTTON.CANCEL" | translate }}
+      </button>
+      <button nz-button type="reset" [nzType]="'primary'">{{ "BUTTON.SUBMIT" | translate }}</button>
+    </nz-button-group>
+  </div>
+</div>

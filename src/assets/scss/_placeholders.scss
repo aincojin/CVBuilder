@@ -1,0 +1,15 @@
+%fullSize {
+  height: 100%;
+  width: 100%;
+}
+
+%iconHover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+//TODO redundant?..
+%flexColumn {
+  display: flex;
+  flex-direction: column;
+}

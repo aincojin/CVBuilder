@@ -1,0 +1,14 @@
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/placeholders";
+
+:host {
+  @extend %fullSize;
+  display: block;
+  nz-layout {
+    min-height: 100%;
+    .global-header {
+      height: 50px;
+    }
+  }
+}

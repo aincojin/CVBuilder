@@ -1,0 +1,34 @@
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/placeholders";
+
+:host {
+  @extend %fullSize;
+  display: block;
+  .wrapper {
+    @extend %fullSize;
+    @include flex-container(center, space-between);
+    .logo {
+      @include flex-container(center);
+      gap: 12px;
+      .logo__name {
+        font-size: 18px;
+        font-weight: bold;
+        color: $white;
+        @include flex-container(center);
+        margin: 0;
+      }
+    }
+    .toolbar {
+      @include flex-container(center, center);
+      gap: 50px;
+      .toolbar__icon {
+        color: $white;
+        width: 18px;
+        &:hover {
+          @extend %iconHover;
+        }
+      }
+    }
+  }
+}

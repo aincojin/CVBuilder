@@ -1,0 +1,37 @@
+{
+  "LANGUAGE": {
+    "RU": "Русский",
+    "EN": "Английский"
+  },
+  "TAB": {
+    "INFO": "Инфо",
+    "CV": "CV"
+  },
+  "LABEL": {
+    "EMAIL": "Эл. почта",
+    "PASSWORD": "Пароль",
+    "FIRST_NAME": "Имя",
+    "LAST_NAME": "Фамилия",
+    "SPECIALIZATION": "Специализация",
+    "DEPARTMENT": "Отдел",
+    "SKILLS": "Навыки"
+  },
+  "VALIDATION_ERROR": {
+    "REQUIRED": "Пожалуйста, заполните поле",
+    "EMAIL": "Пожалуйста, введите правильную почту",
+    "MINLENGTH": "Недостаточно символов",
+    "MAXLENGTH": "Слишком много символов"
+  },
+  "BUTTON": {
+    "LOG_IN": "Войти",
+    "SUBMIT": "Подтвердить",
+    "CANCEL": "Отмена",
+    "ADD_PROJECT": "Добавить Проект",
+    "ADD_EMPLOYEE": "Добавить Сотрудника"
+  },
+
+  "EMPLOYEES_TITLE": "Сотрудники",
+  "PROJECTS_TITLE": "Проекты",
+  "REMEMBER_ME": "Запомнить",
+  "FORGOT_PASSWORD": "Забыли свой пароль?"
+}

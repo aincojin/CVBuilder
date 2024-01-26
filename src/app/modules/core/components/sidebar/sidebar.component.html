@@ -1,0 +1,20 @@
+<ul class="menu" nz-menu nzMode="inline" nzTheme="light" [nzInlineCollapsed]="isCollapsed">
+  <li (click)="toEmployees()" nz-menu-item>
+    <span nz-icon nzType="form"></span>
+    <span>{{ "EMPLOYEES_TITLE" | translate }}</span>
+  </li>
+  <li (click)="toProjects()" nz-menu-item>
+    <span nz-icon nzType="database"></span>
+    <span>{{ "PROJECTS_TITLE" | translate }}</span>
+  </li>
+  <div class="menu__bottom">
+    <nz-divider></nz-divider>
+    <li nz-menu-item>
+      <span
+        nz-icon
+        (click)="toggleCollapse()"
+        [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+      ></span>
+    </li>
+  </div>
+</ul>

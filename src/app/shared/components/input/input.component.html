@@ -1,0 +1,16 @@
+<nz-form-item>
+  <nz-form-label nzRequired>{{ "LABEL." + label | translate }}</nz-form-label>
+  <nz-form-control>
+    <nz-input-group>
+      <input nz-input [type]="inputType" [formControl]="textControl" (blur)="onInputBlur()" />
+    </nz-input-group>
+    <div class="error-wrapper" *ngIf="textControl.touched">
+      <div
+        *ngIf="ngControl.errors && (ngControl.errors | validationError) as errorKey"
+        class="error"
+      >
+        {{ validationErr[errorKey] | translate }}
+      </div>
+    </div>
+  </nz-form-control>
+</nz-form-item>

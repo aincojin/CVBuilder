@@ -1,0 +1,63 @@
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/placeholders";
+
+:host {
+  @extend %fullSize;
+  display: block;
+  .wrapper {
+    // height
+    @include flex-container(center, center, column);
+    .logo {
+      @include flex-container(center, center);
+      gap: 15px;
+      margin-bottom: 10px;
+      .logo__image {
+        width: 40px;
+      }
+      .logo__text {
+        margin: 0;
+      }
+    }
+    .form {
+      @extend %flexColumn;
+      gap: 15px;
+      width: 300px;
+      .form__options {
+        @include flex-container(center, space-between);
+      }
+    }
+  }
+}
+// :host {
+//   @extend %fullSize;
+//   display: block;
+//   .form-wrapper {
+//     height: 70%;
+//     @include flex-container(center, center, column);
+//     .logo-wrapper {
+//       @include flex-container(center, center);
+//       gap: 15px;
+//       margin-bottom: 10px;
+//       .logo {
+//         width: 40px;
+//       }
+//       .logo-text {
+//         margin: 0;
+//       }
+//     }
+
+//     .form {
+//       width: 300px;
+//       @extend %flexColumn;
+//       gap: 20px;
+//       .form-control {
+//         width: 100%;
+//       }
+//       .login-options {
+//         height: fit-content;
+//         @include flex-container(center, space-between);
+//       }
+//     }
+//   }
+// }

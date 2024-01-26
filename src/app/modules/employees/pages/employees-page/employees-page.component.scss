@@ -1,0 +1,19 @@
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/placeholders";
+
+:host {
+  @extend %fullSize;
+  display: block;
+  .page {
+    @extend %fullSize;
+    @extend %flexColumn;
+    nz-page-header {
+      background-color: $white;
+    }
+    .page__content {
+      @extend %fullSize;
+      padding: 25px 0 0 25px;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+<nz-layout>
+  <nz-header class="global-header">
+    <cvgen-header></cvgen-header>
+  </nz-header>
+  <nz-layout>
+    <nz-sider [nzCollapsed]="isCollapsed" nzTheme="light">
+      <cvgen-sidebar
+        [isCollapsed]="isCollapsed"
+        [iconType]="iconType"
+        (isCollapsedChange)="onSidebarToggle($event)"
+      ></cvgen-sidebar>
+    </nz-sider>
+    <nz-content>
+      <router-outlet></router-outlet>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

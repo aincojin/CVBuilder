@@ -1,0 +1,27 @@
+<form nz-form [formGroup]="projectForm" layout="vertical" (ngSubmit)="onSubmit()">
+  <cvgen-input formControlName="name" [label]="'Name'"></cvgen-input>
+
+  <cvgen-date-picker formControlName="datePicker" [label]="'Project Duration'"></cvgen-date-picker>
+
+  <div formGroupName="info1">
+    <cvgen-input formControlName="teamSize" [label]="'Team Size'"></cvgen-input>
+    <cvgen-input formControlName="techStack" [label]="'Tech Stack'"></cvgen-input>
+    <cvgen-input formControlName="roles" [label]="'Roles'"></cvgen-input>
+  </div>
+
+  <div formGroupName="info2">
+    <cvgen-input formControlName="teamSize" [label]="'Team Size'"></cvgen-input>
+    <cvgen-input formControlName="techStack" [label]="'Tech Size'"></cvgen-input>
+    <cvgen-input formControlName="roles" [label]="'Roles'"></cvgen-input>
+  </div>
+
+  <cvgen-textarea formControlName="description" [label]="'Description'"></cvgen-textarea>
+
+  <cvgen-textarea formControlName="responsibilities" [label]="'Responsibilities'"></cvgen-textarea>
+
+  <button nz-button type="submit" [nzType]="'primary'" class="login-form-button login-form-margin">
+    Submit
+  </button>
+  <button nz-button type="reset" [nzType]="'default'">Cancel</button>
+</form>
+<!-- <p>{{ projectForm.get("datePicker")?.value?.[0] }}</p> -->

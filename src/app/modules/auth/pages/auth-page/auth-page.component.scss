@@ -1,0 +1,30 @@
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/placeholders";
+
+:host {
+  @extend %fullSize;
+  display: block;
+  background-color: $gray;
+  .page {
+    @extend %fullSize;
+    @extend %flexColumn;
+    .page__actions {
+      height: 60px;
+      padding: 30px;
+      @include flex-container(center, flex-end);
+      .page__action {
+        .page__action-icon {
+          &:hover {
+            @extend %iconHover;
+          }
+        }
+      }
+    }
+    .page__body {
+      flex: 1;
+      background-image: url(#{$images-path}auth-bg.svg);
+      background-size: cover;
+    }
+  }
+}

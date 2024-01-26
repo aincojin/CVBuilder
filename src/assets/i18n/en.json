@@ -1,0 +1,37 @@
+{
+  "LANGUAGE": {
+    "RU": "Russian",
+    "EN": "English"
+  },
+  "TAB": {
+    "INFO": "Info",
+    "CV": "CV"
+  },
+  "LABEL": {
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "SPECIALIZATION": "Specialization",
+    "DEPARTMENT": "Department",
+    "SKILLS": "Skills"
+  },
+  "VALIDATION_ERROR": {
+    "REQUIRED": "Please, specify the field",
+    "EMAIL": "Please, enter a valid e-mail address",
+    "MINLENGTH": "Not enough characters",
+    "MAXLENGTH": "Too many characters"
+  },
+  "BUTTON": {
+    "LOG_IN": "Log in",
+    "SUBMIT": "Submit",
+    "CANCEL": "Cancel",
+    "ADD_EMPLOYEE": "Add Employee",
+    "ADD_PROJECT": "Add Project"
+  },
+  "EMPLOYEES_TITLE": "Employees",
+  "PROJECTS_TITLE": "Projects",
+
+  "REMEMBER_ME": "Remember Me",
+  "FORGOT_PASSWORD": "Forgot your password?"
+}

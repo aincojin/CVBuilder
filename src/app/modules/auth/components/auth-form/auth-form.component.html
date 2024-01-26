@@ -1,0 +1,27 @@
+<div class="wrapper">
+  <div class="logo">
+    <img class="logo__image" src="../../../../assets/images/header-logo.svg" alt="" />
+    <h1 class="logo__text">Ant Design</h1>
+  </div>
+  <form class="form" nz-form [formGroup]="authForm" [nzLayout]="'vertical'" (ngSubmit)="onSubmit()">
+    <div class="form-controls">
+      <div class="form-control">
+        <cvgen-input formControlName="email" [label]="'EMAIL'"></cvgen-input>
+      </div>
+      <div class="form-control">
+        <cvgen-password
+          formControlName="password"
+          [label]="'PASSWORD'"
+          inputType="password"
+        ></cvgen-password>
+      </div>
+    </div>
+    <div class="form__options">
+      <label class="form__options-checkbox" nz-checkbox>{{ "REMEMBER_ME" | translate }}</label>
+      <a class="form__options-link" nzType="link">{{ "FORGOT_PASSWORD" | translate }}</a>
+    </div>
+    <button class="form__btn" nz-button [nzType]="'primary'" [disabled]="isSubmitting$ | async">
+      {{ "BUTTON.LOG_IN" | translate }}
+    </button>
+  </form>
+</div>

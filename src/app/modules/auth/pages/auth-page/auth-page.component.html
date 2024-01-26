@@ -1,0 +1,18 @@
+<div class="page">
+  <header class="page__actions">
+    <div class="page__action">
+      <a nz-dropdown [nzDropdownMenu]="menu">
+        <span class="page__action-icon" nz-icon nzType="global" nzTheme="outline"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item (click)="changeLanguage('en')">{{ "LANGUAGE.EN" | translate }}</li>
+          <li nz-menu-item (click)="changeLanguage('ru')">{{ "LANGUAGE.RU" | translate }}</li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </header>
+  <main class="page__body">
+    <cvgen-auth-form></cvgen-auth-form>
+  </main>
+</div>

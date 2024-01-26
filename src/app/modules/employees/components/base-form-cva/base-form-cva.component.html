@@ -1,0 +1,8 @@
+<form nz-form [formGroup]="baseForm" (ngSubmit)="onSubmit()">
+  <cvgen-input formControlName="lastName"></cvgen-input>
+  <cvgen-input formControlName="email"></cvgen-input>
+  <cvgen-input formControlName="specialization"></cvgen-input>
+  <cvgen-input formControlName="department"></cvgen-input>
+  <button nz-button type="submit" [nzType]="'primary'">Submit</button>
+  <button nz-button type="reset" [nzType]="'default'">Cancel</button>
+</form>
