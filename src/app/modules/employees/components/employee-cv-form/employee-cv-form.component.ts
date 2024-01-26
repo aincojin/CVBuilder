@@ -14,6 +14,7 @@ import { ProjectFormComponent } from "../../../../shared/components/project-form
 import { NzTabsModule } from "ng-zorro-antd/tabs";
 import { NzCollapseModule } from "ng-zorro-antd/collapse";
 import { TranslateModule } from "@ngx-translate/core";
+import { NzFormModule } from "ng-zorro-antd/form";
 
 @Component({
   selector: "cvgen-employee-cv-form",
@@ -24,6 +25,7 @@ import { TranslateModule } from "@ngx-translate/core";
     InputComponent,
     ProjectFormComponent,
     ReactiveFormsModule,
+    NzFormModule,
     NzButtonModule,
     NzGridModule,
     NzMenuModule,

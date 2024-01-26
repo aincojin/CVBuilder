@@ -12,6 +12,7 @@ import { fetchEmployees } from "../../../../store/employees/employees.actions";
 import { selectEmployeeList } from "../../../../store/employees/employees.reducers";
 import { AppState } from "../../../../store/state/state";
 import { TranslateModule } from "@ngx-translate/core";
+import { Paths } from "../../../../shared/enums/routes";
 
 @Component({
   selector: "cvgen-employee-list-page",
@@ -37,7 +38,6 @@ export class EmployeeListPageComponent implements OnInit {
 
   public addEmployee() {
     console.log(this.employeeList$);
-
-    // this.router.navigate([Paths.CreateEmployee], { relativeTo: this.activatedRoute });
+    this.router.navigate([Paths.CreateEmployee], { relativeTo: this.activatedRoute });
   }
 }

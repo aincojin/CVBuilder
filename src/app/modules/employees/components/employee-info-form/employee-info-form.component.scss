@@ -7,5 +7,14 @@
   display: block;
   .tab {
     width: 80%;
+    .tab__form-controls {
+      @include flex-container(initial, initial);
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      .tab__form-control {
+        width: 30%;
+      }
+    }
   }
 }

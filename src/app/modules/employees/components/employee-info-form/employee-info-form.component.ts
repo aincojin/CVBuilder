@@ -9,12 +9,10 @@ import { InputComponent } from "../../../../shared/components/input/input.compon
 import { TranslateModule } from "@ngx-translate/core";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { Store } from "@ngrx/store";
-import { EmployeeStateInterface } from "../../../../store/state/employeeState";
+import { NzFormLayoutType, NzFormModule } from "ng-zorro-antd/form";
 import { addEmployee, addEmployeeSuccess } from "../../../../store/employees/employees.actions";
 import { AppState } from "../../../../store/state/state";
-import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 
-@UntilDestroy()
 @Component({
   selector: "cvgen-employee-info-form",
   standalone: true,
@@ -22,6 +20,7 @@ import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
     CommonModule,
     TranslateModule,
     ReactiveFormsModule,
+    NzFormModule,
     NzButtonModule,
     NzGridModule,
     InputComponent,
@@ -33,7 +32,6 @@ import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 export class EmployeeInfoFormComponent extends BaseFormCvaComponent {
   constructor(
     fb: FormBuilder,
-    private employeeApiService: EmployeesApiService,
     private store: Store<AppState>,
   ) {
     super(fb);
@@ -43,9 +41,7 @@ export class EmployeeInfoFormComponent extends BaseFormCvaComponent {
   public override onSubmit(): void {
     const newEmployee: EmployeeDtoInterface = this.baseForm.getRawValue();
     console.log(newEmployee);
-
     this.store.dispatch(addEmployee({ newEmployee }));
-
-    // this.baseForm.reset();
+    this.baseForm.reset();
   }
 }

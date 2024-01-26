@@ -1,31 +1,37 @@
 <div class="tab">
-  <form class="tab__form" nz-form [formGroup]="baseForm" (ngSubmit)="onSubmit()">
-    <div nz-row [nzGutter]="[30, 16]">
-      <div nz-col [nzSpan]="8">
+  <form
+    class="tab__form"
+    nz-form
+    [formGroup]="baseForm"
+    [nzLayout]="'vertical'"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="tab__form-controls">
+      <div class="tab__form-control">
         <cvgen-input
           [label]="'FIRST_NAME'"
           inputType="text"
           formControlName="firstName"
         ></cvgen-input>
       </div>
-      <div nz-col [nzSpan]="8">
+      <div class="tab__form-control">
         <cvgen-input
           [label]="'LAST_NAME'"
           inputType="text"
           formControlName="lastName"
         ></cvgen-input>
       </div>
-      <div nz-col [nzSpan]="8">
+      <div class="tab__form-control">
         <cvgen-input [label]="'EMAIL'" inputType="email" formControlName="email"></cvgen-input>
       </div>
-      <div nz-col [nzSpan]="8">
+      <div class="tab__form-control">
         <cvgen-input
           [label]="'SPECIALIZATION'"
           inputType="text"
           formControlName="specialization"
         ></cvgen-input>
       </div>
-      <div nz-col [nzSpan]="8">
+      <div class="tab__form-control">
         <cvgen-input
           [label]="'DEPARTMENT'"
           inputType="text"
