@@ -3,6 +3,10 @@
     {{ "BUTTON.ADD_EMPLOYEE" | translate }}
   </button>
   <div class="page__body">
-    <cvgen-base-table [columns]="columns" [data]="employeeList$ | async"></cvgen-base-table>
+    <cvgen-base-table
+      [columns]="columns"
+      [data]="employeeList$ | async"
+      (selectedEmployeeEmitter)="selectEmployee($event)"
+    ></cvgen-base-table>
   </div>
 </div>

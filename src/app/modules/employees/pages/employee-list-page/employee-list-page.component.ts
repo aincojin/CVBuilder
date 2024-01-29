@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, NavigationEnd } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { NzButtonModule } from "ng-zorro-antd/button";
@@ -26,7 +26,7 @@ export class EmployeeListPageComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private store: Store,
+    private store: Store<AppState>,
   ) {}
 
   public employeeList$: Observable<EmployeeInterface[]> = this.store.select(selectEmployeeList);
@@ -37,7 +37,12 @@ export class EmployeeListPageComponent implements OnInit {
   }
 
   public addEmployee() {
-    console.log(this.employeeList$);
     this.router.navigate([Paths.CreateEmployee], { relativeTo: this.activatedRoute });
+  }
+
+  public selectEmployee(employee: EmployeeInterface) {
+    this.router.navigate([Paths.EditEmployee, employee.id], {
+      relativeTo: this.activatedRoute,
+    });
   }
 }

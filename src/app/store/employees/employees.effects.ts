@@ -4,11 +4,13 @@ import { EmployeesApiService } from "../../shared/services/api/employees.api.ser
 import {
   addEmployee,
   addEmployeeSuccess,
+  fetchEmployee,
+  fetchEmployeeSuccess,
   fetchEmployees,
   fetchEmployeesSuccess,
 } from "./employees.actions";
-import { concatMap, map, mergeMap, switchMap } from "rxjs";
-import { EmployeeDtoInterface, EmployeeInterface } from "../../shared/interfaces/employee";
+import { concatMap, map, switchMap } from "rxjs";
+import { EmployeeInterface } from "../../shared/interfaces/employee";
 
 @Injectable()
 export class EmployeesEffects {
@@ -30,10 +32,23 @@ export class EmployeesEffects {
     ),
   );
 
+  getEmployee$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchEmployee),
+      switchMap(action =>
+        this.employeesApiService.fetchEmployee(action.employeeId).pipe(
+          map(employee => {
+            return fetchEmployeeSuccess({ employee });
+          }),
+        ),
+      ),
+    ),
+  );
+
   addEmployee$ = createEffect(() =>
     this.actions$.pipe(
       ofType(addEmployee),
-      mergeMap(action =>
+      concatMap(action =>
         this.employeesApiService.addEmployee(action.newEmployee).pipe(
           map(addedEmployee => {
             return addEmployeeSuccess({ addedEmployee });

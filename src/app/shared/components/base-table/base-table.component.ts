@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { TableColumns } from "../../interfaces/table-columns";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../interfaces/employee";
 import { CommonModule } from "@angular/common";
@@ -17,4 +17,11 @@ import { TranslateModule } from "@ngx-translate/core";
 export class BaseTableComponent {
   @Input() public columns: TableColumns[];
   @Input() public data: EmployeeInterface[];
+
+  @Output() selectedEmployeeEmitter: EventEmitter<EmployeeInterface> =
+    new EventEmitter<EmployeeInterface>();
+
+  public selectedEmployee(employee: EmployeeInterface) {
+    this.selectedEmployeeEmitter.emit(employee);
+  }
 }

@@ -12,16 +12,13 @@ export class EmployeesApiService {
 
   public fetchEmployees(): Observable<EmployeeInterface[]> {
     const endpoint = `${API_URL}/employees`;
-    return this.http.get<EmployeeInterface[]>(endpoint).pipe(
-      map((employeeList: EmployeeInterface[]) => {
-        return employeeList.map((employee: EmployeeInterface) => ({
-          ...employee,
-          // department: employee.department.name,
-          // specialization: employee.specialization.name,
-        }));
-      }),
-    );
+    return this.http.get<EmployeeInterface[]>(endpoint);
   }
+  public fetchEmployee(employeeId:number):Observable<EmployeeInterface>{
+    const endpoint = `${API_URL}/employees/${employeeId}`;
+    return this.http.get<EmployeeInterface>(endpoint);
+  }
+  
   public addEmployee(newEmployeeData: EmployeeDtoInterface): Observable<EmployeeInterface> {
     const endpoint = `${API_URL}/employees`;
     return this.http.post<EmployeeInterface>(endpoint, newEmployeeData);

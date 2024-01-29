@@ -8,7 +8,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of data">
+      <tr *ngFor="let item of data" (click)="selectedEmployee(item)">
         <td *ngFor="let column of columns">
           @if (column.valueField === "department" || column.valueField === "specialization") {
             {{ item[column.valueField].name }}

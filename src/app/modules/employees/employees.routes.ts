@@ -17,7 +17,7 @@ export const EMPLOYEES_ROUTES: Routes = [
           ),
       },
       {
-        path: Paths.EditEmployee,
+        path: Paths.EditEmployeeId,
         title: "Edit Employee",
         loadComponent: () =>
           import("./pages/edit-employee-page/edit-employee-page.component").then(
