@@ -6,7 +6,7 @@
     <cvgen-base-table
       [columns]="columns"
       [data]="employeeList$ | async"
-      (selectedEmployeeEmitter)="selectEmployee($event)"
+      (clickedRowEmitter)="selectEmployee($event)"
     ></cvgen-base-table>
   </div>
 </div>

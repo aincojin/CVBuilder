@@ -1,6 +1,6 @@
 import { TableColumns } from "../interfaces/table-columns";
 
-export const TABLE_COLUMNS: TableColumns[] = [
+export const EMPLOYEE_TABLE_COLUMNS: TableColumns[] = [
   {
     displayName: "LABEL.FIRST_NAME",
     valueField: "firstName",

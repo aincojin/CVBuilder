@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { Observable } from "rxjs";
 import { BaseTableComponent } from "../../../../shared/components/base-table/base-table.component";
-import { TABLE_COLUMNS } from "../../../../shared/constants/table-columns.const";
+import { EMPLOYEE_TABLE_COLUMNS } from "../../../../shared/constants/table-employees-columns.const";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { fetchEmployees } from "../../../../store/employees/employees.actions";
 import { selectEmployeeList } from "../../../../store/employees/employees.reducers";
@@ -30,7 +30,7 @@ export class EmployeeListPageComponent implements OnInit {
   ) {}
 
   public employeeList$: Observable<EmployeeInterface[]> = this.store.select(selectEmployeeList);
-  public columns = TABLE_COLUMNS;
+  public columns = EMPLOYEE_TABLE_COLUMNS;
 
   ngOnInit(): void {
     this.store.dispatch(fetchEmployees());
