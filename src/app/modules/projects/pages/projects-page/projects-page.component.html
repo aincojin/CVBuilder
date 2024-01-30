@@ -1,4 +1,4 @@
-<div class="base-page-projects">
+<!-- <div class="base-page-projects">
   <nz-page-header [nzTitle]="'PROJECTS_TITLE' | translate">
     <nz-page-header-content class="page-header-content">
       <button nz-button (click)="toCreate()">TO CREATE</button>
@@ -7,6 +7,22 @@
     </nz-page-header-content>
   </nz-page-header>
   <div class="page-content">
+    <router-outlet></router-outlet>
+  </div>
+</div> -->
+<div class="page">
+  <nz-page-header [nzTitle]="'PROJECTS_TITLE' | translate">
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item>Home</nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Projects</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-page-header-content class="page__header">
+      <p>Projects List</p>
+    </nz-page-header-content>
+  </nz-page-header>
+  <div class="page__content">
     <router-outlet></router-outlet>
   </div>
 </div>

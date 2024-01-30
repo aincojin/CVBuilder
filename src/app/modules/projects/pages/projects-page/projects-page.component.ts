@@ -5,11 +5,19 @@ import { Router } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzPageHeaderModule } from "ng-zorro-antd/page-header";
+import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
 
 @Component({
   selector: "cvgen-projects-page",
   standalone: true,
-  imports: [CommonModule, TranslateModule, RouterModule, NzButtonModule, NzPageHeaderModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    RouterModule,
+    NzButtonModule,
+    NzPageHeaderModule,
+    NzBreadCrumbModule,
+  ],
   templateUrl: "./projects-page.component.html",
   styleUrl: "./projects-page.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

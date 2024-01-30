@@ -1,6 +1,11 @@
 <div class="page">
-  <button class="primary-btn" nz-button [nzType]="'primary'">Add Employee</button>
-  <div class="table">
-    <cvgen-base-table [columns]="columns" [data]="employeeList$ | async"></cvgen-base-table>
+  <button class="btn--primary" (click)="addProject()" nz-button [nzType]="'primary'">
+    {{ "BUTTON.ADD_PROJECT" | translate }}
+  </button>
+  <div class="page__body">
+    <cvgen-base-table
+      [columns]="columns"
+      (clickedRowEmitter)="selectProject($event)"
+    ></cvgen-base-table>
   </div>
 </div>

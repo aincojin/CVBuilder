@@ -1,8 +1,39 @@
-// @import "../../../../assets/scss/mixins";
-// @import "../../../../assets/scss/placeholders";
-// @import "../../../../assets/scss/variables";
+@import "../../../../assets/scss/mixins";
+@import "../../../../assets/scss/placeholders";
+@import "../../../../assets/scss/variables";
 
-// :host {
-//   @extend %fullSize;
-//   display: block;
-// }
+:host {
+  @extend %fullSize;
+  display: block;
+  .form {
+    @extend %flexColumn;
+    .form__form-controls {
+      @extend %flexColumn;
+      gap: 20px;
+      margin-bottom: 3%;
+      .form__inputs {
+        @extend %flexColumn;
+        gap: 20px;
+        .form__input-group {
+          @include flex-container(initial, initial);
+          gap: 5%;
+          .form___form-control {
+            width: 20%;
+          }
+        }
+      }
+      .form__textareas {
+        @include flex-container(initial, initial);
+        gap: 4%;
+        .form__textarea {
+          width: 33%;
+          height: fit-content;
+        }
+      }
+    }
+    .form__buttons {
+      @include flex-container(initial, initial);
+      gap: 10px;
+    }
+  }
+}

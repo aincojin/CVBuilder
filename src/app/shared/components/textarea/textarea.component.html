@@ -4,12 +4,20 @@
     <nz-form-control>
       <nz-input-group>
         <textarea nz-input nzAutosize [formControl]="textControl" (blur)="onInputBlur()"></textarea>
-        <ng-container *ngIf="textControl.touched">
+        <!-- <ng-container *ngIf="textControl.touched">
           <div *ngIf="ngControl.errors && (ngControl.errors | validationError) as errorKey">
             {{ validationErr[errorKey] | translate }}
           </div>
-        </ng-container>
+        </ng-container> -->
       </nz-input-group>
+      <div class="error-wrapper" *ngIf="textControl.touched">
+        <div
+          *ngIf="ngControl.errors && (ngControl.errors | validationError) as errorKey"
+          class="error"
+        >
+          {{ validationErr[errorKey] | translate }}
+        </div>
+      </div>
     </nz-form-control>
   </nz-form-item>
 </div>

@@ -6,6 +6,7 @@ import { NzFormModule } from "ng-zorro-antd/form";
 import { DatePickerComponent } from "../date-picker/date-picker.component";
 import { InputComponent } from "../input/input.component";
 import { TextareaComponent } from "../textarea/textarea.component";
+import { TranslateModule } from "@ngx-translate/core";
 
 @Component({
   selector: "cvgen-project-form",
@@ -18,6 +19,7 @@ import { TextareaComponent } from "../textarea/textarea.component";
     ReactiveFormsModule,
     NzButtonModule,
     NzFormModule,
+    TranslateModule,
   ],
   templateUrl: "./project-form.component.html",
   styleUrl: "./project-form.component.scss",

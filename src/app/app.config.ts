@@ -13,7 +13,11 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { employeeFeatureKey, employeeReducer } from "./store/employees/employees.reducers";
 import { EmployeesEffects } from "./store/employees/employees.effects";
 import { provideAnimations } from "@angular/platform-browser/animations";
+import { en_US, provideNzI18n } from "ng-zorro-antd/i18n";
+import { registerLocaleData } from "@angular/common";
+import en from "@angular/common/locales/en";
 
+registerLocaleData(en);
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "../assets/i18n/", ".json");
 }
@@ -45,5 +49,6 @@ export const appConfig: ApplicationConfig = {
     provideEffects(EmployeesEffects),
     provideHttpClient(withInterceptors([tokenInterceptor])),
     provideHttpClient(withFetch()),
+    provideNzI18n(en_US),
   ],
 };

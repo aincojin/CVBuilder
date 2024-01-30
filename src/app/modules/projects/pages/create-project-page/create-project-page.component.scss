@@ -1,9 +1,13 @@
-// @import "../../../../../assets/scss/mixins";
-// @import "../../../../../assets/scss/variables";
-// @import "../../../../../assets/scss/placeholders";
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/placeholders";
 
-// :host {
-//   @extend %fullSize;
-//   display: block;
-//   background-color: $white;
-// }
+:host {
+  @extend %fullSize;
+  display: block;
+  background-color: $white;
+  .page {
+    @extend %fullSize;
+    padding: 30px 40px;
+  }
+}
