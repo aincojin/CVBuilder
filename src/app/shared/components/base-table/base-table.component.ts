@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import { NzTableModule } from "ng-zorro-antd/table";
 import { NzDividerModule } from "ng-zorro-antd/divider";
 import { TranslateModule } from "@ngx-translate/core";
+import { ProjectInterface } from "../../interfaces/project";
 
 @Component({
   selector: "cvgen-base-table",
@@ -14,14 +15,13 @@ import { TranslateModule } from "@ngx-translate/core";
   styleUrl: "./base-table.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BaseTableComponent {
+export class BaseTableComponent<T> {
   @Input() public columns: TableColumns[];
-  @Input() public data: EmployeeInterface[];
+  @Input() public data: T[];
 
-  @Output() selectedEmployeeEmitter: EventEmitter<EmployeeInterface> =
-    new EventEmitter<EmployeeInterface>();
+  @Output() clickedRowEmitter: EventEmitter<T> = new EventEmitter<T>();
 
-  public selectedEmployee(employee: EmployeeInterface) {
-    this.selectedEmployeeEmitter.emit(employee);
+  public rowClicked(item: T) {
+    this.clickedRowEmitter.emit(item);
   }
 }
