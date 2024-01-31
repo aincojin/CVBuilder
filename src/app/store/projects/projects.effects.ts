@@ -16,10 +16,22 @@ export class ProjectsEffects {
     this.actions$.pipe(
       ofType(fetchProjects),
       switchMap(() =>
-        this.projectsApiService
-          .fetchProjects()
-          .pipe(map((projectList: ProjectInterface[]) => fetchProjectsSuccess({ projectList }))),
+        this.projectsApiService.fetchProjects().pipe(
+          // map((projectList: ProjectInterface[]) => fetchProjectsSuccess({ projectList }))),
+          map(projectList => {
+            const modifiedProjectList: ProjectInterface[] = projectList.map(project => ({
+              ...project,
+              startDate: this.formatDate(project.startDate),
+              endDate: this.formatDate(project.endDate),
+            })) as ProjectInterface[];
+            return fetchProjectsSuccess({ projectList: modifiedProjectList });
+          }),
+        ),
       ),
     ),
   );
+  private formatDate(date: string): string {
+    const modifiedDate = new Date(date).toISOString().split("T")[0];
+    return modifiedDate.toString();
+  }
 }

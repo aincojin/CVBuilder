@@ -9,16 +9,19 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of data" (click)="rowClicked(item)">
-        <!-- TODO techStack ia an array, make sure to display each element of it via commas -->
         <td *ngFor="let column of columns">
-          @if (
-            column.valueField == "techStack" ||
-            column.valueField === "department" ||
-            column.valueField === "specialization"
-          ) {
-            {{ item[column.valueField].name }}
-          } @else {
-            {{ item[column.valueField] }}
+          @switch (true) {
+            @case (isArray(item[column.valueField])) {
+              @for (obj of item[column.valueField]; let last = $last; track obj.id) {
+                {{ obj.name }}{{ last ? "" : ", " }}
+              }
+            }
+            @case (isBaseEntity(item[column.valueField])) {
+              {{ item[column.valueField].name }}
+            }
+            @default {
+              {{ item[column.valueField] }}
+            }
           }
         </td>
       </tr>

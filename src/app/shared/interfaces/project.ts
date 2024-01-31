@@ -4,8 +4,8 @@ export interface ProjectInterface {
   id: number;
   projectName: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   teamSize: number;
   techStack: BaseEntityInterface[];
   responsibilities: BaseEntityInterface[];
@@ -16,8 +16,8 @@ export interface ProjectDtoInterface {
   id?: number;
   projectName: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   teamSize: number;
   techStack: string[];
   responsibilities: string[];
