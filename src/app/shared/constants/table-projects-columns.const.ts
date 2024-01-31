@@ -13,12 +13,12 @@ export const PROJECTS_TABLE_COLUMNS: TableColumns[] = [
     displayName: "LABEL.PROJECT_END_DATE",
     valueField: "endDate",
   },
-  {
-    displayName: "LABEL.TEAM_SIZE",
-    valueField: "teamSize",
-  },
   // {
-  //   displayName: "LABEL.TECH_STACK",
-  //   valueField: "techStack",
+  //   displayName: "LABEL.TEAM_SIZE",
+  //   valueField: "teamSize",
   // },
+  {
+    displayName: "LABEL.TECH_STACK",
+    valueField: "techStack",
+  },
 ];

@@ -3,16 +3,15 @@ import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { BaseTableComponent } from "../../../../shared/components/base-table/base-table.component";
-import { selectEmployeeList } from "../../../../store/employees/employees.reducers";
-import { fetchEmployees } from "../../../../store/employees/employees.actions";
 import { Observable } from "rxjs";
-import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { AppState } from "../../../../store/state/state";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PROJECTS_TABLE_COLUMNS } from "../../../../shared/constants/table-projects-columns.const";
 import { TranslateModule } from "@ngx-translate/core";
 import { ProjectInterface } from "../../../../shared/interfaces/project";
 import { Paths } from "../../../../shared/enums/routes";
+import { selectProjectList } from "../../../../store/projects/projects.reducers";
+import { fetchProjects } from "../../../../store/projects/projects.actions";
 
 @Component({
   selector: "cvgen-project-list-page",
@@ -28,14 +27,12 @@ export class ProjectListPageComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {}
-  // TODO display project data
-  // public employeeList$: Observable<EmployeeInterface[]> = this.store.select(selectEmployeeList);
 
+  public projectList$: Observable<ProjectInterface[]> = this.store.select(selectProjectList);
   public columns = PROJECTS_TABLE_COLUMNS;
-  public data = null;
 
   public ngOnInit(): void {
-    this.store.dispatch(fetchEmployees());
+    this.store.dispatch(fetchProjects());
   }
 
   public addProject() {

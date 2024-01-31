@@ -5,6 +5,7 @@
   <div class="page__body">
     <cvgen-base-table
       [columns]="columns"
+      [data]="projectList$ | async"
       (clickedRowEmitter)="selectProject($event)"
     ></cvgen-base-table>
   </div>

@@ -48,10 +48,7 @@ export class DatePickerComponent {
       .pipe(untilDestroyed(this))
       .subscribe((dates: [Date, Date]) => {
         const value: [string, string] =
-          //checks if everything is truthy
-          dates && dates[0] && dates[1]
-            ? [dates[0].toISOString().split("T")[0], dates[1].toISOString().split("T")[0]]
-            : null;
+          dates && dates[0] && dates[1] ? [dates[0].toISOString(), dates[1].toISOString()] : null;
         // console.log("date value: ", value);
 
         if (this.changed) {

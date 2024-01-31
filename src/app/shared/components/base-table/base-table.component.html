@@ -9,8 +9,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of data" (click)="rowClicked(item)">
+        <!-- TODO techStack ia an array, make sure to display each element of it via commas -->
         <td *ngFor="let column of columns">
-          @if (column.valueField === "department" || column.valueField === "specialization") {
+          @if (
+            column.valueField == "techStack" ||
+            column.valueField === "department" ||
+            column.valueField === "specialization"
+          ) {
             {{ item[column.valueField].name }}
           } @else {
             {{ item[column.valueField] }}
