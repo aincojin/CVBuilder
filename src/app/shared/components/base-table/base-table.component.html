@@ -1,5 +1,12 @@
 <div class="wrapper">
-  <nz-table class="table" [nzData]="data">
+  <nz-table
+    class="table"
+    [nzData]="data"
+    [nzPageIndex]="currentPageIndex"
+    [nzTotal]="totalItems"
+    [nzPageSize]="pageSize"
+    (nzPageIndexChange)="onPageIndexChange($event)"
+  >
     <thead>
       <tr>
         <th *ngFor="let column of columns">
@@ -8,7 +15,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of data" (click)="rowClicked(item)">
+      <tr *ngFor="let item of currentData" (click)="rowClicked(item)">
         <td *ngFor="let column of columns">
           @switch (true) {
             @case (isArray(item[column.valueField])) {
