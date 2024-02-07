@@ -12,7 +12,7 @@ export const PROJECTS_ROUTES: Routes = [
         title: "Create Project",
         loadComponent: () =>
           import("./pages/create-project-page/create-project-page.component").then(
-            m => m.CreateProjectPageComponent,
+            r => r.CreateProjectPageComponent,
           ),
       },
       {

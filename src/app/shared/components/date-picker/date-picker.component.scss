@@ -8,7 +8,6 @@
   .ant-form-item-control-input {
     @extend %fullSize;
     nz-form-item {
-      width: inherit;
       margin: 0;
       @extend %flexColumn;
       nz-form-label {

@@ -9,7 +9,7 @@
     <div class="form__inputs">
       <div class="form__input-group">
         <div class="form___form-control form__input">
-          <cvgen-input formControlName="name" [label]="'FIRST_NAME'"></cvgen-input>
+          <cvgen-input formControlName="projectName" [label]="'PROJECT_NAME'"></cvgen-input>
         </div>
         <div class="form___form-control form__date-picker">
           <cvgen-date-picker
@@ -18,39 +18,59 @@
           ></cvgen-date-picker>
         </div>
       </div>
-      <div class="form__input-group" formGroupName="info1">
+      <div class="form__input-group">
         <div class="form___form-control form__input">
           <cvgen-input formControlName="teamSize" [label]="'TEAM_SIZE'"></cvgen-input>
         </div>
+
         <div class="form___form-control form__input">
-          <cvgen-input formControlName="techStack" [label]="'TECH_STACK'"></cvgen-input>
+          <cvgen-select
+            formControlName="techStack"
+            [label]="'TECH_STACK'"
+            [listOfOptions]="techStackOptions"
+          ></cvgen-select>
         </div>
+
         <div class="form___form-control form__input">
-          <cvgen-input formControlName="roles" [label]="'ROLES'"></cvgen-input>
+          <cvgen-select
+            formControlName="teamRoles"
+            [label]="'ROLES'"
+            [listOfOptions]="rolesOptions"
+          ></cvgen-select>
         </div>
       </div>
 
-      <div class="form__input-group" formGroupName="info2">
+      <!-- <div class="form__input-group" formGroupName="info2">
         <div class="form___form-control form__input">
           <cvgen-input formControlName="teamSize" [label]="'TEAM_SIZE'"></cvgen-input>
+        </div> -->
+      <!-- <div class="form___form-control form__input">
+          <cvgen-select
+            formControlName="techStack"
+            [label]="'TECH_STACK'"
+            [listOfOptions]="techStackOptions"
+          ></cvgen-select>
         </div>
+
         <div class="form___form-control form__input">
-          <cvgen-input formControlName="techStack" [label]="'TECH_STACK'"></cvgen-input>
+          <cvgen-select
+            formControlName="teamRoles"
+            [label]="'ROLES'"
+            [listOfOptions]="rolesOptions"
+          ></cvgen-select>
         </div>
-        <div class="form___form-control form__input">
-          <cvgen-input formControlName="roles" [label]="'ROLES'"></cvgen-input>
-        </div>
-      </div>
+      </div> -->
     </div>
     <div class="form__textareas">
       <div class="form___form-control form__textarea">
         <cvgen-textarea formControlName="description" [label]="'DESCRIPTION'"></cvgen-textarea>
       </div>
       <div class="form___form-control form__textarea">
-        <cvgen-textarea
+        <cvgen-select
           formControlName="responsibilities"
           [label]="'RESPONSIBILITIES'"
-        ></cvgen-textarea>
+          [listOfOptions]="responsibilityOptions"
+        ></cvgen-select>
       </div>
     </div>
   </div>
@@ -66,4 +86,5 @@
     <button nz-button type="reset" [nzType]="'default'">{{ "BUTTON.CANCEL" | translate }}</button>
   </div>
 </form>
+
 <!-- <p>{{ projectForm.get("datePicker")?.value?.[0] }}</p> -->

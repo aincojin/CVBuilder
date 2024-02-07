@@ -24,14 +24,4 @@ import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
 })
 export class ProjectsPageComponent {
   constructor(private router: Router) {}
-  public toCreate() {
-    this.router.navigate(["/main/projects/create-project"]);
-  }
-
-  public toEdit() {
-    this.router.navigate(["/main/projects/edit-project"]);
-  }
-  public toList() {
-    this.router.navigate(["/main/projects/project-list"]);
-  }
 }

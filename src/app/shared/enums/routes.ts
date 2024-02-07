@@ -11,4 +11,5 @@ export enum Paths {
   EditEmployee = "edit-employee",
   EditEmployeeId = "edit-employee/:id",
   EmployeeList = "employee-list",
+  ProjectList = "project-list",
 }

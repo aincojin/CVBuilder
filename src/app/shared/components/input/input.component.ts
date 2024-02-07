@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, Self } from "@angular/core";
-import { FormControl, NgControl, ReactiveFormsModule } from "@angular/forms";
+import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } from "@angular/forms";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { VALIDATION_ERR } from "../../constants/errors.const";
 import { CommonModule } from "@angular/common";
@@ -24,11 +24,11 @@ import { TranslateModule } from "@ngx-translate/core";
   styleUrl: "./input.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputComponent {
+export class InputComponent implements ControlValueAccessor {
   @Input() public label: string;
   @Input() public inputType: string = "text";
 
-  public value: string = "";
+  // public value: string = "";
   public textControl = new FormControl();
   public validationErr = VALIDATION_ERR;
 

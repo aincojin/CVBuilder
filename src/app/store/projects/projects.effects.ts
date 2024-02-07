@@ -1,9 +1,14 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { ProjectsApiService } from "../../shared/services/api/projects.api.service";
 import { Injectable } from "@angular/core";
-import { fetchProjects, fetchProjectsSuccess } from "./projects.actions";
+import {
+  addProject,
+  addProjectSuccess,
+  fetchProjects,
+  fetchProjectsSuccess,
+} from "./projects.actions";
 import { ProjectInterface } from "../../shared/interfaces/project";
-import { switchMap, map } from "rxjs";
+import { switchMap, map, concatMap } from "rxjs";
 
 @Injectable()
 export class ProjectsEffects {
@@ -30,8 +35,22 @@ export class ProjectsEffects {
       ),
     ),
   );
+
   private formatDate(date: string): string {
     const modifiedDate = new Date(date).toISOString().split("T")[0];
     return modifiedDate.toString();
   }
+
+  addProject$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(addProject),
+      concatMap(action =>
+        this.projectsApiService.addProject(action.newProject).pipe(
+          map(addedProject => {
+            return addProjectSuccess({ addedProject });
+          }),
+        ),
+      ),
+    ),
+  );
 }

@@ -50,7 +50,6 @@ export class TextareaComponent {
     if (this.touched) {
       this.touched();
     }
-    console.log(this.ngControl.errors);
   }
 
   public writeValue(value: string): void {

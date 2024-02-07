@@ -1,9 +1,17 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { ProjectStateInterface } from "../state/projectState";
-import { fetchProjects, fetchProjectsError, fetchProjectsSuccess } from "./projects.actions";
+import {
+  addProject,
+  addProjectError,
+  addProjectSuccess,
+  fetchProjects,
+  fetchProjectsError,
+  fetchProjectsSuccess,
+} from "./projects.actions";
 
 const initialState: ProjectStateInterface = {
-  projectList: null,
+  projectList: [],
+  project: null,
 };
 
 const projectFeature = createFeature({
@@ -18,6 +26,14 @@ const projectFeature = createFeature({
     on(fetchProjectsError, state => ({
       ...state,
       projectList: null,
+    })),
+    on(addProject, state => ({ ...state })),
+    on(addProjectSuccess, (state, { addedProject }) => ({
+      ...state,
+      projectList: [...state.projectList, addedProject],
+    })),
+    on(addProjectError, state => ({
+      ...state,
     })),
   ),
 });
