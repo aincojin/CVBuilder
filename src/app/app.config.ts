@@ -16,6 +16,12 @@ import { provideAnimations } from "@angular/platform-browser/animations";
 import { en_US, provideNzI18n } from "ng-zorro-antd/i18n";
 import { registerLocaleData } from "@angular/common";
 import en from "@angular/common/locales/en";
+import { projectFeatureKey, projectReducer } from "./store/projects/projects.reducers";
+import { ProjectsEffects } from "./store/projects/projects.effects";
+import { sharedFeatureKey, sharedReducer } from "./store/shared/shared.reducers";
+import { SharedEffects } from "./store/shared/shared.effects";
+import { CvsEffects } from "./store/cvs/cvs.effects";
+import { cvFeatureKey, cvReducer } from "./store/cvs/cvs.reducers";
 
 registerLocaleData(en);
 export function createTranslateLoader(http: HttpClient) {
@@ -29,6 +35,9 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideStore(),
     provideState(employeeFeatureKey, employeeReducer),
+    provideState(projectFeatureKey, projectReducer),
+    provideState(sharedFeatureKey, sharedReducer),
+    provideState(cvFeatureKey, cvReducer),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
@@ -46,7 +55,7 @@ export const appConfig: ApplicationConfig = {
         },
       }),
     ),
-    provideEffects(EmployeesEffects),
+    provideEffects(EmployeesEffects, ProjectsEffects, SharedEffects, CvsEffects),
     provideHttpClient(withInterceptors([tokenInterceptor])),
     provideHttpClient(withFetch()),
     provideNzI18n(en_US),
