@@ -25,7 +25,7 @@ import { TranslateModule } from "@ngx-translate/core";
   styleUrl: "./password.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PasswordComponent extends InputComponent implements ControlValueAccessor {
+export class PasswordComponent extends InputComponent {
   public passwordVisible = false;
   public password?: string;
 

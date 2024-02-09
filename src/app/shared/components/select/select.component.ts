@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { NzFormModule } from "ng-zorro-antd/form";
 import { TranslateModule } from "@ngx-translate/core";
+import { BaseEntityInterface } from "../../interfaces/base-entity";
 
 @UntilDestroy()
 @Component({
@@ -17,11 +18,11 @@ import { TranslateModule } from "@ngx-translate/core";
 })
 export class SelectComponent implements OnInit {
   @Input() public label: string;
-  @Input() public listOfOptions: string[];
-  @Input() public selectControl = new FormControl();
+  @Input() public listOfOptions: BaseEntityInterface[];
 
   public changed: (value: string[]) => void;
   public touched: () => void;
+  public selectControl = new FormControl();
 
   constructor(@Self() public ngControl: NgControl) {
     ngControl.valueAccessor = this;

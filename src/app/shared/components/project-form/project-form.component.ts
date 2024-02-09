@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Self } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit, Self } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, NgControl } from "@angular/forms";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzFormModule } from "ng-zorro-antd/form";
@@ -18,6 +18,22 @@ import { ROLES_OPTIONS } from "../../constants/roles.const";
 import { SelectComponent } from "../select/select.component";
 import { RESPONSIBILITY_OPTIONS } from "../../constants/responsibilities.const";
 import { isNumber } from "util";
+import {
+  fetchDepartments,
+  fetchResponsibilities,
+  fetchSkills,
+  fetchSpecializations,
+  fetchTeamRoles,
+} from "../../../store/shared/shared.actions";
+import { Observable } from "rxjs";
+import { BaseEntityInterface } from "../../interfaces/base-entity";
+import {
+  selectDepartments,
+  selectResponsibilities,
+  selectSkills,
+  selectSpecializations,
+  selectTeamRoles,
+} from "../../../store/shared/shared.reducers";
 
 @Component({
   selector: "cvgen-project-form",
@@ -37,11 +53,20 @@ import { isNumber } from "util";
   styleUrl: "./project-form.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectFormComponent {
+export class ProjectFormComponent implements OnInit {
   public projectForm: FormGroup;
   public techStackOptions = TECH_STACK_OPTIONS;
   public rolesOptions = ROLES_OPTIONS;
   public responsibilityOptions = RESPONSIBILITY_OPTIONS;
+
+  public specializationList$: Observable<BaseEntityInterface[]> =
+    this.store.select(selectSpecializations);
+  public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
+  public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
+  public teamRolesList$: Observable<BaseEntityInterface[]> = this.store.select(selectTeamRoles);
+  public responsibilityList$: Observable<BaseEntityInterface[]> =
+    this.store.select(selectResponsibilities);
+
   constructor(
     private fb: FormBuilder,
     private store: Store<AppState>,
@@ -50,11 +75,8 @@ export class ProjectFormComponent {
   ) {
     this.projectForm = this.fb.group({
       projectName: ["test", Validators.required],
-      // datePicker: this.fb.group({
-      //   startDate: [null, Validators.required],
-      //   endDate: [null, Validators.required],
-      // }),
       datePicker: [null, Validators.required],
+      //TODO change to formArray maybe?...
       teamSize: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
       techStack: [null, Validators.required],
       teamRoles: [null, Validators.required],
@@ -63,14 +85,13 @@ export class ProjectFormComponent {
     });
   }
 
-  //TODO change to formArray maybe?...
-  // private createFormGroup(): FormGroup {
-  //   return this.fb.group({
-  //     teamSize: [null, Validators.required],
-  //     techStack: [null, Validators.required],
-  //     teamRoles: [null, Validators.required],
-  //   });
-  // }
+  public ngOnInit(): void {
+    this.store.dispatch(fetchSpecializations());
+    this.store.dispatch(fetchDepartments());
+    this.store.dispatch(fetchSkills());
+    this.store.dispatch(fetchTeamRoles());
+    this.store.dispatch(fetchResponsibilities());
+  }
 
   public onSubmit() {
     const { datePicker, ...projectformModified } = this.projectForm.getRawValue();
@@ -80,11 +101,12 @@ export class ProjectFormComponent {
       endDate: datePicker[1],
       teamSize: +this.projectForm.get("teamSize").value,
     };
-    console.log(newProject);
-    console.log(typeof newProject.teamSize);
-
     this.store.dispatch(addProject({ newProject }));
-    // this.projectForm.reset();
-    // this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
+    this.projectForm.reset();
+    this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
+  }
+
+  public onCancel() {
+    this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
   }
 }

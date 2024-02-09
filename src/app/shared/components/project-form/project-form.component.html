@@ -27,7 +27,7 @@
           <cvgen-select
             formControlName="techStack"
             [label]="'TECH_STACK'"
-            [listOfOptions]="techStackOptions"
+            [listOfOptions]="skillList$ | async"
           ></cvgen-select>
         </div>
 
@@ -35,7 +35,7 @@
           <cvgen-select
             formControlName="teamRoles"
             [label]="'ROLES'"
-            [listOfOptions]="rolesOptions"
+            [listOfOptions]="teamRolesList$ | async"
           ></cvgen-select>
         </div>
       </div>
@@ -69,7 +69,7 @@
         <cvgen-select
           formControlName="responsibilities"
           [label]="'RESPONSIBILITIES'"
-          [listOfOptions]="responsibilityOptions"
+          [listOfOptions]="responsibilityList$ | async"
         ></cvgen-select>
       </div>
     </div>
@@ -83,7 +83,9 @@
     >
       {{ "BUTTON.SUBMIT" | translate }}
     </button>
-    <button nz-button type="reset" [nzType]="'default'">{{ "BUTTON.CANCEL" | translate }}</button>
+    <button nz-button type="reset" [nzType]="'default'" (click)="onCancel()">
+      {{ "BUTTON.CANCEL" | translate }}
+    </button>
   </div>
 </form>
 

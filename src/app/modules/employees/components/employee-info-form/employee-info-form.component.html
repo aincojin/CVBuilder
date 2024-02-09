@@ -25,18 +25,18 @@
         <cvgen-input [label]="'EMAIL'" inputType="email" formControlName="email"></cvgen-input>
       </div>
       <div class="tab__form-control">
-        <cvgen-input
+        <cvgen-select
           [label]="'SPECIALIZATION'"
-          inputType="text"
+          [listOfOptions]="specializationList$ | async"
           formControlName="specialization"
-        ></cvgen-input>
+        ></cvgen-select>
       </div>
       <div class="tab__form-control">
-        <cvgen-input
+        <cvgen-select
           [label]="'DEPARTMENT'"
-          inputType="text"
+          [listOfOptions]="departmentList$ | async"
           formControlName="department"
-        ></cvgen-input>
+        ></cvgen-select>
       </div>
     </div>
     <button nz-button type="submit">{{ "BUTTON.SUBMIT" | translate }}</button>

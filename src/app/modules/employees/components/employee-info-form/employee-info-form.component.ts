@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { EmployeesApiService } from "../../../../shared/services/api/employees.api.service";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BaseFormCvaComponent } from "../base-form-cva/base-form-cva.component";
 import { CommonModule } from "@angular/common";
 import { NzButtonModule } from "ng-zorro-antd/button";
@@ -9,9 +8,16 @@ import { InputComponent } from "../../../../shared/components/input/input.compon
 import { TranslateModule } from "@ngx-translate/core";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { Store } from "@ngrx/store";
-import { NzFormLayoutType, NzFormModule } from "ng-zorro-antd/form";
-import { addEmployee, addEmployeeSuccess } from "../../../../store/employees/employees.actions";
+import { NzFormModule } from "ng-zorro-antd/form";
+import { addEmployee, updateEmployee } from "../../../../store/employees/employees.actions";
 import { AppState } from "../../../../store/state/state";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Paths } from "../../../../shared/enums/routes";
+import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
+import { SelectComponent } from "../../../../shared/components/select/select.component";
+import { fetchDepartments, fetchSpecializations } from "../../../../store/shared/shared.actions";
+import { Observable } from "rxjs";
+import { selectSpecializations, selectDepartments } from "../../../../store/shared/shared.reducers";
 
 @Component({
   selector: "cvgen-employee-info-form",
@@ -24,24 +30,59 @@ import { AppState } from "../../../../store/state/state";
     NzButtonModule,
     NzGridModule,
     InputComponent,
+    SelectComponent,
   ],
   templateUrl: "./employee-info-form.component.html",
   styleUrl: "./employee-info-form.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmployeeInfoFormComponent extends BaseFormCvaComponent {
+export class EmployeeInfoFormComponent {
+  @Input() public employeeId: number;
+  // public specData: BaseEntityInterface[];
+  // public depData: BaseEntityInterface[];
+
+  @Input() public selectedEmployeeData: EmployeeInterface;
+
+  public baseForm: FormGroup;
+  public specializationList$: Observable<BaseEntityInterface[]> =
+    this.store.select(selectSpecializations);
+  public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
+
   constructor(
-    fb: FormBuilder,
-    private store: Store<AppState>,
-  ) {
-    super(fb);
-    this.baseForm.addControl("firstName", fb.control("", Validators.required));
+    private fb: FormBuilder,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private store: Store,
+  ) {}
+  ngOnInit(): void {
+    this.baseForm = this.fb.group({
+      firstName: ["", Validators.required],
+      lastName: ["", Validators.required],
+      // TODO expand email validation
+      email: ["", [Validators.required, Validators.email]],
+      specialization: ["", Validators.required],
+      department: ["", Validators.required],
+    });
+    this.store.dispatch(fetchDepartments());
+    this.store.dispatch(fetchSpecializations());
   }
 
-  public override onSubmit(): void {
+  //TODO write an employee service
+  public onSubmit(): void {
     const newEmployee: EmployeeDtoInterface = this.baseForm.getRawValue();
+    // if (this.selectedEmployeeData) {
+    //   const employee = newEmployee;
+    //   console.log(this.employeeId);
+    //   this.store.dispatch(updateEmployee({ employee }));
+    // } else {
     console.log(newEmployee);
     this.store.dispatch(addEmployee({ newEmployee }));
+    // }
     this.baseForm.reset();
+    this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
+  }
+
+  public onCancel() {
+    this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
   }
 }

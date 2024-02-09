@@ -28,21 +28,25 @@
             ></cvgen-input>
           </div>
           <div class="tab__form-control">
-            <cvgen-input [label]="'SKILLS'" inputType="text" formControlName="skills"></cvgen-input>
+            <cvgen-select
+              [label]="'SKILLS'"
+              formControlName="skills"
+              [listOfOptions]="skillList$ | async"
+            ></cvgen-select>
           </div>
           <div class="tab__form-control">
-            <cvgen-input
+            <cvgen-select
               [label]="'SPECIALIZATION'"
-              inputType="text"
               formControlName="specialization"
-            ></cvgen-input>
+              [listOfOptions]="specializationList$ | async"
+            ></cvgen-select>
           </div>
           <div class="tab__form-control">
-            <cvgen-input
+            <cvgen-select
               [label]="'DEPARTMENT'"
-              inputType="text"
               formControlName="department"
-            ></cvgen-input>
+              [listOfOptions]="departmentList$ | async"
+            ></cvgen-select>
           </div>
         </div>
       </form>
@@ -61,10 +65,12 @@
     </div>
 
     <nz-button-group class="tab__projects-actions">
-      <button nz-button type="submit" [nzType]="'default'">
+      <button nz-button type="submit" [nzType]="'default'" (click)="onCancel()">
         {{ "BUTTON.CANCEL" | translate }}
       </button>
-      <button nz-button type="reset" [nzType]="'primary'">{{ "BUTTON.SUBMIT" | translate }}</button>
+      <button nz-button type="reset" [nzType]="'primary'">
+        {{ "BUTTON.SUBMIT" | translate }}
+      </button>
     </nz-button-group>
   </div>
 </div>

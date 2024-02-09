@@ -1,8 +1,12 @@
 <nz-form-item>
   <nz-form-label nzRequired>{{ "LABEL." + label | translate }}</nz-form-label>
   <nz-form-control>
-    <nz-select nzMode="multiple" [formControl]="selectControl">
-      <nz-option *ngFor="let item of listOfOptions" [nzLabel]="item" [nzValue]="item"></nz-option>
+    <nz-select nzMode="multiple" nzAllowClear="true" [formControl]="selectControl">
+      <nz-option
+        *ngFor="let item of listOfOptions"
+        [nzLabel]="item.name"
+        [nzValue]="item.id"
+      ></nz-option>
     </nz-select>
   </nz-form-control>
 </nz-form-item>
