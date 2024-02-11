@@ -16,7 +16,7 @@ export const PROJECTS_ROUTES: Routes = [
           ),
       },
       {
-        path: Paths.EditProject,
+        path: Paths.EditProjectId,
         title: "Edit Project",
         loadComponent: () =>
           import("./pages/edit-project-page/edit-project-page.component").then(

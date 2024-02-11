@@ -14,8 +14,22 @@ export class ProjectsApiService {
     const endpoint = `${API_URL}/projects`;
     return this.http.get<ProjectInterface[]>(endpoint);
   }
+
+  public fetchProject(projectId: number): Observable<ProjectInterface> {
+    const endpoint = `${API_URL}/projects/${projectId}`;
+    return this.http.get<ProjectInterface>(endpoint);
+  }
+
   public addProject(newProjectData: ProjectDtoInterface): Observable<ProjectInterface> {
     const endpoint = `${API_URL}/projects`;
     return this.http.post<ProjectInterface>(endpoint, newProjectData);
+  }
+
+  public updateProject(
+    updatedProjectData: ProjectDtoInterface,
+    projectId: number,
+  ): Observable<ProjectInterface> {
+    const endpoint = `${API_URL}/projects/${projectId}`;
+    return this.http.put<ProjectInterface>(endpoint, updatedProjectData);
   }
 }

@@ -38,5 +38,9 @@ export class ProjectListPageComponent implements OnInit {
   public addProject() {
     this.router.navigate([Paths.CreateProject], { relativeTo: this.activatedRoute });
   }
-  public selectProject(project: ProjectInterface) {}
+  public selectProject(project: ProjectInterface) {
+    this.router.navigate([Paths.EditProject, project.id], {
+      relativeTo: this.activatedRoute,
+    });
+  }
 }

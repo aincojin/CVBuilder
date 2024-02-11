@@ -4,9 +4,15 @@ import {
   addProject,
   addProjectError,
   addProjectSuccess,
+  fetchProject,
+  fetchProjectError,
+  fetchProjectSuccess,
   fetchProjects,
   fetchProjectsError,
   fetchProjectsSuccess,
+  updateProject,
+  updateProjectError,
+  updateProjectSuccess,
 } from "./projects.actions";
 
 const initialState: ProjectStateInterface = {
@@ -27,6 +33,17 @@ const projectFeature = createFeature({
       ...state,
       projectList: null,
     })),
+
+    on(fetchProject, state => ({ ...state })),
+    on(fetchProjectSuccess, (state, { project }) => ({
+      ...state,
+      project,
+    })),
+    on(fetchProjectError, state => ({
+      ...state,
+      project: null,
+    })),
+
     on(addProject, state => ({ ...state })),
     on(addProjectSuccess, (state, { addedProject }) => ({
       ...state,
@@ -35,6 +52,23 @@ const projectFeature = createFeature({
     on(addProjectError, state => ({
       ...state,
     })),
+
+    on(updateProject, state => ({ ...state })),
+    on(updateProjectSuccess, (state, { updatedProject }) => {
+      const updatedProjectList = state.projectList.map(project =>
+        project.id === updatedProject.id ? { ...updatedProject } : project,
+      );
+      return {
+        ...state,
+        projectList: updatedProjectList,
+        project: updatedProject,
+        error: null,
+      };
+    }),
+    on(updateProjectError, state => ({
+      ...state,
+      project: null,
+    })),
   ),
 });
 
@@ -42,4 +76,5 @@ export const {
   name: projectFeatureKey,
   reducer: projectReducer,
   selectProjectList,
+  selectProject,
 } = projectFeature;
