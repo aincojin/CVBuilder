@@ -12,8 +12,16 @@ import { Observable } from "rxjs";
 import { selectEmployee } from "../../../../store/employees/employees.reducers";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
-import { selectSpecializations, selectDepartments } from "../../../../store/shared/shared.reducers";
-import { fetchDepartments, fetchSpecializations } from "../../../../store/shared/shared.actions";
+import {
+  selectSpecializations,
+  selectDepartments,
+  selectSkills,
+} from "../../../../store/core/core.reducers";
+import {
+  fetchDepartments,
+  fetchSkills,
+  fetchSpecializations,
+} from "../../../../store/core/core.actions";
 
 @UntilDestroy()
 @Component({
@@ -32,7 +40,12 @@ import { fetchDepartments, fetchSpecializations } from "../../../../store/shared
 })
 export class EditEmployeePageComponent implements OnInit {
   public employeeId: number;
+
   public selectedEmployee$: Observable<EmployeeInterface> = this.store.select(selectEmployee);
+  public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
+  public specializationList$: Observable<BaseEntityInterface[]> =
+    this.store.select(selectSpecializations);
+  public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
 
   constructor(
     private route: ActivatedRoute,
@@ -44,5 +57,8 @@ export class EditEmployeePageComponent implements OnInit {
       this.employeeId = params["id"];
       this.store.dispatch(fetchEmployee({ employeeId: this.employeeId }));
     });
+    this.store.dispatch(fetchDepartments());
+    this.store.dispatch(fetchSkills());
+    this.store.dispatch(fetchSpecializations());
   }
 }

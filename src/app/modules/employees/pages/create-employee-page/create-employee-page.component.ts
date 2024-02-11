@@ -5,19 +5,18 @@ import { EmployeeCvFormComponent } from "../../components/employee-cv-form/emplo
 import { EmployeeInfoFormComponent } from "../../components/employee-info-form/employee-info-form.component";
 import { TranslateModule } from "@ngx-translate/core";
 import { Store } from "@ngrx/store";
-import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
 import {
   selectDepartments,
   selectSkills,
   selectSpecializations,
-} from "../../../../store/shared/shared.reducers";
+} from "../../../../store/core/core.reducers";
 import {
   fetchDepartments,
   fetchSkills,
   fetchSpecializations,
-} from "../../../../store/shared/shared.actions";
+} from "../../../../store/core/core.actions";
 
 @Component({
   selector: "cvgen-create-employee-page",
@@ -33,4 +32,17 @@ import {
   styleUrl: "./create-employee-page.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateEmployeePageComponent {}
+export class CreateEmployeePageComponent {
+  public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
+  public specializationList$: Observable<BaseEntityInterface[]> =
+    this.store.select(selectSpecializations);
+  public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
+
+  constructor(private store: Store) {}
+
+  public ngOnInit(): void {
+    this.store.dispatch(fetchDepartments());
+    this.store.dispatch(fetchSkills());
+    this.store.dispatch(fetchSpecializations());
+  }
+}

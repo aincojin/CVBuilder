@@ -1,13 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
-import { ActivatedRoute, NavigationEnd } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { Observable } from "rxjs";
 import { BaseTableComponent } from "../../../../shared/components/base-table/base-table.component";
 import { EMPLOYEE_TABLE_COLUMNS } from "../../../../shared/constants/table-employees-columns.const";
-import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
+import { EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { fetchEmployees } from "../../../../store/employees/employees.actions";
 import { selectEmployeeList } from "../../../../store/employees/employees.reducers";
 import { AppState } from "../../../../store/state/state";

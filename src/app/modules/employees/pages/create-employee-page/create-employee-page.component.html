@@ -1,10 +1,17 @@
 <div class="page">
   <nz-tabset>
     <nz-tab [nzTitle]="'TAB.INFO' | translate">
-      <cvgen-employee-info-form></cvgen-employee-info-form>
+      <cvgen-employee-info-form
+        [departmentData]="departmentList$ | async"
+        [specializationData]="specializationList$ | async"
+      ></cvgen-employee-info-form>
     </nz-tab>
     <nz-tab [nzTitle]="'TAB.CV' | translate">
-      <cvgen-employee-cv-form></cvgen-employee-cv-form>
+      <cvgen-employee-cv-form
+        [departmentData]="departmentList$ | async"
+        [specializationData]="specializationList$ | async"
+        [skillData]="skillList$ | async"
+      ></cvgen-employee-cv-form>
     </nz-tab>
   </nz-tabset>
 </div>

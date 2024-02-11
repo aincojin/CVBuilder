@@ -19,17 +19,7 @@ import { Paths } from "../../../../shared/enums/routes";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
 import { SelectComponent } from "../../../../shared/components/select/select.component";
 import { Store } from "@ngrx/store";
-import { Observable } from "rxjs";
-import {
-  selectSpecializations,
-  selectDepartments,
-  selectSkills,
-} from "../../../../store/shared/shared.reducers";
-import {
-  fetchDepartments,
-  fetchSkills,
-  fetchSpecializations,
-} from "../../../../store/shared/shared.actions";
+import { EmployeeInterface } from "../../../../shared/interfaces/employee";
 
 @Component({
   selector: "cvgen-employee-cv-form",
@@ -55,11 +45,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeCvFormComponent {
+  @Input() public employeeId: number;
+  @Input() public selectedEmployeeData: EmployeeInterface;
+  @Input() public departmentData: BaseEntityInterface[];
+  @Input() public specializationData: BaseEntityInterface[];
+  @Input() public skillData: BaseEntityInterface[];
+
   public baseForm: FormGroup;
-  public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
-  public specializationList$: Observable<BaseEntityInterface[]> =
-    this.store.select(selectSpecializations);
-  public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
 
   //TODO move it up the hierachy, implement @Input()
   public cvData = CV_DATA;
@@ -80,15 +72,11 @@ export class EmployeeCvFormComponent {
       skills: ["", Validators.required],
     });
   }
-  public ngOnInit(): void {
-    this.store.dispatch(fetchDepartments());
-    this.store.dispatch(fetchSkills());
-    this.store.dispatch(fetchSpecializations());
-  }
+
   public onSubmit() {
     console.log(this.baseForm.value);
   }
-
+  public addCv() {}
   public onCancel() {
     this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
   }

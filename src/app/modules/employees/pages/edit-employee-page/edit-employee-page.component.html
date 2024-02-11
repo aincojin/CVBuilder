@@ -4,10 +4,18 @@
       <cvgen-employee-info-form
         [employeeId]="employeeId"
         [selectedEmployeeData]="selectedEmployee$ | async"
+        [departmentData]="departmentList$ | async"
+        [specializationData]="specializationList$ | async"
       ></cvgen-employee-info-form>
     </nz-tab>
     <nz-tab [nzTitle]="'TAB.CV' | translate">
-      <cvgen-employee-cv-form></cvgen-employee-cv-form>
+      <cvgen-employee-cv-form
+        [employeeId]="employeeId"
+        [selectedEmployeeData]="selectedEmployee$ | async"
+        [departmentData]="departmentList$ | async"
+        [specializationData]="specializationList$ | async"
+        [skillData]="skillList$ | async"
+      ></cvgen-employee-cv-form>
     </nz-tab>
   </nz-tabset>
 </div>

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { BaseFormCvaComponent } from "../base-form-cva/base-form-cva.component";
 import { CommonModule } from "@angular/common";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzGridModule } from "ng-zorro-antd/grid";
@@ -9,15 +8,12 @@ import { TranslateModule } from "@ngx-translate/core";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { Store } from "@ngrx/store";
 import { NzFormModule } from "ng-zorro-antd/form";
-import { addEmployee, updateEmployee } from "../../../../store/employees/employees.actions";
+import { addEmployee } from "../../../../store/employees/employees.actions";
 import { AppState } from "../../../../store/state/state";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Paths } from "../../../../shared/enums/routes";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
 import { SelectComponent } from "../../../../shared/components/select/select.component";
-import { fetchDepartments, fetchSpecializations } from "../../../../store/shared/shared.actions";
-import { Observable } from "rxjs";
-import { selectSpecializations, selectDepartments } from "../../../../store/shared/shared.reducers";
 
 @Component({
   selector: "cvgen-employee-info-form",
@@ -38,21 +34,17 @@ import { selectSpecializations, selectDepartments } from "../../../../store/shar
 })
 export class EmployeeInfoFormComponent {
   @Input() public employeeId: number;
-  // public specData: BaseEntityInterface[];
-  // public depData: BaseEntityInterface[];
-
   @Input() public selectedEmployeeData: EmployeeInterface;
+  @Input() public departmentData: BaseEntityInterface[];
+  @Input() public specializationData: BaseEntityInterface[];
 
   public baseForm: FormGroup;
-  public specializationList$: Observable<BaseEntityInterface[]> =
-    this.store.select(selectSpecializations);
-  public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private store: Store,
+    private store: Store<AppState>,
   ) {}
   ngOnInit(): void {
     this.baseForm = this.fb.group({
@@ -63,13 +55,16 @@ export class EmployeeInfoFormComponent {
       specialization: ["", Validators.required],
       department: ["", Validators.required],
     });
-    this.store.dispatch(fetchDepartments());
-    this.store.dispatch(fetchSpecializations());
   }
 
   //TODO write an employee service
   public onSubmit(): void {
-    const newEmployee: EmployeeDtoInterface = this.baseForm.getRawValue();
+    const { department, specialization, ...employeeModified } = this.baseForm.getRawValue();
+    const newEmployee: EmployeeDtoInterface = {
+      ...employeeModified,
+      department: department.toString(),
+      specialization: specialization.toString(),
+    };
     // if (this.selectedEmployeeData) {
     //   const employee = newEmployee;
     //   console.log(this.employeeId);

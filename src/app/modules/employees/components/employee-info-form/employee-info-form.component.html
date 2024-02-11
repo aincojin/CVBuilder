@@ -27,14 +27,14 @@
       <div class="tab__form-control">
         <cvgen-select
           [label]="'SPECIALIZATION'"
-          [listOfOptions]="specializationList$ | async"
+          [listOfOptions]="specializationData"
           formControlName="specialization"
         ></cvgen-select>
       </div>
       <div class="tab__form-control">
         <cvgen-select
           [label]="'DEPARTMENT'"
-          [listOfOptions]="departmentList$ | async"
+          [listOfOptions]="departmentData"
           formControlName="department"
         ></cvgen-select>
       </div>

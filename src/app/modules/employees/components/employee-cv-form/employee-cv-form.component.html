@@ -10,7 +10,7 @@
       </li>
     </ul>
     <button class="tab__list-add-btn" nz-button type="reset">
-      <span nz-icon nzType="plus" nzTheme="outline"></span>
+      <span nz-icon nzType="plus" nzTheme="outline" (click)="addCv()"></span>
     </button>
   </div>
   <div class="tab__content">
@@ -31,21 +31,21 @@
             <cvgen-select
               [label]="'SKILLS'"
               formControlName="skills"
-              [listOfOptions]="skillList$ | async"
+              [listOfOptions]="skillData"
             ></cvgen-select>
           </div>
           <div class="tab__form-control">
             <cvgen-select
               [label]="'SPECIALIZATION'"
               formControlName="specialization"
-              [listOfOptions]="specializationList$ | async"
+              [listOfOptions]="specializationData"
             ></cvgen-select>
           </div>
           <div class="tab__form-control">
             <cvgen-select
               [label]="'DEPARTMENT'"
               formControlName="department"
-              [listOfOptions]="departmentList$ | async"
+              [listOfOptions]="departmentData"
             ></cvgen-select>
           </div>
         </div>
