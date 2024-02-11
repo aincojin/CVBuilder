@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { switchMap, map } from "rxjs";
-import { SharedApiService } from "../../shared/services/api/shared.api.service";
+import { CoreApiService } from "../../shared/services/api/core.api.service";
 import {
   fetchDepartments,
   fetchDepartmentsSuccess,
@@ -13,21 +13,21 @@ import {
   fetchSpecializationsSuccess,
   fetchTeamRoles,
   fetchTeamRolesSuccess,
-} from "./shared.actions";
+} from "./core.actions";
 import { BaseEntityInterface } from "../../shared/interfaces/base-entity";
 
 @Injectable()
-export class SharedEffects {
+export class CoreEffects {
   constructor(
     private actions$: Actions,
-    private sharedApiService: SharedApiService,
+    private coreApiService: CoreApiService,
   ) {}
 
   getSpecializations$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchSpecializations),
       switchMap(() =>
-        this.sharedApiService
+        this.coreApiService
           .fetchSpecializations()
           .pipe(
             map((specializations: BaseEntityInterface[]) =>
@@ -42,7 +42,7 @@ export class SharedEffects {
     this.actions$.pipe(
       ofType(fetchDepartments),
       switchMap(() =>
-        this.sharedApiService
+        this.coreApiService
           .fetchDepartments()
           .pipe(
             map((departments: BaseEntityInterface[]) => fetchDepartmentsSuccess({ departments })),
@@ -55,7 +55,7 @@ export class SharedEffects {
     this.actions$.pipe(
       ofType(fetchSkills),
       switchMap(() =>
-        this.sharedApiService
+        this.coreApiService
           .fetchSkills()
           .pipe(map((skills: BaseEntityInterface[]) => fetchSkillsSuccess({ skills }))),
       ),
@@ -66,7 +66,7 @@ export class SharedEffects {
     this.actions$.pipe(
       ofType(fetchTeamRoles),
       switchMap(() =>
-        this.sharedApiService
+        this.coreApiService
           .fetchTeamRoles()
           .pipe(map((teamRoles: BaseEntityInterface[]) => fetchTeamRolesSuccess({ teamRoles }))),
       ),
@@ -77,7 +77,7 @@ export class SharedEffects {
     this.actions$.pipe(
       ofType(fetchResponsibilities),
       switchMap(() =>
-        this.sharedApiService
+        this.coreApiService
           .fetchResponsibilities()
           .pipe(
             map((responsibilities: BaseEntityInterface[]) =>

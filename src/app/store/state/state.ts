@@ -1,5 +1,5 @@
 import { AuthStateInterface } from "./authState";
-import { SharedStateInterface } from "./sharedState";
+import { CoreStateInterface } from "./coreState";
 import { EmployeeStateInterface } from "./employeeState";
 import { ProjectStateInterface } from "./projectState";
 import { CvStateInterface } from "./cvState";
@@ -7,6 +7,6 @@ import { CvStateInterface } from "./cvState";
 export interface AppState {
   employees: EmployeeStateInterface;
   projects: ProjectStateInterface;
-  shared: SharedStateInterface;
+  core: CoreStateInterface;
   cvs: CvStateInterface;
 }

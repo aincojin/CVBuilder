@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, OnInit, Self } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit, Self } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, NgControl } from "@angular/forms";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzFormModule } from "ng-zorro-antd/form";
@@ -9,7 +9,7 @@ import { TextareaComponent } from "../textarea/textarea.component";
 import { TranslateModule } from "@ngx-translate/core";
 import { ProjectDtoInterface } from "../../interfaces/project";
 import { Store } from "@ngrx/store";
-import { addProject } from "../../../store/projects/projects.actions";
+import { addProject, updateProject } from "../../../store/projects/projects.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Paths } from "../../enums/routes";
 import { AppState } from "../../../store/state/state";
@@ -24,16 +24,14 @@ import {
   fetchSkills,
   fetchSpecializations,
   fetchTeamRoles,
-} from "../../../store/shared/shared.actions";
+} from "../../../store/core/core.actions";
 import { Observable } from "rxjs";
 import { BaseEntityInterface } from "../../interfaces/base-entity";
 import {
-  selectDepartments,
   selectResponsibilities,
   selectSkills,
-  selectSpecializations,
   selectTeamRoles,
-} from "../../../store/shared/shared.reducers";
+} from "../../../store/core/core.reducers";
 
 @Component({
   selector: "cvgen-project-form",
@@ -54,14 +52,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectFormComponent implements OnInit {
+  @Input() public itemId: number;
+
   public projectForm: FormGroup;
   public techStackOptions = TECH_STACK_OPTIONS;
   public rolesOptions = ROLES_OPTIONS;
   public responsibilityOptions = RESPONSIBILITY_OPTIONS;
 
-  public specializationList$: Observable<BaseEntityInterface[]> =
-    this.store.select(selectSpecializations);
-  public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
   public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
   public teamRolesList$: Observable<BaseEntityInterface[]> = this.store.select(selectTeamRoles);
   public responsibilityList$: Observable<BaseEntityInterface[]> =
@@ -86,8 +83,6 @@ export class ProjectFormComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.store.dispatch(fetchSpecializations());
-    this.store.dispatch(fetchDepartments());
     this.store.dispatch(fetchSkills());
     this.store.dispatch(fetchTeamRoles());
     this.store.dispatch(fetchResponsibilities());
@@ -101,7 +96,13 @@ export class ProjectFormComponent implements OnInit {
       endDate: datePicker[1],
       teamSize: +this.projectForm.get("teamSize").value,
     };
-    this.store.dispatch(addProject({ newProject }));
+    console.log(this.itemId);
+
+    if (this.itemId) {
+      this.store.dispatch(updateProject({ projectId: this.itemId, project: newProject }));
+    } else {
+      this.store.dispatch(addProject({ newProject }));
+    }
     this.projectForm.reset();
     this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
   }

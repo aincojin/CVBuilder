@@ -7,7 +7,7 @@ import { BaseEntityInterface } from "../../interfaces/base-entity";
 @Injectable({
   providedIn: "root",
 })
-export class SharedApiService {
+export class CoreApiService {
   constructor(private http: HttpClient) {}
 
   public fetchSpecializations(): Observable<BaseEntityInterface[]> {

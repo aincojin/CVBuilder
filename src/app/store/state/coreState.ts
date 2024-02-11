@@ -1,6 +1,6 @@
 import { BaseEntityInterface } from "../../shared/interfaces/base-entity";
 
-export interface SharedStateInterface {
+export interface CoreStateInterface {
   specializations: BaseEntityInterface[];
   departments: BaseEntityInterface[];
   skills: BaseEntityInterface[];

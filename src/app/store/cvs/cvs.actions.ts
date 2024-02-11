@@ -7,6 +7,7 @@ export enum CvsActions {
   GET_CVS_ERROR = "[Cvs] Get Cvs Error",
 
   ADD_CV = "[Cvs] Add Cv",
+  // ADD_EMPTY_CV="[Cv] Add Empty Cv",
   ADD_CV_SUCCESS = "[Cvs] Add Cv Success",
   ADD_CV_ERROR = "[Cvs] Add Cv Error",
 

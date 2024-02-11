@@ -1,5 +1,5 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
-import { SharedStateInterface } from "../state/sharedState";
+import { CoreStateInterface } from "../state/coreState";
 import {
   fetchDepartments,
   fetchDepartmentsError,
@@ -16,10 +16,9 @@ import {
   fetchTeamRoles,
   fetchTeamRolesError,
   fetchTeamRolesSuccess,
-} from "./shared.actions";
-import { state } from "@angular/animations";
+} from "./core.actions";
 
-const initialState: SharedStateInterface = {
+const initialState: CoreStateInterface = {
   specializations: null,
   departments: [],
   skills: [],
@@ -27,8 +26,8 @@ const initialState: SharedStateInterface = {
   responsibilities: [],
 };
 
-const sharedFeature = createFeature({
-  name: "shared",
+const coreFeature = createFeature({
+  name: "core",
   reducer: createReducer(
     initialState,
     on(fetchSpecializations, state => ({ ...state })),
@@ -83,11 +82,11 @@ const sharedFeature = createFeature({
   ),
 });
 export const {
-  name: sharedFeatureKey,
-  reducer: sharedReducer,
+  name: coreFeatureKey,
+  reducer: coreReducer,
   selectDepartments,
   selectResponsibilities,
   selectSkills,
   selectSpecializations,
   selectTeamRoles,
-} = sharedFeature;
+} = coreFeature;
