@@ -30,6 +30,7 @@ export class ProjectListPageComponent implements OnInit {
 
   public projectList$: Observable<ProjectInterface[]> = this.store.select(selectProjectList);
   public isLoading$: Observable<boolean> = this.store.select(selectIsLoading);
+
   public columns = PROJECTS_TABLE_COLUMNS;
 
   public ngOnInit(): void {

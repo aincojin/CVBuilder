@@ -3,5 +3,6 @@
     [skillList]="skillList$ | async"
     [responsibilityList]="responsibilityList$ | async"
     [teamRolesList]="teamRolesList$ | async"
+    (projectAddedEmitter)="projectAdded($event)"
   ></cvgen-project-form>
 </div>

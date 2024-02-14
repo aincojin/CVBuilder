@@ -1,1 +1,6 @@
-<cvgen-project-form [itemId]="projectId"></cvgen-project-form>
+<cvgen-project-form
+  [skillList]="skillList$ | async"
+  [responsibilityList]="responsibilityList$ | async"
+  [teamRolesList]="teamRolesList$ | async"
+  (projectUpdatedEmitter)="projectUpdated($event)"
+></cvgen-project-form>

@@ -4,9 +4,23 @@ import { ProjectFormComponent } from "../../../../shared/components/project-form
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { fetchProject } from "../../../../store/projects/projects.actions";
-import { setPageTitle } from "../../../../store/core/core.actions";
+import { fetchProject, updateProject } from "../../../../store/projects/projects.actions";
+import {
+  fetchResponsibilities,
+  fetchSkills,
+  fetchTeamRoles,
+  setPageTitle,
+} from "../../../../store/core/core.actions";
 import { AppState } from "../../../../store/state/state";
+import { ProjectDtoInterface } from "../../../../shared/interfaces/project";
+import { Paths } from "../../../../shared/enums/routes";
+import { Observable } from "rxjs";
+import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
+import {
+  selectSkills,
+  selectTeamRoles,
+  selectResponsibilities,
+} from "../../../../store/core/core.reducers";
 
 @UntilDestroy()
 @Component({
@@ -20,14 +34,28 @@ import { AppState } from "../../../../store/state/state";
 export class EditProjectPageComponent {
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly store = inject(Store<AppState>);
+  private readonly router = inject(Router);
+
+  public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
+  public teamRolesList$: Observable<BaseEntityInterface[]> = this.store.select(selectTeamRoles);
+  public responsibilityList$: Observable<BaseEntityInterface[]> =
+    this.store.select(selectResponsibilities);
 
   public projectId: number;
 
   public ngOnInit(): void {
     this.store.dispatch(setPageTitle({ pageTitle: "Edit a Project" }));
+    this.store.dispatch(fetchSkills());
+    this.store.dispatch(fetchTeamRoles());
+    this.store.dispatch(fetchResponsibilities());
     this.activatedRoute.params.pipe(untilDestroyed(this)).subscribe(params => {
       this.projectId = params["id"];
       this.store.dispatch(fetchProject({ projectId: this.projectId }));
     });
+  }
+
+  public projectUpdated(updatedProject: ProjectDtoInterface) {
+    this.store.dispatch(updateProject({ project: updatedProject, projectId: this.projectId }));
+    this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
   }
 }

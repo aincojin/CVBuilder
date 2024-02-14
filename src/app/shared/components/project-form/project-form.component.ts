@@ -1,5 +1,12 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input, OnInit, Self, inject } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from "@angular/core";
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, NgControl } from "@angular/forms";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzFormModule } from "ng-zorro-antd/form";
@@ -8,11 +15,8 @@ import { InputComponent } from "../input/input.component";
 import { TextareaComponent } from "../textarea/textarea.component";
 import { TranslateModule } from "@ngx-translate/core";
 import { ProjectDtoInterface } from "../../interfaces/project";
-import { Store } from "@ngrx/store";
-import { addProject, updateProject } from "../../../store/projects/projects.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Paths } from "../../enums/routes";
-import { AppState } from "../../../store/state/state";
 import { SelectComponent } from "../select/select.component";
 import { BaseEntityInterface } from "../../interfaces/base-entity";
 
@@ -38,14 +42,18 @@ export class ProjectFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly store = inject(Store<AppState>);
 
-  @Input() public itemId: number;
   @Input() public skillList: BaseEntityInterface[];
   @Input() public responsibilityList: BaseEntityInterface[];
   @Input() public teamRolesList: BaseEntityInterface[];
 
   public projectForm: FormGroup;
+
+  @Output() projectAddedEmitter: EventEmitter<ProjectDtoInterface> =
+    new EventEmitter<ProjectDtoInterface>();
+
+  @Output() projectUpdatedEmitter: EventEmitter<ProjectDtoInterface> =
+    new EventEmitter<ProjectDtoInterface>();
 
   constructor() {
     this.projectForm = this.fb.group({
@@ -60,12 +68,6 @@ export class ProjectFormComponent {
   }
 
   public onSubmit() {
-    //TODO do smth with onSubmit...:)
-
-    // if (this.projectForm.touched && this.projectForm.invalid) {
-    //   this.projectForm.markAllAsTouched();
-    //   return;
-    // }
     const { datePicker, ...projectformModified } = this.projectForm.getRawValue();
     const newProject: ProjectDtoInterface = {
       ...projectformModified,
@@ -73,15 +75,15 @@ export class ProjectFormComponent {
       endDate: datePicker[1],
       teamSize: +this.projectForm.get("teamSize").value,
     };
-    console.log(this.itemId);
 
-    if (this.itemId) {
-      this.store.dispatch(updateProject({ projectId: this.itemId, project: newProject }));
-    } else {
-      this.store.dispatch(addProject({ newProject }));
-    }
+    this.projectAddedEmitter.emit(newProject);
+    this.projectUpdatedEmitter.emit(newProject);
     this.projectForm.reset();
-    this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
+
+    if (this.projectForm.touched && this.projectForm.invalid) {
+      this.projectForm.markAllAsTouched();
+      return;
+    }
   }
 
   public onCancel() {

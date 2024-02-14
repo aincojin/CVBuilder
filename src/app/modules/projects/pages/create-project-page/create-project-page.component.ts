@@ -16,6 +16,10 @@ import {
   selectTeamRoles,
   selectResponsibilities,
 } from "../../../../store/core/core.reducers";
+import { ProjectDtoInterface } from "../../../../shared/interfaces/project";
+import { addProject } from "../../../../store/projects/projects.actions";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Paths } from "../../../../shared/enums/routes";
 
 @Component({
   selector: "cvgen-create-project-page",
@@ -27,6 +31,8 @@ import {
 })
 export class CreateProjectPageComponent {
   private readonly store = inject(Store<AppState>);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
   public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
   public teamRolesList$: Observable<BaseEntityInterface[]> = this.store.select(selectTeamRoles);
@@ -38,5 +44,10 @@ export class CreateProjectPageComponent {
     this.store.dispatch(fetchSkills());
     this.store.dispatch(fetchTeamRoles());
     this.store.dispatch(fetchResponsibilities());
+  }
+
+  public projectAdded(newProject: ProjectDtoInterface) {
+    this.store.dispatch(addProject({ newProject }));
+    this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
   }
 }
