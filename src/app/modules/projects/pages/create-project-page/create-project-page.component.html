@@ -1,3 +1,7 @@
 <div class="page">
-  <cvgen-project-form></cvgen-project-form>
+  <cvgen-project-form
+    [skillList]="skillList$ | async"
+    [responsibilityList]="responsibilityList$ | async"
+    [teamRolesList]="teamRolesList$ | async"
+  ></cvgen-project-form>
 </div>

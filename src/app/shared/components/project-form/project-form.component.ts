@@ -13,25 +13,8 @@ import { addProject, updateProject } from "../../../store/projects/projects.acti
 import { ActivatedRoute, Router } from "@angular/router";
 import { Paths } from "../../enums/routes";
 import { AppState } from "../../../store/state/state";
-import { TECH_STACK_OPTIONS } from "../../constants/techStack.const";
-import { ROLES_OPTIONS } from "../../constants/roles.const";
 import { SelectComponent } from "../select/select.component";
-import { RESPONSIBILITY_OPTIONS } from "../../constants/responsibilities.const";
-import { isNumber } from "util";
-import {
-  fetchDepartments,
-  fetchResponsibilities,
-  fetchSkills,
-  fetchSpecializations,
-  fetchTeamRoles,
-} from "../../../store/core/core.actions";
-import { Observable } from "rxjs";
 import { BaseEntityInterface } from "../../interfaces/base-entity";
-import {
-  selectResponsibilities,
-  selectSkills,
-  selectTeamRoles,
-} from "../../../store/core/core.reducers";
 
 @Component({
   selector: "cvgen-project-form",
@@ -51,23 +34,18 @@ import {
   styleUrl: "./project-form.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectFormComponent implements OnInit {
+export class ProjectFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly store = inject(Store<AppState>);
 
   @Input() public itemId: number;
+  @Input() public skillList: BaseEntityInterface[];
+  @Input() public responsibilityList: BaseEntityInterface[];
+  @Input() public teamRolesList: BaseEntityInterface[];
 
   public projectForm: FormGroup;
-  public techStackOptions = TECH_STACK_OPTIONS;
-  public rolesOptions = ROLES_OPTIONS;
-  public responsibilityOptions = RESPONSIBILITY_OPTIONS;
-
-  public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
-  public teamRolesList$: Observable<BaseEntityInterface[]> = this.store.select(selectTeamRoles);
-  public responsibilityList$: Observable<BaseEntityInterface[]> =
-    this.store.select(selectResponsibilities);
 
   constructor() {
     this.projectForm = this.fb.group({
@@ -81,13 +59,9 @@ export class ProjectFormComponent implements OnInit {
     });
   }
 
-  public ngOnInit(): void {
-    this.store.dispatch(fetchSkills());
-    this.store.dispatch(fetchTeamRoles());
-    this.store.dispatch(fetchResponsibilities());
-  }
-
   public onSubmit() {
+    //TODO do smth with onSubmit...:)
+
     // if (this.projectForm.touched && this.projectForm.invalid) {
     //   this.projectForm.markAllAsTouched();
     //   return;

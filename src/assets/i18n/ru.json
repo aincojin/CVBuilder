@@ -1,4 +1,3 @@
-//TODO look for missing translations(en.json for reference)
 {
   "LANGUAGE": {
     "RU": "Русский",
@@ -39,9 +38,18 @@
     "ADD_PROJECT": "Добавить Проект",
     "ADD_EMPLOYEE": "Добавить Сотрудника"
   },
+  "TITLES": {
+    "EMPLOYEES_TITLE": "Сотрудники",
+    "EMPLOYEE_LIST": "Список Сотрудников",
+    "CREATE_EMPLOYEE": "Создать Сотрудника",
+    "EDIT_EMPLOYEE": "Изменить Сотрудника",
 
-  "EMPLOYEES_TITLE": "Сотрудники",
-  "PROJECTS_TITLE": "Проекты",
+    "PROJECTS_TITLE": "Проекты",
+    "PROJECT_LIST": "Список Проектов",
+    "CREATE_PROJECT": "Создать Проект",
+    "EDIT_PROJECT": "Изменить Проект"
+  },
+
   "REMEMBER_ME": "Запомнить",
   "FORGOT_PASSWORD": "Забыли свой пароль?"
 }

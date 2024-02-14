@@ -27,7 +27,7 @@
           <cvgen-select
             formControlName="techStack"
             [label]="'TECH_STACK'"
-            [listOfOptions]="skillList$ | async"
+            [listOfOptions]="skillList"
           ></cvgen-select>
         </div>
 
@@ -35,7 +35,7 @@
           <cvgen-select
             formControlName="teamRoles"
             [label]="'ROLES'"
-            [listOfOptions]="teamRolesList$ | async"
+            [listOfOptions]="teamRolesList"
           ></cvgen-select>
         </div>
       </div>
@@ -48,7 +48,7 @@
         <cvgen-select
           formControlName="responsibilities"
           [label]="'RESPONSIBILITIES'"
-          [listOfOptions]="responsibilityList$ | async"
+          [listOfOptions]="responsibilityList"
         ></cvgen-select>
       </div>
     </div>

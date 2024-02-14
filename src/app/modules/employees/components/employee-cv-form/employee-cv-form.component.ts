@@ -61,7 +61,6 @@ export class EmployeeCvFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly store = inject(Store<AppState>);
 
   constructor() {
     this.baseForm = this.fb.group({
