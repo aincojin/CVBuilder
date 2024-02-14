@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { API_URL } from "../../constants/api";
 import { BaseEntityInterface } from "../../interfaces/base-entity";
@@ -8,7 +8,7 @@ import { BaseEntityInterface } from "../../interfaces/base-entity";
   providedIn: "root",
 })
 export class CoreApiService {
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   public fetchSpecializations(): Observable<BaseEntityInterface[]> {
     const endpoint = `${API_URL}/specializations`;

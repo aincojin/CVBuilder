@@ -49,15 +49,12 @@ export class DatePickerComponent {
       .subscribe((dates: [Date, Date]) => {
         const value: [string, string] =
           dates && dates[0] && dates[1] ? [dates[0].toISOString(), dates[1].toISOString()] : null;
-        // console.log("date value: ", value);
-
         if (this.changed) {
           this.changed(value);
         }
       });
   }
 
-  // TODO onInputBlur is afk
   public onInputBlur() {
     if (this.touched) {
       this.touched();

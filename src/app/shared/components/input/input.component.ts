@@ -28,7 +28,6 @@ export class InputComponent implements ControlValueAccessor {
   @Input() public label: string;
   @Input() public inputType: string = "text";
 
-  // public value: string = "";
   public textControl = new FormControl();
   public validationErr = VALIDATION_ERR;
 

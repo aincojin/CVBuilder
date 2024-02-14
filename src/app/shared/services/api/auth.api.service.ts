@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Token } from "../../interfaces/token";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { API_URL } from "../../constants/api";
 import { AuthInterface } from "../../interfaces/auth";
@@ -9,7 +9,7 @@ import { AuthInterface } from "../../interfaces/auth";
   providedIn: "root",
 })
 export class AuthApiService {
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   public login(credentials: AuthInterface): Observable<Token> {
     const endpoint = `${API_URL}/auth/login`;

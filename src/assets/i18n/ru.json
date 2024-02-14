@@ -1,3 +1,4 @@
+//TODO look for missing translations(en.json for reference)
 {
   "LANGUAGE": {
     "RU": "Русский",
@@ -14,7 +15,16 @@
     "LAST_NAME": "Фамилия",
     "SPECIALIZATION": "Специализация",
     "DEPARTMENT": "Отдел",
-    "SKILLS": "Навыки"
+    "SKILLS": "Навыки",
+    "PROJECT_NAME": "Название",
+    "PROJECT_DURATION": "Продолжительность",
+    "PROJECT_START_DATE": "Начало",
+    "PROJECT_END_DATE": "Завершение",
+    "TEAM_SIZE": "Размер команды",
+    "TECH_STACK": "Стек технологий",
+    "ROLES": "Роли",
+    "DESCRIPTION": "Описание",
+    "RESPONSIBILITIES": "Задачи"
   },
   "VALIDATION_ERROR": {
     "REQUIRED": "Пожалуйста, заполните поле",

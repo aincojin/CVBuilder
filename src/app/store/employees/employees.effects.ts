@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { EmployeesApiService } from "../../shared/services/api/employees.api.service";
 import {
@@ -8,16 +8,16 @@ import {
   fetchEmployeeSuccess,
   fetchEmployees,
   fetchEmployeesSuccess,
+  updateEmployee,
+  updateEmployeeSuccess,
 } from "./employees.actions";
-import { concatMap, map, switchMap } from "rxjs";
+import { concatMap, map, mergeMap, switchMap } from "rxjs";
 import { EmployeeInterface } from "../../shared/interfaces/employee";
 
 @Injectable()
 export class EmployeesEffects {
-  constructor(
-    private actions$: Actions,
-    private employeesApiService: EmployeesApiService,
-  ) {}
+  private readonly actions$ = inject(Actions);
+  private readonly employeesApiService = inject(EmployeesApiService);
 
   getEmployeeList$ = createEffect(() =>
     this.actions$.pipe(
@@ -52,6 +52,19 @@ export class EmployeesEffects {
         this.employeesApiService.addEmployee(action.newEmployee).pipe(
           map(addedEmployee => {
             return addEmployeeSuccess({ addedEmployee });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  updateEmployee$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateEmployee),
+      mergeMap(action =>
+        this.employeesApiService.updateEmployee(action.employee, action.employeeId).pipe(
+          map(updatedEmployee => {
+            return updateEmployeeSuccess({ updatedEmployee });
           }),
         ),
       ),

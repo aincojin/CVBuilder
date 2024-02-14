@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input, OnInit, Self } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit, Self, inject } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, NgControl } from "@angular/forms";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzFormModule } from "ng-zorro-antd/form";
@@ -52,6 +52,11 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectFormComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly store = inject(Store<AppState>);
+
   @Input() public itemId: number;
 
   public projectForm: FormGroup;
@@ -64,20 +69,14 @@ export class ProjectFormComponent implements OnInit {
   public responsibilityList$: Observable<BaseEntityInterface[]> =
     this.store.select(selectResponsibilities);
 
-  constructor(
-    private fb: FormBuilder,
-    private store: Store<AppState>,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-  ) {
+  constructor() {
     this.projectForm = this.fb.group({
-      projectName: ["test", Validators.required],
+      projectName: ["", Validators.required],
       datePicker: [null, Validators.required],
-      //TODO change to formArray maybe?...
       teamSize: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
       techStack: [null, Validators.required],
       teamRoles: [null, Validators.required],
-      description: ["qwer", Validators.required],
+      description: ["", Validators.required],
       responsibilities: [null, Validators.required],
     });
   }
@@ -89,6 +88,10 @@ export class ProjectFormComponent implements OnInit {
   }
 
   public onSubmit() {
+    // if (this.projectForm.touched && this.projectForm.invalid) {
+    //   this.projectForm.markAllAsTouched();
+    //   return;
+    // }
     const { datePicker, ...projectformModified } = this.projectForm.getRawValue();
     const newProject: ProjectDtoInterface = {
       ...projectformModified,

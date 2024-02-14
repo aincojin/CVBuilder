@@ -1,12 +1,17 @@
+<!-- <nz-spin *ngIf="isLoading$ | async"></nz-spin> -->
 <div class="page">
-  <button class="btn--primary" (click)="addEmployee()" nz-button [nzType]="'primary'">
-    {{ "BUTTON.ADD_EMPLOYEE" | translate }}
-  </button>
-  <div class="page__body">
-    <cvgen-base-table
-      [columns]="columns"
-      [data]="employeeList$ | async"
-      (clickedRowEmitter)="selectEmployee($event)"
-    ></cvgen-base-table>
-  </div>
+  @if (isLoading$ | async) {
+    <nz-spin></nz-spin>
+  } @else {
+    <button class="btn--primary" (click)="addEmployee()" nz-button [nzType]="'primary'">
+      {{ "BUTTON.ADD_EMPLOYEE" | translate }}
+    </button>
+    <div class="page__body">
+      <cvgen-base-table
+        [columns]="columns"
+        [data]="employeeList$ | async"
+        (clickedRowEmitter)="selectEmployee($event)"
+      ></cvgen-base-table>
+    </div>
+  }
 </div>

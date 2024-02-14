@@ -9,8 +9,10 @@
   padding: 30px 40px;
   .page {
     @extend %fullSize;
-    nz-tabset {
-      @extend %fullSize;
+    @include flex-container(initial, space-between, column);
+    .tabs__actions {
+      @include flex-container(initial, flex-end);
+      gap: 20px;
     }
   }
 }

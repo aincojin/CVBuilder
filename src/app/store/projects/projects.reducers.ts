@@ -18,39 +18,49 @@ import {
 const initialState: ProjectStateInterface = {
   projectList: [],
   project: null,
+  error: null,
+  isLoading: false,
 };
 
 const projectFeature = createFeature({
   name: "projects",
   reducer: createReducer(
     initialState,
-    on(fetchProjects, state => ({ ...state })),
+    on(fetchProjects, state => ({ ...state, isLoading: true })),
     on(fetchProjectsSuccess, (state, { projectList }) => ({
       ...state,
       projectList,
+      error: null,
+      isLoading: false,
     })),
-    on(fetchProjectsError, state => ({
+    on(fetchProjectsError, (state, { error }) => ({
       ...state,
       projectList: null,
+      error,
+      isLoading: false,
     })),
 
     on(fetchProject, state => ({ ...state })),
     on(fetchProjectSuccess, (state, { project }) => ({
       ...state,
       project,
+      error: null,
     })),
-    on(fetchProjectError, state => ({
+    on(fetchProjectError, (state, { error }) => ({
       ...state,
       project: null,
+      error,
     })),
 
     on(addProject, state => ({ ...state })),
     on(addProjectSuccess, (state, { addedProject }) => ({
       ...state,
       projectList: [...state.projectList, addedProject],
+      error: null,
     })),
-    on(addProjectError, state => ({
+    on(addProjectError, (state, { error }) => ({
       ...state,
+      error,
     })),
 
     on(updateProject, state => ({ ...state })),
@@ -62,12 +72,12 @@ const projectFeature = createFeature({
         ...state,
         projectList: updatedProjectList,
         project: updatedProject,
-        error: null,
       };
     }),
-    on(updateProjectError, state => ({
+    on(updateProjectError, (state, { error }) => ({
       ...state,
       project: null,
+      error,
     })),
   ),
 });
@@ -77,4 +87,5 @@ export const {
   reducer: projectReducer,
   selectProjectList,
   selectProject,
+  selectIsLoading,
 } = projectFeature;

@@ -1,5 +1,4 @@
-import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
+import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
 import { Paths } from "../enums/routes";
@@ -12,12 +11,9 @@ import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
   providedIn: "root",
 })
 export class AuthService {
-  constructor(
-    private cookieService: CookieService,
-    private authApiService: AuthApiService,
-    private router: Router,
-    private store: Store,
-  ) {}
+  private readonly router = inject(Router);
+  private readonly cookieService = inject(CookieService);
+  private readonly authApiService = inject(AuthApiService);
 
   public login(credentials: AuthInterface) {
     this.authApiService

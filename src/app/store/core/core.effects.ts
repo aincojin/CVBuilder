@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { switchMap, map } from "rxjs";
 import { CoreApiService } from "../../shared/services/api/core.api.service";
@@ -18,10 +18,8 @@ import { BaseEntityInterface } from "../../shared/interfaces/base-entity";
 
 @Injectable()
 export class CoreEffects {
-  constructor(
-    private actions$: Actions,
-    private coreApiService: CoreApiService,
-  ) {}
+  private readonly actions$ = inject(Actions);
+  private readonly coreApiService = inject(CoreApiService);
 
   getSpecializations$ = createEffect(() =>
     this.actions$.pipe(

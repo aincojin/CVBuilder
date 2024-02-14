@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { ProjectDtoInterface, ProjectInterface } from "../../shared/interfaces/project";
+import { ErrorInterface } from "../../shared/interfaces/error";
 
 export enum ProjectsActions {
   GET_PROJECTS = "[Projects] Get Projects",
@@ -24,7 +25,10 @@ export const fetchProjectsSuccess = createAction(
   ProjectsActions.GET_PROJECTS_SUCCESS,
   props<{ projectList: ProjectInterface[] }>(),
 );
-export const fetchProjectsError = createAction(ProjectsActions.GET_PROJECTS_ERROR);
+export const fetchProjectsError = createAction(
+  ProjectsActions.GET_PROJECTS_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const fetchProject = createAction(
   ProjectsActions.GET_PROJECT,
@@ -34,7 +38,10 @@ export const fetchProjectSuccess = createAction(
   ProjectsActions.GET_PROJECT_SUCCESS,
   props<{ project: ProjectInterface }>(),
 );
-export const fetchProjectError = createAction(ProjectsActions.GET_PROJECT_ERROR);
+export const fetchProjectError = createAction(
+  ProjectsActions.GET_PROJECT_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const addProject = createAction(
   ProjectsActions.ADD_PROJECT,
@@ -44,7 +51,10 @@ export const addProjectSuccess = createAction(
   ProjectsActions.ADD_PROJECT_SUCCESS,
   props<{ addedProject: ProjectInterface }>(),
 );
-export const addProjectError = createAction(ProjectsActions.ADD_PROJECT_ERROR);
+export const addProjectError = createAction(
+  ProjectsActions.ADD_PROJECT_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const updateProject = createAction(
   ProjectsActions.UPDATE_PROJECT,
@@ -54,4 +64,7 @@ export const updateProjectSuccess = createAction(
   ProjectsActions.UPDATE_PROJECT_SUCCESS,
   props<{ updatedProject: ProjectInterface }>(),
 );
-export const updateProjectError = createAction(ProjectsActions.UPDATE_PROJECT_ERROR);
+export const updateProjectError = createAction(
+  ProjectsActions.UPDATE_PROJECT_ERROR,
+  props<{ error: ErrorInterface }>(),
+);

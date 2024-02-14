@@ -1,7 +1,7 @@
 <div class="tab">
   <div class="tab__list">
     <ul class="tab__menu" nz-menu [nzMode]="'vertical'">
-      <li class="tab__menu-item" nz-menu-item *ngFor="let cv of cvData">
+      <li class="tab__menu-item" nz-menu-item *ngFor="let cv of selectedEmployeeData?.cvs">
         <div class="tab__menu-item__content">
           <span class="tab__menu-item--open">{{ cv.cvName }}</span>
           <span class="tab__menu-item--delete" nz-icon nzType="delete"></span>
@@ -57,7 +57,7 @@
           {{ "BUTTON.ADD_PROJECT" | translate }}
         </button>
       </nz-button-group>
-      <nz-collapse>
+      <nz-collapse class="tab__projects-collapse">
         <nz-collapse-panel *ngFor="let project of projectsData" [nzHeader]="project.projectName">
           <cvgen-project-form></cvgen-project-form>
         </nz-collapse-panel>
@@ -65,10 +65,10 @@
     </div>
 
     <nz-button-group class="tab__projects-actions">
-      <button nz-button type="submit" [nzType]="'default'" (click)="onCancel()">
+      <button nz-button type="reset" [nzType]="'default'" (click)="onCancel()">
         {{ "BUTTON.CANCEL" | translate }}
       </button>
-      <button nz-button type="reset" [nzType]="'primary'">
+      <button nz-button type="submit" [nzType]="'primary'">
         {{ "BUTTON.SUBMIT" | translate }}
       </button>
     </nz-button-group>

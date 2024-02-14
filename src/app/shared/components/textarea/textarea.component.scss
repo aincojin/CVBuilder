@@ -1,24 +1,3 @@
-// @import "../../../../assets/scss/mixins";
-// @import "../../../../assets/scss/placeholders";
-// @import "../../../../assets/scss/variables";
-
-// :host {
-//   @extend %fullSize;
-//   display: block;
-//   .ant-form-item-control-input {
-//     @extend %fullSize;
-//     nz-form-item {
-//       width: inherit;
-//       // margin-bottom: 10px;
-//       @extend %flexColumn;
-//       nz-form-label {
-//         padding: 5px;
-//         align-self: flex-start;
-//       }
-//     }
-//   }
-// }
-
 @import "../../../../assets/scss/mixins";
 @import "../../../../assets/scss/variables";
 @import "../../../../assets/scss/placeholders";
@@ -27,7 +6,7 @@
   @extend %fullSize;
   display: block;
   nz-form-item {
-    width: 100%; //TODO ?
+    width: 100%;
     margin: 0;
     nz-form-label {
       padding: 5px;

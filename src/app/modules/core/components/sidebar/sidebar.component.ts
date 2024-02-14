@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from "@angular/core";
 import { Router } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
 import { NzDividerModule } from "ng-zorro-antd/divider";
@@ -15,7 +22,7 @@ import { NzMenuModule } from "ng-zorro-antd/menu";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
-  constructor(private router: Router) {}
+  private readonly router = inject(Router);
 
   @Input() public isCollapsed: boolean;
   @Input() iconType: string = "menu-fold";

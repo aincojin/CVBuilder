@@ -1,13 +1,14 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit, inject } from "@angular/core";
 import { NzTabsModule } from "ng-zorro-antd/tabs";
+import { NzButtonModule } from "ng-zorro-antd/button";
 import { EmployeeCvFormComponent } from "../../components/employee-cv-form/employee-cv-form.component";
 import { EmployeeInfoFormComponent } from "../../components/employee-info-form/employee-info-form.component";
 import { TranslateModule } from "@ngx-translate/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { fetchEmployee } from "../../../../store/employees/employees.actions";
-import { EmployeeInterface } from "../../../../shared/interfaces/employee";
+import { fetchEmployee, updateEmployee } from "../../../../store/employees/employees.actions";
+import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { Observable } from "rxjs";
 import { selectEmployee } from "../../../../store/employees/employees.reducers";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
@@ -21,7 +22,10 @@ import {
   fetchDepartments,
   fetchSkills,
   fetchSpecializations,
+  setPageTitle,
 } from "../../../../store/core/core.actions";
+import { Paths } from "../../../../shared/enums/routes";
+import { AppState } from "../../../../store/state/state";
 
 @UntilDestroy()
 @Component({
@@ -33,12 +37,17 @@ import {
     EmployeeInfoFormComponent,
     EmployeeCvFormComponent,
     NzTabsModule,
+    NzButtonModule,
   ],
   templateUrl: "./edit-employee-page.component.html",
   styleUrl: "./edit-employee-page.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditEmployeePageComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly store = inject(Store<AppState>);
+
   public employeeId: number;
 
   public selectedEmployee$: Observable<EmployeeInterface> = this.store.select(selectEmployee);
@@ -47,18 +56,21 @@ export class EditEmployeePageComponent implements OnInit {
     this.store.select(selectSpecializations);
   public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
 
-  constructor(
-    private route: ActivatedRoute,
-    private store: Store,
-  ) {}
-
   public ngOnInit(): void {
-    this.route.params.pipe(untilDestroyed(this)).subscribe(params => {
+    this.activatedRoute.params.pipe(untilDestroyed(this)).subscribe(params => {
       this.employeeId = params["id"];
       this.store.dispatch(fetchEmployee({ employeeId: this.employeeId }));
     });
+    this.store.dispatch(setPageTitle({ pageTitle: `Edit Employees Profile` }));
     this.store.dispatch(fetchDepartments());
     this.store.dispatch(fetchSkills());
     this.store.dispatch(fetchSpecializations());
+  }
+
+  public updateExisting(updatedEmployee: EmployeeDtoInterface) {
+    console.log("update dispatch");
+    console.log(updatedEmployee);
+    this.store.dispatch(updateEmployee({ employeeId: this.employeeId, employee: updatedEmployee }));
+    this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
   }
 }

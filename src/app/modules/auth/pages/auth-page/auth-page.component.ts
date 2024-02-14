@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { NzIconModule } from "ng-zorro-antd/icon";
 import { AuthFormComponent } from "../../components/auth-form/auth-form.component";
 import { NzLayoutModule } from "ng-zorro-antd/layout";
@@ -23,7 +23,8 @@ import { TranslateModule } from "@ngx-translate/core";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthPageComponent {
-  constructor(private langService: LanguageService) {}
+  private readonly langService = inject(LanguageService);
+
   public changeLanguage(lang: string) {
     this.langService.switchLang(lang);
   }

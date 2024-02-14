@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { ProjectsApiService } from "../../shared/services/api/projects.api.service";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {
   addProject,
   addProjectSuccess,
@@ -12,21 +12,18 @@ import {
   updateProjectSuccess,
 } from "./projects.actions";
 import { ProjectInterface } from "../../shared/interfaces/project";
-import { switchMap, map, concatMap } from "rxjs";
+import { switchMap, map, concatMap, mergeMap } from "rxjs";
 
 @Injectable()
 export class ProjectsEffects {
-  constructor(
-    private actions$: Actions,
-    private projectsApiService: ProjectsApiService,
-  ) {}
+  private readonly actions$ = inject(Actions);
+  private readonly projectsApiService = inject(ProjectsApiService);
 
   getProjectList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchProjects),
       switchMap(() =>
         this.projectsApiService.fetchProjects().pipe(
-          // map((projectList: ProjectInterface[]) => fetchProjectsSuccess({ projectList }))),
           map(projectList => {
             const modifiedProjectList: ProjectInterface[] = projectList.map(project => ({
               ...project,
@@ -69,7 +66,7 @@ export class ProjectsEffects {
   updateProject$ = createEffect(() =>
     this.actions$.pipe(
       ofType(updateProject),
-      concatMap(action =>
+      mergeMap(action =>
         this.projectsApiService.updateProject(action.project, action.projectId).pipe(
           map(updatedProject => {
             return updateProjectSuccess({ updatedProject });

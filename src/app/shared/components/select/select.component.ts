@@ -40,6 +40,8 @@ export class SelectComponent implements OnInit {
 
   public writeValue(value: string[] | null): void {
     this.selectControl.setValue(value || []);
+    setTimeout(() => console.log(this.selectControl.value), 1000);
+    console.log(value);
   }
 
   public registerOnChange(fn: (value: string[]) => void): void {

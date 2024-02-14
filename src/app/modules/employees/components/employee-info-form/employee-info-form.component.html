@@ -39,6 +39,13 @@
         ></cvgen-select>
       </div>
     </div>
-    <button nz-button type="submit">{{ "BUTTON.SUBMIT" | translate }}</button>
+    <nz-button-group class="tabs__actions">
+      <button nz-button type="submit" [nzType]="'primary'">
+        {{ "BUTTON.SUBMIT" | translate }}
+      </button>
+      <button nz-button type="reset" [nzType]="'default'" (click)="onCancel()">
+        {{ "BUTTON.CANCEL" | translate }}
+      </button>
+    </nz-button-group>
   </form>
 </div>

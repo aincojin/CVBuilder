@@ -1,7 +1,12 @@
 import { createAction, props } from "@ngrx/store";
 import { BaseEntityInterface } from "../../shared/interfaces/base-entity";
+import { ErrorInterface } from "../../shared/interfaces/error";
 
 export enum CoreActions {
+  SET_PAGE_TITLE = "[Core] Set Page Title",
+
+  //TODO breadcrumbs
+
   GET_SPECIALIZATIONS = "[Core] Get Specializations",
   GET_SPECIALIZATIONS_SUCCESS = "[Core] Get Specializations Success",
   GET_SPECIALIZATIONS_ERROR = "[Core] Get Specializations Error",
@@ -23,37 +28,57 @@ export enum CoreActions {
   GET_RESPONSIBILITIES_ERROR = "[Core] Get Responsibilities Error",
 }
 
+export const setPageTitle = createAction(
+  CoreActions.SET_PAGE_TITLE,
+  props<{ pageTitle: string }>(),
+);
+
 export const fetchSpecializations = createAction(CoreActions.GET_SPECIALIZATIONS);
 export const fetchSpecializationsSuccess = createAction(
   CoreActions.GET_SPECIALIZATIONS_SUCCESS,
   props<{ specializations: BaseEntityInterface[] }>(),
 );
-export const fetchSpecializationsError = createAction(CoreActions.GET_SPECIALIZATIONS);
+export const fetchSpecializationsError = createAction(
+  CoreActions.GET_SPECIALIZATIONS,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const fetchDepartments = createAction(CoreActions.GET_DEPARTMENTS);
 export const fetchDepartmentsSuccess = createAction(
   CoreActions.GET_DEPARTMENTS_SUCCESS,
   props<{ departments: BaseEntityInterface[] }>(),
 );
-export const fetchDepartmentsError = createAction(CoreActions.GET_DEPARTMENTS_ERROR);
+export const fetchDepartmentsError = createAction(
+  CoreActions.GET_DEPARTMENTS_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const fetchSkills = createAction(CoreActions.GET_SKILLS);
 export const fetchSkillsSuccess = createAction(
   CoreActions.GET_SKILLS_SUCCESS,
   props<{ skills: BaseEntityInterface[] }>(),
 );
-export const fetchSkillsError = createAction(CoreActions.GET_SKILLS_ERROR);
+export const fetchSkillsError = createAction(
+  CoreActions.GET_SKILLS_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const fetchTeamRoles = createAction(CoreActions.GET_TEAM_ROLES);
 export const fetchTeamRolesSuccess = createAction(
   CoreActions.GET_TEAM_ROLES_SUCCESS,
   props<{ teamRoles: BaseEntityInterface[] }>(),
 );
-export const fetchTeamRolesError = createAction(CoreActions.GET_TEAM_ROLES_ERROR);
+export const fetchTeamRolesError = createAction(
+  CoreActions.GET_TEAM_ROLES_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const fetchResponsibilities = createAction(CoreActions.GET_RESPONSIBILITIES);
 export const fetchResponsibilitiesSuccess = createAction(
   CoreActions.GET_RESPONSIBILITIES_SUCCESS,
   props<{ responsibilities: BaseEntityInterface[] }>(),
 );
-export const fetchResponsibilitiesError = createAction(CoreActions.GET_RESPONSIBILITIES_ERROR);
+export const fetchResponsibilitiesError = createAction(
+  CoreActions.GET_RESPONSIBILITIES_ERROR,
+  props<{ error: ErrorInterface }>(),
+);

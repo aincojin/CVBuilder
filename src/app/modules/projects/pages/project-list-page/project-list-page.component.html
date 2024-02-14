@@ -1,12 +1,16 @@
 <div class="page">
-  <button class="btn--primary" (click)="addProject()" nz-button [nzType]="'primary'">
-    {{ "BUTTON.ADD_PROJECT" | translate }}
-  </button>
-  <div class="page__body">
-    <cvgen-base-table
-      [columns]="columns"
-      [data]="projectList$ | async"
-      (clickedRowEmitter)="selectProject($event)"
-    ></cvgen-base-table>
-  </div>
+  @if (isLoading$ | async) {
+    <nz-spin></nz-spin>
+  } @else {
+    <button class="btn--primary" (click)="addProject()" nz-button [nzType]="'primary'">
+      {{ "BUTTON.ADD_PROJECT" | translate }}
+    </button>
+    <div class="page__body">
+      <cvgen-base-table
+        [columns]="columns"
+        [data]="projectList$ | async"
+        (clickedRowEmitter)="selectProject($event)"
+      ></cvgen-base-table>
+    </div>
+  }
 </div>

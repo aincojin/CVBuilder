@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { ProjectDtoInterface, ProjectInterface } from "../../interfaces/project";
 import { API_URL } from "../../constants/api";
@@ -8,7 +8,7 @@ import { API_URL } from "../../constants/api";
   providedIn: "root",
 })
 export class ProjectsApiService {
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   public fetchProjects(): Observable<ProjectInterface[]> {
     const endpoint = `${API_URL}/projects`;

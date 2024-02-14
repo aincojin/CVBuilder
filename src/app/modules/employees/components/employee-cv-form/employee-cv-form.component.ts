@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, inject } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { PROJECT_DATA } from "../../../../shared/constants/projects.const";
 import { CV_DATA } from "../../../../shared/constants/cvs.const";
@@ -20,6 +20,7 @@ import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
 import { SelectComponent } from "../../../../shared/components/select/select.component";
 import { Store } from "@ngrx/store";
 import { EmployeeInterface } from "../../../../shared/interfaces/employee";
+import { AppState } from "../../../../store/state/state";
 
 @Component({
   selector: "cvgen-employee-cv-form",
@@ -53,19 +54,18 @@ export class EmployeeCvFormComponent {
 
   public baseForm: FormGroup;
 
-  //TODO move it up the hierachy, implement @Input()
+  //TODO move it up the hierachy, @Input()
   public cvData = CV_DATA;
   public projectsData = PROJECT_DATA;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private store: Store,
-  ) {
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly store = inject(Store<AppState>);
+
+  constructor() {
     this.baseForm = this.fb.group({
       lastName: ["", Validators.required],
-      // TODO expand email validation
       email: ["", [Validators.required, Validators.email]],
       specialization: ["", Validators.required],
       department: ["", Validators.required],

@@ -17,22 +17,9 @@
     <tbody>
       <tr *ngFor="let item of currentData" (click)="rowClicked(item)">
         <td *ngFor="let column of columns">
-          @switch (true) {
-            @case (isArray(item[column.valueField])) {
-              @for (obj of item[column.valueField]; let last = $last; track obj.id) {
-                {{ obj.name }}{{ last ? "" : ", " }}
-              }
-            }
-            @case (isBaseEntity(item[column.valueField])) {
-              {{ item[column.valueField].name }}
-            }
-            @default {
-              {{ item[column.valueField] }}
-            }
-          }
+          {{ item | tableItemsDisplay: column }}
         </td>
       </tr>
     </tbody>
-    <!-- <nz-pagination [nzPageIndex]="1" [nzTotal]="500" [nzPageSize]="2" (nzPageIndexChange)="onPageIndexChange($event)"></nz-pagination> -->
   </nz-table>
 </div>

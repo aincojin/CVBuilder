@@ -4,6 +4,9 @@ import {
   addCv,
   addCvError,
   addCvSuccess,
+  fetchCv,
+  fetchCvError,
+  fetchCvSuccess,
   fetchCvs,
   fetchCvsError,
   fetchCvsSuccess,
@@ -12,6 +15,8 @@ import {
 const initialState: CvStateInterface = {
   cvList: [],
   cv: null,
+  error: null,
+  isLoading: false,
 };
 
 const cvFeature = createFeature({
@@ -28,6 +33,16 @@ const cvFeature = createFeature({
       cvList: null,
     })),
 
+    on(fetchCv, state => ({ ...state })),
+    on(fetchCvSuccess, (state, { cv }) => ({
+      ...state,
+      cv,
+    })),
+    on(fetchCvError, state => ({
+      ...state,
+      cv: null,
+    })),
+
     on(addCv, state => ({
       ...state,
     })),
@@ -41,4 +56,10 @@ const cvFeature = createFeature({
   ),
 });
 
-export const { name: cvFeatureKey, reducer: cvReducer, selectCv, selectCvList } = cvFeature;
+export const {
+  name: cvFeatureKey,
+  reducer: cvReducer,
+  selectCv,
+  selectCvList,
+  selectIsLoading,
+} = cvFeature;

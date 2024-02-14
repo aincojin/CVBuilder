@@ -18,8 +18,8 @@ import { registerLocaleData } from "@angular/common";
 import en from "@angular/common/locales/en";
 import { projectFeatureKey, projectReducer } from "./store/projects/projects.reducers";
 import { ProjectsEffects } from "./store/projects/projects.effects";
-import { sharedFeatureKey, sharedReducer } from "./store/shared/shared.reducers";
-import { SharedEffects } from "./store/shared/shared.effects";
+import { coreFeatureKey, coreReducer } from "./store/core/core.reducers";
+import { CoreEffects } from "./store/core/core.effects";
 import { CvsEffects } from "./store/cvs/cvs.effects";
 import { cvFeatureKey, cvReducer } from "./store/cvs/cvs.reducers";
 
@@ -36,7 +36,7 @@ export const appConfig: ApplicationConfig = {
     provideStore(),
     provideState(employeeFeatureKey, employeeReducer),
     provideState(projectFeatureKey, projectReducer),
-    provideState(sharedFeatureKey, sharedReducer),
+    provideState(coreFeatureKey, coreReducer),
     provideState(cvFeatureKey, cvReducer),
     provideStoreDevtools({
       maxAge: 25,
@@ -55,7 +55,7 @@ export const appConfig: ApplicationConfig = {
         },
       }),
     ),
-    provideEffects(EmployeesEffects, ProjectsEffects, SharedEffects, CvsEffects),
+    provideEffects(EmployeesEffects, ProjectsEffects, CoreEffects, CvsEffects),
     provideHttpClient(withInterceptors([tokenInterceptor])),
     provideHttpClient(withFetch()),
     provideNzI18n(en_US),

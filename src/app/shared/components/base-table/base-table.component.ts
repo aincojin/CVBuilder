@@ -14,11 +14,19 @@ import { NzDividerModule } from "ng-zorro-antd/divider";
 import { TranslateModule } from "@ngx-translate/core";
 import { BaseEntityInterface } from "../../interfaces/base-entity";
 import { NzPaginationModule } from "ng-zorro-antd/pagination";
+import { TableItemsDisplayPipe } from "../../pipes/table-items-display.pipe";
 
 @Component({
   selector: "cvgen-base-table",
   standalone: true,
-  imports: [CommonModule, TranslateModule, NzTableModule, NzDividerModule, NzPaginationModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    TableItemsDisplayPipe,
+    NzTableModule,
+    NzDividerModule,
+    NzPaginationModule,
+  ],
   templateUrl: "./base-table.component.html",
   styleUrl: "./base-table.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,14 +37,14 @@ export class BaseTableComponent<T> implements OnChanges {
 
   @Output() clickedRowEmitter: EventEmitter<T> = new EventEmitter<T>();
 
-  public pageSize = 4;
+  public pageSize = 5;
   public currentPageIndex = 1;
   public currentData: readonly T[] = [];
   public totalItems: number = this.data.length;
   public totalPages: number = this.totalItems / this.pageSize;
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes["data"]) {
+    if (changes["data"].currentValue) {
       this.updateCurrentPageData();
     }
   }
@@ -55,12 +63,4 @@ export class BaseTableComponent<T> implements OnChanges {
   public rowClicked(item: T) {
     this.clickedRowEmitter.emit(item);
   }
-
-  public isArray(value: string[]): boolean {
-    return Array.isArray(value);
-  }
-  public isBaseEntity(value: BaseEntityInterface): boolean {
-    return typeof value === "object" && "id" in value && "name" in value;
-  }
-  // public onPageIndexChange($event){}
 }

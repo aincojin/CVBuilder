@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
-import { Store } from "@ngrx/store";
 import { AuthInterface } from "../../../../shared/interfaces/auth";
 import { AuthService } from "../../../../shared/services/auth.service";
 import { CommonModule } from "@angular/common";
@@ -12,7 +11,7 @@ import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzCheckboxModule } from "ng-zorro-antd/checkbox";
 import { NzAnchorModule } from "ng-zorro-antd/anchor";
 import { TranslateModule } from "@ngx-translate/core";
-import { NzFormLayoutType } from "ng-zorro-antd/form";
+
 @Component({
   selector: "cvgen-auth-form",
   standalone: true,
@@ -35,11 +34,10 @@ import { NzFormLayoutType } from "ng-zorro-antd/form";
 export class AuthFormComponent {
   public authForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private store: Store,
-  ) {
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+
+  constructor() {
     this.authForm = this.fb.group({
       email: ["e1@gmail.com", [Validators.required, Validators.email]],
       password: ["p1", Validators.required],

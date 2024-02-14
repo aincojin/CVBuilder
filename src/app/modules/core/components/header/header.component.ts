@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { AuthService } from "../../../../shared/services/auth.service";
 import { NzIconModule } from "ng-zorro-antd/icon";
 import { NzDropDownModule } from "ng-zorro-antd/dropdown";
@@ -14,10 +14,8 @@ import { LanguageService } from "../../../../shared/services/language.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  constructor(
-    private authService: AuthService,
-    private langService: LanguageService,
-  ) {}
+  private readonly authService = inject(AuthService);
+  private readonly langService = inject(LanguageService);
 
   public onLogout() {
     this.authService.logout();

@@ -6,7 +6,6 @@
   @extend %fullSize;
   display: block;
   .wrapper {
-    // height
     @include flex-container(center, center, column);
     .logo {
       @include flex-container(center, center);
@@ -29,35 +28,3 @@
     }
   }
 }
-// :host {
-//   @extend %fullSize;
-//   display: block;
-//   .form-wrapper {
-//     height: 70%;
-//     @include flex-container(center, center, column);
-//     .logo-wrapper {
-//       @include flex-container(center, center);
-//       gap: 15px;
-//       margin-bottom: 10px;
-//       .logo {
-//         width: 40px;
-//       }
-//       .logo-text {
-//         margin: 0;
-//       }
-//     }
-
-//     .form {
-//       width: 300px;
-//       @extend %flexColumn;
-//       gap: 20px;
-//       .form-control {
-//         width: 100%;
-//       }
-//       .login-options {
-//         height: fit-content;
-//         @include flex-container(center, space-between);
-//       }
-//     }
-//   }
-// }

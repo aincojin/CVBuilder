@@ -25,7 +25,6 @@ export const tokenInterceptor: HttpInterceptorFn = (
       } else if (error.status === 403) {
         return handleForbiddenError(error);
       }
-      // Continue the error propagation
       return throwError(() => error);
     }),
   );

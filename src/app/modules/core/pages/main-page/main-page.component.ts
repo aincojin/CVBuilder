@@ -14,8 +14,6 @@ import { RouterModule } from "@angular/router";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainPageComponent {
-  constructor() {}
-
   public isCollapsed = false;
   public iconType: string = "menu-fold";
 

@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../shared/interfaces/employee";
+import { ErrorInterface } from "../../shared/interfaces/error";
 
 export enum EmployeeActions {
   GET_EMPLOYEES = "[Employees] Get Employees",
@@ -24,7 +25,10 @@ export const fetchEmployeesSuccess = createAction(
   EmployeeActions.GET_EMPLOYEES_SUCCESS,
   props<{ employeeList: EmployeeInterface[] }>(),
 );
-export const fetchEmployeesError = createAction(EmployeeActions.GET_EMPLOYEES_ERROR);
+export const fetchEmployeesError = createAction(
+  EmployeeActions.GET_EMPLOYEES_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const fetchEmployee = createAction(
   EmployeeActions.GET_EMPLOYEE,
@@ -34,7 +38,10 @@ export const fetchEmployeeSuccess = createAction(
   EmployeeActions.GET_EMPLOYEE_SUCCESS,
   props<{ employee: EmployeeInterface }>(),
 );
-export const fetchEmployeeError = createAction(EmployeeActions.GET_EMPLOYEE_ERROR);
+export const fetchEmployeeError = createAction(
+  EmployeeActions.GET_EMPLOYEE_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const addEmployee = createAction(
   EmployeeActions.ADD_EMPLOYEE,
@@ -44,4 +51,20 @@ export const addEmployeeSuccess = createAction(
   EmployeeActions.ADD_EMPLOYEE_SUCCESS,
   props<{ addedEmployee: EmployeeInterface }>(),
 );
-export const addEmployeeError = createAction(EmployeeActions.ADD_EMPLOYEE_ERROR);
+export const addEmployeeError = createAction(
+  EmployeeActions.ADD_EMPLOYEE_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
+
+export const updateEmployee = createAction(
+  EmployeeActions.UPDATE_EMPLOYEE,
+  props<{ employeeId: number; employee: EmployeeDtoInterface }>(),
+);
+export const updateEmployeeSuccess = createAction(
+  EmployeeActions.UPDATE_EMPLOYEE_SUCCESS,
+  props<{ updatedEmployee: EmployeeInterface }>(),
+);
+export const updateEmployeeError = createAction(
+  EmployeeActions.UPDATE_EMPLOYEE_ERROR,
+  props<{ error: ErrorInterface }>(),
+);

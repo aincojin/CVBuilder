@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { NzButtonModule } from "ng-zorro-antd/button";
@@ -8,7 +15,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { Store } from "@ngrx/store";
 import { NzFormModule } from "ng-zorro-antd/form";
-import { addEmployee } from "../../../../store/employees/employees.actions";
+import { addEmployee, updateEmployee } from "../../../../store/employees/employees.actions";
 import { AppState } from "../../../../store/state/state";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Paths } from "../../../../shared/enums/routes";
@@ -38,26 +45,30 @@ export class EmployeeInfoFormComponent {
   @Input() public departmentData: BaseEntityInterface[];
   @Input() public specializationData: BaseEntityInterface[];
 
+  @Output() submitInfoForm: EventEmitter<EmployeeDtoInterface> =
+    new EventEmitter<EmployeeDtoInterface>();
+
+  @Output() updateInfoForm: EventEmitter<[EmployeeDtoInterface, number]> = new EventEmitter<
+    [EmployeeDtoInterface, number]
+  >();
+
   public baseForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private store: Store<AppState>,
-  ) {}
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly store = inject(Store<AppState>);
+
   ngOnInit(): void {
     this.baseForm = this.fb.group({
       firstName: ["", Validators.required],
       lastName: ["", Validators.required],
-      // TODO expand email validation
       email: ["", [Validators.required, Validators.email]],
       specialization: ["", Validators.required],
       department: ["", Validators.required],
     });
   }
 
-  //TODO write an employee service
   public onSubmit(): void {
     const { department, specialization, ...employeeModified } = this.baseForm.getRawValue();
     const newEmployee: EmployeeDtoInterface = {
@@ -65,16 +76,15 @@ export class EmployeeInfoFormComponent {
       department: department.toString(),
       specialization: specialization.toString(),
     };
-    // if (this.selectedEmployeeData) {
-    //   const employee = newEmployee;
-    //   console.log(this.employeeId);
-    //   this.store.dispatch(updateEmployee({ employee }));
-    // } else {
-    console.log(newEmployee);
-    this.store.dispatch(addEmployee({ newEmployee }));
-    // }
+    // console.log(newEmployee);
+
+    if (this.employeeId) {
+      this.submitInfoForm.emit(newEmployee);
+    } else {
+      this.submitInfoForm.emit(newEmployee);
+    }
     this.baseForm.reset();
-    this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
+    // this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
   }
 
   public onCancel() {

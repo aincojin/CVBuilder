@@ -14,7 +14,16 @@
     "LAST_NAME": "Last Name",
     "SPECIALIZATION": "Specialization",
     "DEPARTMENT": "Department",
-    "SKILLS": "Skills"
+    "SKILLS": "Skills",
+    "PROJECT_NAME": "Project Name",
+    "PROJECT_DURATION": "Project Duration",
+    "PROJECT_START_DATE": "Start Date",
+    "PROJECT_END_DATE": "End Date",
+    "TEAM_SIZE": "Team Size",
+    "TECH_STACK": "Tech Stack",
+    "ROLES": "Roles",
+    "DESCRIPTION": "Description",
+    "RESPONSIBILITIES": "Responsibilities"
   },
   "VALIDATION_ERROR": {
     "REQUIRED": "Please, specify the field",
@@ -29,8 +38,17 @@
     "ADD_EMPLOYEE": "Add Employee",
     "ADD_PROJECT": "Add Project"
   },
-  "EMPLOYEES_TITLE": "Employees",
-  "PROJECTS_TITLE": "Projects",
+  "TITLES": {
+    "EMPLOYEE_TITLE": "Employees",
+    "EMPLOYEE_LIST": "Employee List",
+    "CREATE_EMPLOYEE": "Create an Employee",
+    "EDIT_EMPLOYEE": "Edit Employee's Profile",
+
+    "PROJECT_TITLE": "Projects",
+    "PROJECT_LIST": "Project List",
+    "CREATE_PROJECT": "Create a Project",
+    "EDIT_PROJECT": "Edit the Project"
+  },
 
   "REMEMBER_ME": "Remember Me",
   "FORGOT_PASSWORD": "Forgot your password?"
