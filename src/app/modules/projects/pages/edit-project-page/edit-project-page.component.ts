@@ -9,10 +9,10 @@ import {
   fetchResponsibilities,
   fetchSkills,
   fetchTeamRoles,
-  setPageTitle,
+  setPageTitles,
 } from "../../../../store/core/core.actions";
 import { AppState } from "../../../../store/state/state";
-import { ProjectDtoInterface } from "../../../../shared/interfaces/project";
+import { ProjectDtoInterface, ProjectInterface } from "../../../../shared/interfaces/project";
 import { Paths } from "../../../../shared/enums/routes";
 import { Observable } from "rxjs";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
@@ -21,6 +21,7 @@ import {
   selectTeamRoles,
   selectResponsibilities,
 } from "../../../../store/core/core.reducers";
+import { selectProject } from "../../../../store/projects/projects.reducers";
 
 @UntilDestroy()
 @Component({
@@ -36,6 +37,7 @@ export class EditProjectPageComponent {
   private readonly store = inject(Store<AppState>);
   private readonly router = inject(Router);
 
+  public selectedProjectData$: Observable<ProjectInterface> = this.store.select(selectProject);
   public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
   public teamRolesList$: Observable<BaseEntityInterface[]> = this.store.select(selectTeamRoles);
   public responsibilityList$: Observable<BaseEntityInterface[]> =
@@ -44,7 +46,9 @@ export class EditProjectPageComponent {
   public projectId: number;
 
   public ngOnInit(): void {
-    this.store.dispatch(setPageTitle({ pageTitle: "Edit a Project" }));
+    this.store.dispatch(
+      setPageTitles({ pageTitle: "TITLES.PROJECT_TITLE", pageSubtitle: "TITLES.EDIT_PROJECT" }),
+    );
     this.store.dispatch(fetchSkills());
     this.store.dispatch(fetchTeamRoles());
     this.store.dispatch(fetchResponsibilities());

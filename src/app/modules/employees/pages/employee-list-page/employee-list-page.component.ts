@@ -17,7 +17,7 @@ import {
 import { AppState } from "../../../../store/state/state";
 import { TranslateModule } from "@ngx-translate/core";
 import { Paths } from "../../../../shared/enums/routes";
-import { setPageTitle } from "../../../../store/core/core.actions";
+import { setPageTitles } from "../../../../store/core/core.actions";
 
 @Component({
   selector: "cvgen-employee-list-page",
@@ -37,7 +37,9 @@ export class EmployeeListPageComponent implements OnInit {
   public columns = EMPLOYEE_TABLE_COLUMNS;
 
   ngOnInit(): void {
-    this.store.dispatch(setPageTitle({ pageTitle: "Employee List" }));
+    this.store.dispatch(
+      setPageTitles({ pageTitle: "TITLES.EMPLOYEE_TITLE", pageSubtitle: "TITLES.EMPLOYEE_LIST" }),
+    );
     this.store.dispatch(fetchEmployees());
   }
 

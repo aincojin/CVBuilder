@@ -7,10 +7,13 @@ import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzPageHeaderModule } from "ng-zorro-antd/page-header";
 import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
 import { Store } from "@ngrx/store";
-import { setPageTitle } from "../../../../store/core/core.actions";
 import { Observable } from "rxjs";
-import { selectPageTitle } from "../../../../store/core/core.reducers";
+import { selectBreadcrumbs, selectPageTitles } from "../../../../store/core/core.reducers";
 import { AppState } from "../../../../store/state/state";
+import { PageTitleInterface } from "../../../../shared/interfaces/page-title";
+import { addToBreadcrumbs } from "../../../../store/core/core.actions";
+import { BreadcrumbsInterface } from "../../../../shared/interfaces/breadcrumbs";
+import { Paths } from "../../../../shared/enums/routes";
 
 @Component({
   selector: "cvgen-employees-page",
@@ -30,6 +33,14 @@ import { AppState } from "../../../../store/state/state";
 export class EmployeesPageComponent {
   private readonly store = inject(Store<AppState>);
 
-  pageTitle$: Observable<string> = this.store.select(selectPageTitle);
-  public ngOnInit() {}
+  pageTitleS$: Observable<PageTitleInterface> = this.store.select(selectPageTitles);
+  breadcrumbs$: Observable<BreadcrumbsInterface[]> = this.store.select(selectBreadcrumbs);
+
+  public ngOnInit() {
+    this.store.dispatch(
+      addToBreadcrumbs({
+        breadcrumbs: [{ label: "TITLES.EMPLOYEE_TITLE", link: Paths.Employees }],
+      }),
+    );
+  }
 }

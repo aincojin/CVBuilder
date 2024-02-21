@@ -1,13 +1,17 @@
 <div class="page">
-  <nz-page-header [nzTitle]="'TITLES.EMPLOYEE_TITLE' | translate">
+  <nz-page-header
+    [nzTitle]="'TITLES.EMPLOYEE_TITLE' | translate"
+    *ngIf="pageTitleS$ | async as pageTitles"
+  >
     <nz-breadcrumb nz-page-header-breadcrumb>
-      <nz-breadcrumb-item>Home</nz-breadcrumb-item>
-      <nz-breadcrumb-item>
-        <a>Employees</a>
-      </nz-breadcrumb-item>
+      @for (item of breadcrumbs$ | async; track item.label) {
+        <nz-breadcrumb-item>
+          <a [routerLink]="item.link">{{ item.label | translate }}</a>
+        </nz-breadcrumb-item>
+      }
     </nz-breadcrumb>
     <nz-page-header-content class="page__header">
-      <p>{{ pageTitle$ | async }}</p>
+      <p>{{ pageTitles.pageSubtitle | translate }}</p>
     </nz-page-header-content>
   </nz-page-header>
   <div class="page__content">

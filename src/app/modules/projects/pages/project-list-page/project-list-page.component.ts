@@ -13,7 +13,7 @@ import { ProjectInterface } from "../../../../shared/interfaces/project";
 import { Paths } from "../../../../shared/enums/routes";
 import { selectIsLoading, selectProjectList } from "../../../../store/projects/projects.reducers";
 import { fetchProjects } from "../../../../store/projects/projects.actions";
-import { setPageTitle } from "../../../../store/core/core.actions";
+import { setPageTitles } from "../../../../store/core/core.actions";
 
 @Component({
   selector: "cvgen-project-list-page",
@@ -34,8 +34,9 @@ export class ProjectListPageComponent implements OnInit {
   public columns = PROJECTS_TABLE_COLUMNS;
 
   public ngOnInit(): void {
-    //TODO translations
-    this.store.dispatch(setPageTitle({ pageTitle: "Project List" }));
+    this.store.dispatch(
+      setPageTitles({ pageTitle: "TITLES.PROJECT_TITLE", pageSubtitle: "TITLES.PROJECT_LIST" }),
+    );
     this.store.dispatch(fetchProjects());
   }
 

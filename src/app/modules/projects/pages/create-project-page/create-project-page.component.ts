@@ -6,7 +6,7 @@ import {
   fetchResponsibilities,
   fetchSkills,
   fetchTeamRoles,
-  setPageTitle,
+  setPageTitles,
 } from "../../../../store/core/core.actions";
 import { AppState } from "../../../../store/state/state";
 import { Observable } from "rxjs";
@@ -40,7 +40,9 @@ export class CreateProjectPageComponent {
     this.store.select(selectResponsibilities);
 
   public ngOnInit(): void {
-    this.store.dispatch(setPageTitle({ pageTitle: "Create a Project" }));
+    this.store.dispatch(
+      setPageTitles({ pageTitle: "TITLES.PROJECT_TITLE", pageSubtitle: "TITLES.CREATE_PROJECT" }),
+    );
     this.store.dispatch(fetchSkills());
     this.store.dispatch(fetchTeamRoles());
     this.store.dispatch(fetchResponsibilities());
