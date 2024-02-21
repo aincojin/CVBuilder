@@ -1,0 +1,59 @@
+<div class="tab__form-wrapper">
+  <form nz-form [formGroup]="baseForm" [nzLayout]="'vertical'" (ngSubmit)="onSubmit()">
+    <button nz-button type="submit" [nzType]="'primary'">
+      {{ "BUTTON.SUBMIT" | translate }}
+    </button>
+    <div class="tab__form-controls">
+      <div class="tab__form-control">
+        <cvgen-input
+          [label]="'FIRST_NAME'"
+          inputType="text"
+          formControlName="firstName"
+        ></cvgen-input>
+      </div>
+      <div class="tab__form-control">
+        <cvgen-input
+          [label]="'LAST_NAME'"
+          inputType="text"
+          formControlName="lastName"
+        ></cvgen-input>
+      </div>
+      <div class="tab__form-control">
+        <cvgen-input [label]="'EMAIL'" inputType="email" formControlName="email"></cvgen-input>
+      </div>
+      <!-- TODO do i need those here too? -->
+      <div class="tab__form-control">
+        <cvgen-select [label]="'SPECIALIZATION'" formControlName="specialization"></cvgen-select>
+      </div>
+      <div class="tab__form-control">
+        <cvgen-select [label]="'DEPARTMENT'" formControlName="department"></cvgen-select>
+      </div>
+      <div class="tab__form-control">
+        <cvgen-multiselect [label]="'SKILLS'" formControlName="skills"></cvgen-multiselect>
+      </div>
+      <!-- TODO -->
+      <!-- <div class="tab__form-control">
+        <cvgen-multiselect
+          [label]="'LANGUAGES'"
+          formControlName="languages"
+        ></cvgen-multiselect>
+      </div> -->
+    </div>
+  </form>
+</div>
+<div class="tab__projects">
+  <!-- <nz-button-group class="tab__projects-actions">
+    <button class="tab__projects-add-btn" nz-button [nzType]="'primary'">
+      {{ "BUTTON.ADD_PROJECT" | translate }}
+    </button>
+  </nz-button-group> -->
+  <!-- TODO -->
+  <!-- <nz-collapse class="tab__projects-collapse">
+    <nz-collapse-panel
+      *ngFor="let project of selectedEmployeeData?.cvs['cvsProjects']"
+      [nzHeader]="project.projectName"
+    >
+      <cvgen-project-form></cvgen-project-form>
+    </nz-collapse-panel>
+  </nz-collapse> -->
+</div>

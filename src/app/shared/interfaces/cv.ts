@@ -31,3 +31,15 @@ export interface CvDtoInterface {
   employeeId: number;
   projects: ProjectDtoInterface[];
 }
+
+export interface CvFormInterface {
+  cvName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  skills: string[];
+  department: string;
+  specialization: string;
+  language: LanguageDtoInterface[];
+  projects: ProjectDtoInterface[];
+}

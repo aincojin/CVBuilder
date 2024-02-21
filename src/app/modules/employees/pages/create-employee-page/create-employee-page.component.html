@@ -12,15 +12,17 @@
         [departmentData]="departmentList$ | async"
         [specializationData]="specializationList$ | async"
         [skillData]="skillList$ | async"
+        [cvData]="cvData$ | async"
+        (cvAddedEmitter)="cvAdded($event)"
       ></cvgen-employee-cv-form>
     </nz-tab>
   </nz-tabset>
-  <!-- <nz-button-group class="tabs__actions">
+  <nz-button-group class="tabs__actions">
     <button nz-button type="submit" [nzType]="'default'">
       {{ "BUTTON.CANCEL" | translate }}
     </button>
-    <button nz-button type="reset" [nzType]="'primary'">
+    <button nz-button type="reset" [nzType]="'primary'" (click)="onSubmit()">
       {{ "BUTTON.SUBMIT" | translate }}
     </button>
-  </nz-button-group> -->
+  </nz-button-group>
 </div>

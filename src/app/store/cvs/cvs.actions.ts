@@ -1,7 +1,12 @@
 import { createAction, props } from "@ngrx/store";
-import { CvDtoInterface, CvInterface } from "../../shared/interfaces/cv";
+import { CvDtoInterface, CvFormInterface, CvInterface } from "../../shared/interfaces/cv";
 
 export enum CvsActions {
+  ADD_NEW_CV = "[Cvs] Add New Cv",
+  UPDATE_NEW_CV = "[Cvs] Update New Cv",
+  GET_NEW_CV = "[Cv] Get New Cv",
+  DELETE_NEW_CV = "[Cvs] Delete New Cv",
+
   GET_CVS = "[Cvs] Get Cvs",
   GET_CVS_SUCCESS = "[Cvs] Get Cvs Success",
   GET_CVS_ERROR = "[Cvs] Get Cvs Error",
@@ -11,13 +16,12 @@ export enum CvsActions {
   GET_CV_ERROR = "[Cvs] Get Cv Error",
 
   ADD_CV = "[Cvs] Add Cv",
-  // ADD_EMPTY_CV="[Cv] Add Empty Cv",
   ADD_CV_SUCCESS = "[Cvs] Add Cv Success",
   ADD_CV_ERROR = "[Cvs] Add Cv Error",
 
-  UPDATE_CV = "[Cvs] Upadate Cv",
-  UPDATE_CV_SUCCESS = "[CVS] Upadate Cv Success",
-  UPDATE_CV_ERROR = "[CVS] Upadate Cv Error",
+  UPDATE_CV = "[Cvs] Update Cv",
+  UPDATE_CV_SUCCESS = "[CVS] Update Cv Success",
+  UPDATE_CV_ERROR = "[CVS] Update Cv Error",
 }
 
 export const fetchCvs = createAction(CvsActions.GET_CVS);
@@ -44,3 +48,11 @@ export const updateCvSuccess = createAction(
   props<{ updatedCv: CvInterface }>(),
 );
 export const updateCvError = createAction(CvsActions.UPDATE_CV_ERROR);
+
+export const addNewCv = createAction(CvsActions.ADD_NEW_CV, props<{ newCv: CvFormInterface }>());
+export const fetchNewCv = createAction(CvsActions.GET_NEW_CV, props<{ newCvName: string }>());
+export const updateNewCv = createAction(
+  CvsActions.UPDATE_NEW_CV,
+  props<{ updatedNewCv: CvFormInterface }>(),
+);
+export const deleteNewCv = createAction(CvsActions.DELETE_NEW_CV, props<{ deletedCvId: number }>());

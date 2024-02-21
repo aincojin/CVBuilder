@@ -40,7 +40,7 @@
     .tab__content {
       flex: 1;
       .tab__form-wrapper {
-        width: 80%;
+        // width: 80%;
         .tab__form-controls {
           @include flex-container(initial, initial);
           gap: 20px;

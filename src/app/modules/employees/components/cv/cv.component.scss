@@ -1,0 +1,31 @@
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/placeholders";
+
+:host {
+  @extend %fullSize;
+  display: block;
+  .tab__form-wrapper {
+    // width: 80%;
+    .tab__form-controls {
+      @include flex-container(initial, initial);
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      .tab__form-control {
+        width: 30%;
+      }
+    }
+  }
+  .tab__projects {
+    @include flex-container(flex-end, center, column);
+    .tab__projects-collapse {
+      width: 100%;
+      margin: 10px 0 20px 0;
+    }
+  }
+  .tab__projects-actions {
+    @include flex-container(initial, flex-end);
+    gap: 15px;
+  }
+}

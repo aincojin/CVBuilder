@@ -4,15 +4,21 @@ import {
   addCv,
   addCvError,
   addCvSuccess,
+  addNewCv,
   fetchCv,
   fetchCvError,
   fetchCvSuccess,
   fetchCvs,
   fetchCvsError,
   fetchCvsSuccess,
+  fetchNewCv,
+  updateNewCv,
 } from "./cvs.actions";
 
 const initialState: CvStateInterface = {
+  newCvList: [],
+  newCv: null,
+
   cvList: [],
   cv: null,
   error: null,
@@ -53,12 +59,30 @@ const cvFeature = createFeature({
     on(addCvError, state => ({
       ...state,
     })),
+
+    on(addNewCv, (state, { newCv }) => ({
+      ...state,
+      newCvList: [...state.newCvList, newCv],
+    })),
+    on(updateNewCv, (state, { updatedNewCv }) => {
+      const updatedNewCvList = state.newCvList.map(newCv =>
+        newCv.cvName === updatedNewCv.cvName ? { ...updatedNewCv } : newCv,
+      );
+      return {
+        ...state,
+        newCvList: updatedNewCvList,
+        newCv: updatedNewCv,
+        error: null,
+      };
+    }),
   ),
 });
 
 export const {
   name: cvFeatureKey,
   reducer: cvReducer,
+  selectNewCvList,
+  selectNewCv,
   selectCv,
   selectCvList,
   selectIsLoading,
