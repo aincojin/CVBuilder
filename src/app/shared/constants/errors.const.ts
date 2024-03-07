@@ -1,6 +1,7 @@
 export const VALIDATION_ERR = {
   required: "VALIDATION_ERROR.REQUIRED",
   email: "VALIDATION_ERROR.EMAIL",
+  numericValue: "VALIDATION_ERROR.IS_NUMERIC",
   minlength: "VALIDATION_ERROR.MINLENGTH",
   maxlength: "VALIDATION_ERROR.MAXLENGTH",
 };

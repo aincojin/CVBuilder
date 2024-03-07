@@ -6,6 +6,7 @@ export enum CvsActions {
   UPDATE_NEW_CV = "[Cvs] Update New Cv",
   GET_NEW_CV = "[Cv] Get New Cv",
   DELETE_NEW_CV = "[Cvs] Delete New Cv",
+  RESET_NEW_CVS = "[Cvs] Reset New Cvs",
 
   GET_CVS = "[Cvs] Get Cvs",
   GET_CVS_SUCCESS = "[Cvs] Get Cvs Success",
@@ -42,7 +43,10 @@ export const addCvSuccess = createAction(
 );
 export const addCvError = createAction(CvsActions.ADD_CV_ERROR);
 
-export const updateCv = createAction(CvsActions.UPDATE_CV, props<{ cv: CvDtoInterface }>());
+export const updateCv = createAction(
+  CvsActions.UPDATE_CV,
+  props<{ cvId: number; cv: CvDtoInterface }>(),
+);
 export const updateCvSuccess = createAction(
   CvsActions.UPDATE_CV_SUCCESS,
   props<{ updatedCv: CvInterface }>(),
@@ -50,9 +54,13 @@ export const updateCvSuccess = createAction(
 export const updateCvError = createAction(CvsActions.UPDATE_CV_ERROR);
 
 export const addNewCv = createAction(CvsActions.ADD_NEW_CV, props<{ newCv: CvFormInterface }>());
+export const resetNewCvs = createAction(CvsActions.RESET_NEW_CVS);
 export const fetchNewCv = createAction(CvsActions.GET_NEW_CV, props<{ newCvName: string }>());
 export const updateNewCv = createAction(
   CvsActions.UPDATE_NEW_CV,
   props<{ updatedNewCv: CvFormInterface }>(),
 );
-export const deleteNewCv = createAction(CvsActions.DELETE_NEW_CV, props<{ deletedCvId: number }>());
+export const deleteNewCv = createAction(
+  CvsActions.DELETE_NEW_CV,
+  props<{ deletedCvName: string }>(),
+);

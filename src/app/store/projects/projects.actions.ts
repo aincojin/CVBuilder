@@ -3,6 +3,11 @@ import { ProjectDtoInterface, ProjectInterface } from "../../shared/interfaces/p
 import { ErrorInterface } from "../../shared/interfaces/error";
 
 export enum ProjectsActions {
+  ADD_NEW_PROJECT = "[Projects] Add New Project",
+  UPDATE_NEW_PROJECT = "[Projects] Update New Project",
+  GET_NEW_PROJECT = "[Project] Get New Project",
+  DELETE_NEW_PROJECT = "[Projects] Delete New Project",
+
   GET_PROJECTS = "[Projects] Get Projects",
   GET_PROJECTS_SUCCESS = "[Projects] Get Projects Success",
   GET_PROJECTS_ERROR = "[Projects] Get Projects Error",
@@ -67,4 +72,22 @@ export const updateProjectSuccess = createAction(
 export const updateProjectError = createAction(
   ProjectsActions.UPDATE_PROJECT_ERROR,
   props<{ error: ErrorInterface }>(),
+);
+
+// TODO
+export const addNewProject = createAction(
+  ProjectsActions.ADD_NEW_PROJECT,
+  props<{ newProject: ProjectDtoInterface }>(),
+);
+export const fetchNewProject = createAction(
+  ProjectsActions.GET_NEW_PROJECT,
+  props<{ newProjectName: string }>(),
+);
+// export const updateNewProject = createAction(
+//   ProjectsActions.UPDATE_NEW_PROJECT,
+//   props<{ updatedNewProject: ProjectFormInterface }>(),
+// );
+export const deleteNewProject = createAction(
+  ProjectsActions.DELETE_NEW_PROJECT,
+  props<{ deletedProjectId: number }>(),
 );

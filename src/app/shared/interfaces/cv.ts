@@ -1,6 +1,6 @@
 import { ProjectDtoInterface, ProjectInterface } from "./project";
 import { BaseEntityInterface } from "./base-entity";
-import { LanguageDtoInterface, LanguageInterface } from "./language";
+import { LanguageDtoInterface, LanguageFormInterface, LanguageInterface } from "./language";
 
 export interface CvInterface {
   id: number;
@@ -15,21 +15,21 @@ export interface CvInterface {
   departmentId: number;
   specializationId: number;
   employeeId: number;
-  projects: ProjectInterface[];
+  cvsProjects: ProjectInterface[];
 }
 
 export interface CvDtoInterface {
   id?: number;
+  employeeId: number;
   cvName: string;
-  language: LanguageDtoInterface[];
-  skills: string[];
   firstName: string;
   lastName: string;
   email: string;
+  skills: string[];
   department: string;
   specialization: string;
-  employeeId: number;
-  projects: ProjectDtoInterface[];
+  language: LanguageDtoInterface[];
+  cvsProjects: ProjectDtoInterface[];
 }
 
 export interface CvFormInterface {
@@ -40,6 +40,6 @@ export interface CvFormInterface {
   skills: string[];
   department: string;
   specialization: string;
-  language: LanguageDtoInterface[];
-  projects: ProjectDtoInterface[];
+  language: LanguageFormInterface[];
+  cvsProjects: ProjectDtoInterface[];
 }

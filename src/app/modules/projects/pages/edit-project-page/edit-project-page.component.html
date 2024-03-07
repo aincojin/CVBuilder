@@ -1,6 +1,9 @@
 <cvgen-project-form
+  *ngIf="selectedProjectData$ | async"
+  [selectedProjectData]="projectDataTransformed$ | async"
   [skillList]="skillList$ | async"
   [responsibilityList]="responsibilityList$ | async"
   [teamRolesList]="teamRolesList$ | async"
   (projectUpdatedEmitter)="projectUpdated($event)"
+  (projectCanceled)="onCancel()"
 ></cvgen-project-form>

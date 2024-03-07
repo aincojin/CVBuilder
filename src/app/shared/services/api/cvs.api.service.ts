@@ -24,8 +24,9 @@ export class CvsApiService {
     const endpoint = `${API_URL}/cvs`;
     return this.http.post<CvInterface>(endpoint, newCvData);
   }
-  // public addCv(newCvData: CvDtoInterface): Observable<CvInterface> {
-  //   const endpoint = `${API_URL}/cvs`;
-  //   return this.http.post<CvInterface>(endpoint, newCvData);
-  // }
+
+  public updateCv(updatedCvData: CvDtoInterface, cvId: number): Observable<CvInterface> {
+    const endpoint = `${API_URL}/cvs/${cvId}`;
+    return this.http.put<CvInterface>(endpoint, updatedCvData);
+  }
 }

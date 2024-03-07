@@ -7,6 +7,10 @@
   display: block;
   .tab__form-wrapper {
     // width: 80%;
+    .tab__actions {
+      @include flex-container(initial, flex-end);
+      margin-bottom: 10px;
+    }
     .tab__form-controls {
       @include flex-container(initial, initial);
       gap: 20px;
@@ -14,6 +18,30 @@
       margin-bottom: 20px;
       .tab__form-control {
         width: 30%;
+      }
+      .tab__form-array-wrapper {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        .tab__list-add-btn {
+          width: 30%;
+        }
+        .tab__form-array {
+          @include flex-container(initial, initial, column);
+          width: 60%;
+          .tab__from-group {
+            @include flex-container(center, initial);
+            gap: 20px;
+            .tab__form-control {
+              width: 40%;
+            }
+            .tab__menu-item--delete {
+              &:hover {
+                color: $red;
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -26,6 +54,5 @@
   }
   .tab__projects-actions {
     @include flex-container(initial, flex-end);
-    gap: 15px;
   }
 }

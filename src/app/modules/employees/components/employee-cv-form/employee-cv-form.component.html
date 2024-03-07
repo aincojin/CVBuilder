@@ -4,7 +4,12 @@
       <li class="tab__menu-item" nz-menu-item *ngFor="let cv of cvData">
         <div class="tab__menu-item__content" (click)="selectCv(cv)">
           <span class="tab__menu-item--open">{{ cv.cvName }}</span>
-          <span class="tab__menu-item--delete" nz-icon nzType="delete"></span>
+          <span
+            class="tab__menu-item--delete"
+            nz-icon
+            nzType="delete"
+            (click)="onDeleteCv(cv.cvName)"
+          ></span>
         </div>
         <nz-divider></nz-divider>
       </li>
@@ -14,15 +19,19 @@
     </button>
   </div>
   <div class="tab__content">
-    <!-- TODO  -->
-    <cvgen-cv *ngIf="selectedCv" [selectedCv]="selectedCv"></cvgen-cv>
-    <!-- <nz-button-group class="tab__projects-actions">
-      <button nz-button type="submit" [nzType]="'primary'">
-        {{ "BUTTON.SUBMIT" | translate }}
-      </button>
-      <button nz-button type="reset" [nzType]="'default'" (click)="onCancel()">
-        {{ "BUTTON.CANCEL" | translate }}
-      </button>
-    </nz-button-group> -->
+    <cvgen-cv
+      *ngIf="(selectedCv$ | async) && cvData"
+      [selectedCv]="selectedCv$ | async"
+      [selectedEmployeeData]="selectedEmployeeData"
+      [selectedProject]="selectedProject$ | async"
+      (projectSelectedEmitter)="projectIdSelected($event)"
+      [departmentData]="departmentData"
+      [skillData]="skillData"
+      [teamRolesList]="teamRolesList"
+      [responsibilityList]="responsibilityList"
+      [specializationData]="specializationData"
+      [projectData]="projectData"
+      (cvSavedEmitter)="saveNewCv($event)"
+    ></cvgen-cv>
   </div>
 </div>

@@ -4,11 +4,11 @@ import {
   EventEmitter,
   Input,
   Output,
+  SimpleChanges,
   inject,
 } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { PROJECT_DATA } from "../../../../shared/constants/projects.const";
-import { CV_DATA } from "../../../../shared/constants/cvs.const";
 import { CommonModule } from "@angular/common";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzDividerModule } from "ng-zorro-antd/divider";
@@ -21,17 +21,20 @@ import { NzTabsModule } from "ng-zorro-antd/tabs";
 import { NzCollapseModule } from "ng-zorro-antd/collapse";
 import { TranslateModule } from "@ngx-translate/core";
 import { NzFormModule } from "ng-zorro-antd/form";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Paths } from "../../../../shared/enums/routes";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
 import { SelectComponent } from "../../../../shared/components/select/select.component";
-import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
+import { EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { MultiselectComponent } from "../../../../shared/components/multiselect/multiselect.component";
-import { CvDtoInterface, CvFormInterface } from "../../../../shared/interfaces/cv";
+import { CvFormInterface, CvInterface } from "../../../../shared/interfaces/cv";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../../../store/state/state";
 import { CvComponent } from "../cv/cv.component";
-import { selectNewCv } from "../../../../store/cvs/cvs.reducers";
+import { selectNewCv, selectNewCvList } from "../../../../store/cvs/cvs.reducers";
+import { deleteNewCv, fetchNewCv, updateNewCv } from "../../../../store/cvs/cvs.actions";
+import { Observable } from "rxjs";
+import { ProjectInterface } from "../../../../shared/interfaces/project";
+import { selectProject } from "../../../../store/projects/projects.reducers";
+import { fetchProject } from "../../../../store/projects/projects.actions";
 
 @Component({
   selector: "cvgen-employee-cv-form",
@@ -63,57 +66,52 @@ export class EmployeeCvFormComponent {
   @Input() public departmentData: BaseEntityInterface[];
   @Input() public specializationData: BaseEntityInterface[];
   @Input() public skillData: BaseEntityInterface[];
+  @Input() public responsibilityList: BaseEntityInterface[];
+  @Input() public teamRolesList: BaseEntityInterface[];
   @Input() public cvData: CvFormInterface[];
+  @Input() public projectData: ProjectInterface[];
 
   public baseForm: FormGroup;
   public cvName: string;
-  public selectedCv: CvFormInterface;
 
   //TODO move it up the hierachy, @Input()
-  // public cvData = CV_DATA;
   public projectsData = PROJECT_DATA;
 
-  private readonly fb = inject(FormBuilder);
-  private readonly router = inject(Router);
-  private readonly activatedRoute = inject(ActivatedRoute);
   private readonly store = inject(Store<AppState>);
 
   @Output() cvAddedEmitter: EventEmitter<CvFormInterface> = new EventEmitter<CvFormInterface>();
   @Output() cvListEmitter: EventEmitter<CvFormInterface> = new EventEmitter<CvFormInterface>();
 
-  ngOnInit() {
-    this.baseForm = this.fb.group({
-      firstName: ["", Validators.required],
-      lastName: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-      specialization: [null, Validators.required],
-      department: [null, Validators.required],
-      skills: [null, Validators.required],
-      language: [null, Validators.required],
-      projects: [null, Validators.required],
-    });
-  }
+  public selectedCv$: Observable<CvFormInterface> = this.store.select(selectNewCv);
+  public newCvList$: Observable<CvFormInterface[]> = this.store.select(selectNewCvList);
+  public selectedProject$: Observable<ProjectInterface> = this.store.select(selectProject);
 
-  public onSubmit() {
-    console.log("hey");
-    console.log(this.baseForm.getRawValue());
-  }
   public addCv() {
-    // console.log("add cv");
     const uniqueCvName = this.generateUniqueCvName();
     const newCv: CvFormInterface = {
+      // cvName: uniqueCvName,
+      // cvsProjects: [],
+      // firstName: "",
+      // lastName: "",
+      // email: "",
+      // department: "",
+      // specialization: "",
+      // skills: [],
+      // language: [],
       cvName: uniqueCvName,
-      projects: [],
-      firstName: "",
-      lastName: "",
-      email: "",
-      department: "",
-      specialization: "",
-      skills: [],
+      cvsProjects: [],
+      firstName: "test",
+      lastName: "test",
+      email: "test@gmail.com",
+      department: "dept1",
+      specialization: "spec1",
+      skills: ["tech1", "tech2"],
       language: [],
     };
-    // console.log(newCv);
-    //TODO
+    console.log("skills: ", this.skillData);
+    console.log("roles: ", this.teamRolesList);
+    console.log("resp: ", this.responsibilityList);
+
     this.cvAddedEmitter.emit(newCv);
   }
   private generateUniqueCvName(): string {
@@ -121,12 +119,21 @@ export class EmployeeCvFormComponent {
     const uniqueName = `CV_${uniqueId}`;
     return uniqueName;
   }
-
-  public selectCv(cv: CvFormInterface) {
-    this.selectedCv = cv;
-    console.log("selected cv: ", this.selectedCv.cvName);
+  public projectIdSelected(projectId: number) {
+    this.store.dispatch(fetchProject({ projectId: projectId }));
   }
-  public onCancel() {
-    this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
+
+  public saveNewCv(savedCv: CvFormInterface) {
+    savedCv.language.map(lang => {
+      console.log(lang);
+    });
+    console.log("updatedCv: ", savedCv.language);
+    this.store.dispatch(updateNewCv({ updatedNewCv: savedCv }));
+  }
+  public selectCv(cv: CvFormInterface) {
+    this.store.dispatch(fetchNewCv({ newCvName: cv.cvName }));
+  }
+  public onDeleteCv(deletedName: string) {
+    this.store.dispatch(deleteNewCv({ deletedCvName: deletedName }));
   }
 }

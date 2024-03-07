@@ -15,9 +15,9 @@ export enum EmployeeActions {
   ADD_EMPLOYEE_SUCCESS = "[Employees] Add Employee Success",
   ADD_EMPLOYEE_ERROR = "[Employees] Add Employee Error",
 
-  UPDATE_EMPLOYEE = "[Employees] Upadate Employee",
-  UPDATE_EMPLOYEE_SUCCESS = "[Employees] Upadate Employee Success",
-  UPDATE_EMPLOYEE_ERROR = "[Employees] Upadate Employee Error",
+  UPDATE_EMPLOYEE = "[Employees] Update Employee",
+  UPDATE_EMPLOYEE_SUCCESS = "[Employees] Update Employee Success",
+  UPDATE_EMPLOYEE_ERROR = "[Employees] Update Employee Error",
 }
 
 export const fetchEmployees = createAction(EmployeeActions.GET_EMPLOYEES);

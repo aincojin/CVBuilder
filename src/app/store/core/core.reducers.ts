@@ -1,6 +1,8 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { CoreStateInterface } from "../state/coreState";
 import {
+  addToBreadcrumbs,
+  deleteFromBreadcrumbs,
   fetchDepartments,
   fetchDepartmentsError,
   fetchDepartmentsSuccess,
@@ -16,12 +18,13 @@ import {
   fetchTeamRoles,
   fetchTeamRolesError,
   fetchTeamRolesSuccess,
-  setPageTitle,
+  setBreadcrumbs,
+  setPageTitles,
 } from "./core.actions";
-import { state } from "@angular/animations";
 
 const initialState: CoreStateInterface = {
-  pageTitle: "",
+  pageTitles: null,
+  breadcrumbs: [],
   specializations: null,
   departments: [],
   skills: [],
@@ -34,10 +37,23 @@ const coreFeature = createFeature({
   name: "core",
   reducer: createReducer(
     initialState,
-    on(setPageTitle, (state, { pageTitle }) => ({
+    on(setPageTitles, (state, { pageTitle, pageSubtitle }) => ({
       ...state,
-      pageTitle,
+      pageTitles: { pageTitle, pageSubtitle },
     })),
+    on(setBreadcrumbs, (state, { breadcrumbs }) => ({
+      ...state,
+      breadcrumbs: breadcrumbs,
+    })),
+    on(addToBreadcrumbs, (state, { breadcrumb }) => ({
+      ...state,
+      breadcrumbs: [...state.breadcrumbs, breadcrumb],
+    })),
+    on(deleteFromBreadcrumbs, (state, { index }) => ({
+      ...state,
+      breadcrumbs: state.breadcrumbs.slice(0, index + 1),
+    })),
+
     on(fetchSpecializations, state => ({ ...state })),
     on(fetchSpecializationsSuccess, (state, { specializations }) => ({
       ...state,
@@ -102,7 +118,8 @@ const coreFeature = createFeature({
 export const {
   name: coreFeatureKey,
   reducer: coreReducer,
-  selectPageTitle,
+  selectPageTitles,
+  selectBreadcrumbs,
   selectDepartments,
   selectResponsibilities,
   selectSkills,

@@ -1,11 +1,5 @@
 <div class="tab">
-  <form
-    class="tab__form"
-    nz-form
-    [formGroup]="baseForm"
-    [nzLayout]="'vertical'"
-    (ngSubmit)="onSubmit()"
-  >
+  <form class="tab__form" nz-form [formGroup]="baseForm" [nzLayout]="'vertical'">
     <div class="tab__form-controls">
       <div class="tab__form-control">
         <cvgen-input
@@ -39,13 +33,5 @@
         ></cvgen-select>
       </div>
     </div>
-    <nz-button-group class="tabs__actions">
-      <button nz-button type="submit" [nzType]="'primary'">
-        {{ "BUTTON.SUBMIT" | translate }}
-      </button>
-      <button nz-button type="reset" [nzType]="'default'" (click)="onCancel()">
-        {{ "BUTTON.CANCEL" | translate }}
-      </button>
-    </nz-button-group>
   </form>
 </div>

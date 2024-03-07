@@ -27,8 +27,8 @@ export class ProjectsEffects {
           map(projectList => {
             const modifiedProjectList: ProjectInterface[] = projectList.map(project => ({
               ...project,
-              startDate: this.formatDate(project.startDate),
-              endDate: this.formatDate(project.endDate),
+              // startDate: this.formatDate(project.startDate),
+              // endDate: this.formatDate(project.endDate),
             })) as ProjectInterface[];
             return fetchProjectsSuccess({ projectList: modifiedProjectList });
           }),
@@ -76,8 +76,11 @@ export class ProjectsEffects {
     ),
   );
 
-  private formatDate(date: string): string {
-    const modifiedDate = new Date(date).toISOString().split("T")[0];
-    return modifiedDate.toString();
-  }
+  //TODO i dont set the time so everything after T is redundant
+  //so..maybe better to leave it here?..
+
+  // private formatDate(date: string): string {
+  //   const modifiedDate = new Date(date).toISOString().split("T")[0];
+  //   return modifiedDate.toString();
+  // }
 }

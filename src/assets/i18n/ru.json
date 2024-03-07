@@ -15,6 +15,8 @@
     "SPECIALIZATION": "Специализация",
     "DEPARTMENT": "Отдел",
     "SKILLS": "Навыки",
+    "LANGUAGES": "Язык",
+    "LEVELS": "Уровень",
     "PROJECT_NAME": "Название",
     "PROJECT_DURATION": "Продолжительность",
     "PROJECT_START_DATE": "Начало",
@@ -29,25 +31,29 @@
     "REQUIRED": "Пожалуйста, заполните поле",
     "EMAIL": "Пожалуйста, введите правильную почту",
     "MINLENGTH": "Недостаточно символов",
-    "MAXLENGTH": "Слишком много символов"
+    "MAXLENGTH": "Слишком много символов",
+    "IS_NUMERIC": "Введите число"
   },
   "BUTTON": {
     "LOG_IN": "Войти",
     "SUBMIT": "Подтвердить",
     "CANCEL": "Отмена",
+    "SAVE": "Сохранить",
     "ADD_PROJECT": "Добавить Проект",
     "ADD_EMPLOYEE": "Добавить Сотрудника"
   },
   "TITLES": {
-    "EMPLOYEES_TITLE": "Сотрудники",
+    "EMPLOYEE_TITLE": "Сотрудники",
     "EMPLOYEE_LIST": "Список Сотрудников",
     "CREATE_EMPLOYEE": "Создать Сотрудника",
     "EDIT_EMPLOYEE": "Изменить Сотрудника",
 
-    "PROJECTS_TITLE": "Проекты",
+    "PROJECT_TITLE": "Проекты",
     "PROJECT_LIST": "Список Проектов",
     "CREATE_PROJECT": "Создать Проект",
-    "EDIT_PROJECT": "Изменить Проект"
+    "EDIT_PROJECT": "Изменить Проект",
+
+    "HOME": "Главная"
   },
 
   "REMEMBER_ME": "Запомнить",

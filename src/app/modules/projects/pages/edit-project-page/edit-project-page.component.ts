@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { fetchProject, updateProject } from "../../../../store/projects/projects.actions";
 import {
+  addToBreadcrumbs,
+  deleteFromBreadcrumbs,
   fetchResponsibilities,
   fetchSkills,
   fetchTeamRoles,
@@ -22,6 +24,7 @@ import {
   selectResponsibilities,
 } from "../../../../store/core/core.reducers";
 import { selectProject } from "../../../../store/projects/projects.reducers";
+import { ProjectsService } from "../../services/projects.service";
 
 @UntilDestroy()
 @Component({
@@ -36,6 +39,7 @@ export class EditProjectPageComponent {
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly store = inject(Store<AppState>);
   private readonly router = inject(Router);
+  private readonly projectService = inject(ProjectsService);
 
   public selectedProjectData$: Observable<ProjectInterface> = this.store.select(selectProject);
   public skillList$: Observable<BaseEntityInterface[]> = this.store.select(selectSkills);
@@ -44,22 +48,37 @@ export class EditProjectPageComponent {
     this.store.select(selectResponsibilities);
 
   public projectId: number;
+  public projectDataTransformed$: Observable<ProjectDtoInterface>;
 
   public ngOnInit(): void {
+    this.activatedRoute.params.pipe(untilDestroyed(this)).subscribe(params => {
+      this.projectId = params["id"];
+      this.store.dispatch(fetchProject({ projectId: this.projectId }));
+      this.store.dispatch(
+        addToBreadcrumbs({
+          breadcrumb: {
+            label: "TITLES.EDIT_PROJECT",
+            link: { path: `${Paths.EditProject}/${this.projectId}`, id: this.projectId },
+          },
+        }),
+      );
+    });
     this.store.dispatch(
       setPageTitles({ pageTitle: "TITLES.PROJECT_TITLE", pageSubtitle: "TITLES.EDIT_PROJECT" }),
     );
     this.store.dispatch(fetchSkills());
     this.store.dispatch(fetchTeamRoles());
     this.store.dispatch(fetchResponsibilities());
-    this.activatedRoute.params.pipe(untilDestroyed(this)).subscribe(params => {
-      this.projectId = params["id"];
-      this.store.dispatch(fetchProject({ projectId: this.projectId }));
-    });
+    this.projectDataTransformed$ = this.projectService.fromProjectToDto(this.selectedProjectData$);
   }
 
   public projectUpdated(updatedProject: ProjectDtoInterface) {
     this.store.dispatch(updateProject({ project: updatedProject, projectId: this.projectId }));
+    this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
+  }
+
+  public onCancel() {
+    this.store.dispatch(deleteFromBreadcrumbs({ index: -2 }));
     this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
   }
 }

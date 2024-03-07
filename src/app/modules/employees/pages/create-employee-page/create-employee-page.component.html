@@ -4,7 +4,7 @@
       <cvgen-employee-info-form
         [departmentData]="departmentList$ | async"
         [specializationData]="specializationList$ | async"
-        (submitInfoForm)="addNewEmployee($event)"
+        [formInvalid]="formInvalid"
       ></cvgen-employee-info-form>
     </nz-tab>
     <nz-tab [nzTitle]="'TAB.CV' | translate">
@@ -12,13 +12,16 @@
         [departmentData]="departmentList$ | async"
         [specializationData]="specializationList$ | async"
         [skillData]="skillList$ | async"
+        [teamRolesList]="teamRolesList$ | async"
+        [responsibilityList]="responsibilityList$ | async"
         [cvData]="cvData$ | async"
+        [projectData]="projectData$ | async"
         (cvAddedEmitter)="cvAdded($event)"
       ></cvgen-employee-cv-form>
     </nz-tab>
   </nz-tabset>
   <nz-button-group class="tabs__actions">
-    <button nz-button type="submit" [nzType]="'default'">
+    <button nz-button type="submit" [nzType]="'default'" (click)="onCancel()">
       {{ "BUTTON.CANCEL" | translate }}
     </button>
     <button nz-button type="reset" [nzType]="'primary'" (click)="onSubmit()">

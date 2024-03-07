@@ -18,6 +18,7 @@ import {
 const initialState: EmployeeStateInterface = {
   employeeList: [],
   employee: null,
+  responseData: null,
   error: null,
   isLoading: false,
 };
@@ -56,6 +57,7 @@ const employeeFeature = createFeature({
     on(addEmployeeSuccess, (state, { addedEmployee }) => ({
       ...state,
       employeeList: [...state.employeeList, addedEmployee],
+      responseData: addedEmployee,
       error: null,
     })),
     on(addEmployeeError, (state, { error }) => ({
@@ -89,4 +91,5 @@ export const {
   selectEmployeeList,
   selectEmployee,
   selectIsLoading,
+  selectResponseData,
 } = employeeFeature;

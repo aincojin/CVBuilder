@@ -22,21 +22,20 @@
         <div class="form___form-control form__input">
           <cvgen-input formControlName="teamSize" [label]="'TEAM_SIZE'"></cvgen-input>
         </div>
-
         <div class="form___form-control form__input">
-          <cvgen-select
+          <cvgen-multiselect
             formControlName="techStack"
             [label]="'TECH_STACK'"
             [listOfOptions]="skillList"
-          ></cvgen-select>
+          ></cvgen-multiselect>
         </div>
 
         <div class="form___form-control form__input">
-          <cvgen-select
+          <cvgen-multiselect
             formControlName="teamRoles"
             [label]="'ROLES'"
             [listOfOptions]="teamRolesList"
-          ></cvgen-select>
+          ></cvgen-multiselect>
         </div>
       </div>
     </div>
@@ -45,11 +44,11 @@
         <cvgen-textarea formControlName="description" [label]="'DESCRIPTION'"></cvgen-textarea>
       </div>
       <div class="form___form-control form__textarea">
-        <cvgen-select
+        <cvgen-multiselect
           formControlName="responsibilities"
           [label]="'RESPONSIBILITIES'"
           [listOfOptions]="responsibilityList"
-        ></cvgen-select>
+        ></cvgen-multiselect>
       </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, Self } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Self } from "@angular/core";
 import { FormControl, NgControl, ReactiveFormsModule } from "@angular/forms";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { VALIDATION_ERR } from "../../constants/errors.const";
@@ -34,7 +34,10 @@ export class TextareaComponent {
   public changed: (value: string) => void;
   public touched: () => void;
 
-  constructor(@Self() public ngControl: NgControl) {
+  constructor(
+    @Self() public ngControl: NgControl,
+    private cdRef: ChangeDetectorRef,
+  ) {
     ngControl.valueAccessor = this;
   }
 
@@ -44,6 +47,16 @@ export class TextareaComponent {
         this.changed(val);
       }
     });
+  }
+  public ngDoCheck(): void {
+    if (this.ngControl.control.errors !== this.textControl.errors) {
+    }
+    if (this.ngControl.control.touched) {
+      this.textControl.markAsTouched();
+    } else {
+      this.textControl.markAsPristine();
+    }
+    this.cdRef.markForCheck();
   }
 
   public onInputBlur() {

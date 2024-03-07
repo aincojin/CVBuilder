@@ -1,12 +1,20 @@
 <nz-form-item>
   <nz-form-label nzRequired>{{ "LABEL." + label | translate }}</nz-form-label>
   <nz-form-control>
-    <nz-select nzMode="multiple" nzAllowClear="true" [formControl]="selectControl">
+    <nz-select nzAllowClear="true" [formControl]="selectControl" (nzBlur)="onSelectBlur()">
       <nz-option
         *ngFor="let item of listOfOptions"
         [nzLabel]="item.name"
         [nzValue]="item.name"
       ></nz-option>
     </nz-select>
+    <div class="error-wrapper" *ngIf="selectControl.touched">
+      <div
+        *ngIf="ngControl.errors && (ngControl.errors | validationError) as errorKey"
+        class="error"
+      >
+        {{ validationErr[errorKey] | translate }}
+      </div>
+    </div>
   </nz-form-control>
 </nz-form-item>

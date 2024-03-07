@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { TableColumns } from "../interfaces/table-columns";
 import { BaseEntityInterface } from "../interfaces/base-entity";
+import { isoDatePattern } from "../constants/date-iso.const";
 
 @Pipe({
   name: "tableItemsDisplay",
@@ -12,6 +13,9 @@ export class TableItemsDisplayPipe<T> implements PipeTransform {
       return item[column.valueField].map((obj: any) => obj.name).join(", ");
     } else if (isBaseEntity(item[column.valueField])) {
       return item[column.valueField].name;
+    } else if (isISODate(item[column.valueField])) {
+      const modifiedDate = new Date(item[column.valueField]).toISOString().split("T")[0];
+      return modifiedDate.toString();
     } else {
       return item[column.valueField];
     }
@@ -25,8 +29,7 @@ function isArray(value: string[]): boolean {
 function isBaseEntity(value: BaseEntityInterface): boolean {
   return typeof value === "object" && "id" in value && "name" in value;
 }
-//TODO ?..(effects)
-function formatDate(date: string): string {
-  const modifiedDate = new Date(date).toISOString().split("T")[0];
-  return modifiedDate.toString();
+
+function isISODate(value: string): boolean {
+  return isoDatePattern.test(value);
 }

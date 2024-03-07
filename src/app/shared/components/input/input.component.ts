@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, Self } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Self } from "@angular/core";
 import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } from "@angular/forms";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { VALIDATION_ERR } from "../../constants/errors.const";
@@ -35,7 +35,10 @@ export class InputComponent implements ControlValueAccessor {
   public touched: () => void;
 
   //@Self() makes sure that if you wrap the formControl with another formControl it works fine
-  constructor(@Self() public ngControl: NgControl) {
+  constructor(
+    @Self() public ngControl: NgControl,
+    private cdRef: ChangeDetectorRef,
+  ) {
     ngControl.valueAccessor = this;
   }
 
@@ -52,20 +55,25 @@ export class InputComponent implements ControlValueAccessor {
       this.touched();
     }
   }
-
-  //takes a value from the form control value and updates the corresponding view.
-  public writeValue(value: string): void {
-    this.textControl.setValue(value);
+  //TODO the hell..
+  public ngDoCheck(): void {
+    if (this.ngControl.control.touched) {
+      this.textControl.markAsTouched();
+    }
+    this.cdRef.markForCheck();
   }
 
-  //notifies angular about the change
-  // is used to register a callback function that should be called whenever the control's value changes in the view
+  //TODO do a normal prefill tf is this it doesnt even work properly
+  public writeValue(value: string): void {
+    this.textControl.setValue(value);
+    this.cdRef.detectChanges();
+    // console.log(this.textControl.value);
+    setTimeout(() => console.log(this.textControl.value), 1000);
+  }
+
   public registerOnChange(fn: (value: string) => void): void {
     this.changed = fn;
   }
-  //is used to register a callback function that should be called
-  //when the control is touched (e.g., clicked or focused)
-  //e.g. validation
   public registerOnTouched(fn: () => void): void {
     this.touched = fn;
   }

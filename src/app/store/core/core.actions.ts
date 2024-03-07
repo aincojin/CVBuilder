@@ -1,11 +1,15 @@
 import { createAction, props } from "@ngrx/store";
 import { BaseEntityInterface } from "../../shared/interfaces/base-entity";
 import { ErrorInterface } from "../../shared/interfaces/error";
+import { BreadcrumbsInterface } from "../../shared/interfaces/breadcrumbs";
 
 export enum CoreActions {
-  SET_PAGE_TITLE = "[Core] Set Page Title",
+  SET_PAGE_TITLES = "[Core] Set Page Title",
 
   //TODO breadcrumbs
+  SET_BREADCRUMBS = "[Core] Set Breadcrumbs",
+  ADD_TO_BREADCRUMBS = "[Core] Add To Breadcrumbs",
+  DELETE_FROM_BREADCRUMBS = "[Core] Delete From Breadcrumbs",
 
   GET_SPECIALIZATIONS = "[Core] Get Specializations",
   GET_SPECIALIZATIONS_SUCCESS = "[Core] Get Specializations Success",
@@ -28,9 +32,22 @@ export enum CoreActions {
   GET_RESPONSIBILITIES_ERROR = "[Core] Get Responsibilities Error",
 }
 
-export const setPageTitle = createAction(
-  CoreActions.SET_PAGE_TITLE,
-  props<{ pageTitle: string }>(),
+export const setPageTitles = createAction(
+  CoreActions.SET_PAGE_TITLES,
+  props<{ pageTitle: string; pageSubtitle: string }>(),
+);
+
+export const setBreadcrumbs = createAction(
+  CoreActions.SET_BREADCRUMBS,
+  props<{ breadcrumbs: BreadcrumbsInterface[] }>(),
+);
+export const addToBreadcrumbs = createAction(
+  CoreActions.ADD_TO_BREADCRUMBS,
+  props<{ breadcrumb: BreadcrumbsInterface }>(),
+);
+export const deleteFromBreadcrumbs = createAction(
+  CoreActions.DELETE_FROM_BREADCRUMBS,
+  props<{ index: number }>(),
 );
 
 export const fetchSpecializations = createAction(CoreActions.GET_SPECIALIZATIONS);

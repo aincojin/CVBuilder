@@ -1,0 +1,19 @@
+@import "../../../../assets/scss/mixins";
+@import "../../../../assets/scss/variables";
+@import "../../../../assets/scss/placeholders";
+
+:host {
+  @extend %fullSize;
+  display: block;
+  nz-form-item {
+    width: 100%;
+    margin: 0;
+    nz-form-label {
+      padding: 5px;
+    }
+    .error-wrapper {
+      color: $red;
+      text-align: end;
+    }
+  }
+}

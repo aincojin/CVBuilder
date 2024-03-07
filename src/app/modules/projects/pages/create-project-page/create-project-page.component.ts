@@ -3,6 +3,8 @@ import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { ProjectFormComponent } from "../../../../shared/components/project-form/project-form.component";
 import { Store } from "@ngrx/store";
 import {
+  addToBreadcrumbs,
+  deleteFromBreadcrumbs,
   fetchResponsibilities,
   fetchSkills,
   fetchTeamRoles,
@@ -43,6 +45,11 @@ export class CreateProjectPageComponent {
     this.store.dispatch(
       setPageTitles({ pageTitle: "TITLES.PROJECT_TITLE", pageSubtitle: "TITLES.CREATE_PROJECT" }),
     );
+    this.store.dispatch(
+      addToBreadcrumbs({
+        breadcrumb: { label: "TITLES.CREATE_PROJECT", link: { path: Paths.CreateProject } },
+      }),
+    );
     this.store.dispatch(fetchSkills());
     this.store.dispatch(fetchTeamRoles());
     this.store.dispatch(fetchResponsibilities());
@@ -50,6 +57,11 @@ export class CreateProjectPageComponent {
 
   public projectAdded(newProject: ProjectDtoInterface) {
     this.store.dispatch(addProject({ newProject }));
+    this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
+  }
+
+  public onCancel() {
+    this.store.dispatch(deleteFromBreadcrumbs({ index: -2 }));
     this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
   }
 }

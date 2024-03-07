@@ -6,7 +6,8 @@
   @extend %fullSize;
   display: block;
   .form {
-    @extend %flexColumn;
+    @include flex-container(initial, space-between, column);
+    @extend %fullSize;
     .form__form-controls {
       @extend %flexColumn;
       gap: 20px;
@@ -35,8 +36,8 @@
       }
     }
     .form__buttons {
-      @include flex-container(initial, initial);
-      gap: 10px;
+      @include flex-container(initial, flex-end);
+      gap: 20px;
     }
   }
 }

@@ -4,7 +4,7 @@
     <nz-form-control>
       <nz-input-group>
         <!-- TODO blur doesnt work for nz-range-picker for some reason:( -->
-        <nz-range-picker [formControl]="dateRangeControl" (blur)="onInputBlur()"></nz-range-picker>
+        <nz-range-picker [formControl]="dateRangeControl"></nz-range-picker>
       </nz-input-group>
       <div class="error-wrapper" *ngIf="dateRangeControl.touched">
         <div

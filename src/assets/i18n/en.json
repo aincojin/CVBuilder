@@ -15,6 +15,8 @@
     "SPECIALIZATION": "Specialization",
     "DEPARTMENT": "Department",
     "SKILLS": "Skills",
+    "LANGUAGES": "Language",
+    "LEVELS": "Level",
     "PROJECT_NAME": "Project Name",
     "PROJECT_DURATION": "Project Duration",
     "PROJECT_START_DATE": "Start Date",
@@ -29,12 +31,14 @@
     "REQUIRED": "Please, specify the field",
     "EMAIL": "Please, enter a valid e-mail address",
     "MINLENGTH": "Not enough characters",
-    "MAXLENGTH": "Too many characters"
+    "MAXLENGTH": "Too many characters",
+    "IS_NUMERIC": "Enter a number"
   },
   "BUTTON": {
     "LOG_IN": "Log in",
     "SUBMIT": "Submit",
     "CANCEL": "Cancel",
+    "SAVE": "Save",
     "ADD_EMPLOYEE": "Add Employee",
     "ADD_PROJECT": "Add Project"
   },
@@ -47,7 +51,9 @@
     "PROJECT_TITLE": "Projects",
     "PROJECT_LIST": "Project List",
     "CREATE_PROJECT": "Create a Project",
-    "EDIT_PROJECT": "Edit the Project"
+    "EDIT_PROJECT": "Edit the Project",
+
+    "HOME": "Home"
   },
 
   "REMEMBER_ME": "Remember Me",

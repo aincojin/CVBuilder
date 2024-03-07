@@ -7,10 +7,12 @@ import {
   fetchCvSuccess,
   fetchCvs,
   fetchCvsSuccess,
+  updateCv,
+  updateCvSuccess,
 } from "./cvs.actions";
 import { CvInterface } from "../../shared/interfaces/cv";
 import { Injectable, inject } from "@angular/core";
-import { switchMap, map, concatMap } from "rxjs";
+import { switchMap, map, concatMap, mergeMap } from "rxjs";
 
 @Injectable()
 export class CvsEffects {
@@ -46,6 +48,19 @@ export class CvsEffects {
         this.cvsApiService.addCv(action.cv).pipe(
           map(addedCv => {
             return addCvSuccess({ addedCv });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  updateCv$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateCv),
+      mergeMap(action =>
+        this.cvsApiService.updateCv(action.cv, action.cvId).pipe(
+          map(updatedCv => {
+            return updateCvSuccess({ updatedCv });
           }),
         ),
       ),

@@ -11,9 +11,14 @@ import { Observable } from "rxjs";
 import { selectBreadcrumbs, selectPageTitles } from "../../../../store/core/core.reducers";
 import { AppState } from "../../../../store/state/state";
 import { PageTitleInterface } from "../../../../shared/interfaces/page-title";
-import { addToBreadcrumbs } from "../../../../store/core/core.actions";
+import {
+  addToBreadcrumbs,
+  deleteFromBreadcrumbs,
+  setBreadcrumbs,
+} from "../../../../store/core/core.actions";
 import { BreadcrumbsInterface } from "../../../../shared/interfaces/breadcrumbs";
 import { Paths } from "../../../../shared/enums/routes";
+import { resetNewCvs } from "../../../../store/cvs/cvs.actions";
 
 @Component({
   selector: "cvgen-employees-page",
@@ -38,9 +43,13 @@ export class EmployeesPageComponent {
 
   public ngOnInit() {
     this.store.dispatch(
-      addToBreadcrumbs({
-        breadcrumbs: [{ label: "TITLES.EMPLOYEE_TITLE", link: Paths.Employees }],
+      setBreadcrumbs({
+        breadcrumbs: [{ label: "TITLES.EMPLOYEE_TITLE", link: { path: Paths.Employees } }],
       }),
     );
+  }
+  public onBreadcrumbClick(index: number) {
+    this.store.dispatch(resetNewCvs());
+    this.store.dispatch(deleteFromBreadcrumbs({ index: index }));
   }
 }

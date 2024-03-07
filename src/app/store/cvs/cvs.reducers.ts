@@ -5,6 +5,7 @@ import {
   addCvError,
   addCvSuccess,
   addNewCv,
+  deleteNewCv,
   fetchCv,
   fetchCvError,
   fetchCvSuccess,
@@ -12,6 +13,10 @@ import {
   fetchCvsError,
   fetchCvsSuccess,
   fetchNewCv,
+  resetNewCvs,
+  updateCv,
+  updateCvError,
+  updateCvSuccess,
   updateNewCv,
 } from "./cvs.actions";
 
@@ -60,9 +65,32 @@ const cvFeature = createFeature({
       ...state,
     })),
 
+    on(updateCv, state => ({ ...state })),
+    on(updateCvSuccess, (state, { updatedCv }) => {
+      const updatedCvList = state.cvList.map(cv =>
+        cv.id === updatedCv.id ? { ...updatedCv } : cv,
+      );
+      return {
+        ...state,
+        cvList: updatedCvList,
+        cv: updatedCv,
+        error: null,
+      };
+    }),
+    on(updateCvError, state => ({
+      ...state,
+      cv: null,
+    })),
+
     on(addNewCv, (state, { newCv }) => ({
       ...state,
       newCvList: [...state.newCvList, newCv],
+      newCv: null,
+    })),
+    on(resetNewCvs, state => ({
+      ...state,
+      newCvList: [],
+      newCv: null,
     })),
     on(updateNewCv, (state, { updatedNewCv }) => {
       const updatedNewCvList = state.newCvList.map(newCv =>
@@ -73,6 +101,20 @@ const cvFeature = createFeature({
         newCvList: updatedNewCvList,
         newCv: updatedNewCv,
         error: null,
+      };
+    }),
+    on(fetchNewCv, (state, { newCvName }) => {
+      const selectedNewCv = state.newCvList.find(selectedCv => selectedCv.cvName === newCvName);
+      return {
+        ...state,
+        newCv: selectedNewCv,
+      };
+    }),
+    on(deleteNewCv, (state, { deletedCvName }) => {
+      const updatedNewCvList = state.newCvList.filter(cv => cv.cvName !== deletedCvName);
+      return {
+        ...state,
+        newCvList: updatedNewCvList,
       };
     }),
   ),

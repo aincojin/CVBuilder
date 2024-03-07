@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, Self } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Self } from "@angular/core";
 import { FormControl, FormsModule, NgControl, ReactiveFormsModule } from "@angular/forms";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { VALIDATION_ERR } from "../../constants/errors.const";
@@ -9,6 +9,7 @@ import { NzDatePickerModule } from "ng-zorro-antd/date-picker";
 import { ValidationErrorPipe } from "../../pipes/validation-error.pipe";
 import { InputComponent } from "../input/input.component";
 import { TranslateModule } from "@ngx-translate/core";
+import { DatePickerInterface } from "../../interfaces/date-picker";
 
 @UntilDestroy()
 @Component({
@@ -32,14 +33,17 @@ import { TranslateModule } from "@ngx-translate/core";
 export class DatePickerComponent {
   @Input() public label: string;
 
-  public value: null;
+  public value: DatePickerInterface;
   public validationErr = VALIDATION_ERR;
   public dateRangeControl = new FormControl();
 
-  public changed: (value: [string, string]) => void;
+  public changed: (value: DatePickerInterface) => void;
   public touched: () => void;
 
-  constructor(@Self() public ngControl: NgControl) {
+  constructor(
+    @Self() public ngControl: NgControl,
+    private cdRef: ChangeDetectorRef,
+  ) {
     ngControl.valueAccessor = this;
   }
 
@@ -47,8 +51,16 @@ export class DatePickerComponent {
     this.dateRangeControl.valueChanges
       .pipe(untilDestroyed(this))
       .subscribe((dates: [Date, Date]) => {
-        const value: [string, string] =
-          dates && dates[0] && dates[1] ? [dates[0].toISOString(), dates[1].toISOString()] : null;
+        console.log("Datepicker value: ", dates);
+        const dateObj = {
+          startDate: dates[0],
+          endDate: dates[1],
+        };
+        console.log("Datepicker object: ", dateObj);
+        const value: DatePickerInterface =
+          dateObj && dateObj.startDate && dateObj.endDate
+            ? { startDate: dateObj.startDate.toISOString(), endDate: dateObj.endDate.toISOString() }
+            : null;
         if (this.changed) {
           this.changed(value);
         }
@@ -61,19 +73,32 @@ export class DatePickerComponent {
     }
     console.log(this.ngControl.errors);
   }
+  public ngDoCheck(): void {
+    if (this.ngControl.control.touched) {
+      this.dateRangeControl.markAsTouched();
+    } else {
+      this.dateRangeControl.markAsPristine();
+    }
+    this.cdRef.markForCheck();
+  }
 
   //sets the value to the native(html) form control
-  public writeValue(value: [string, string] | null): void {
-    if (value === null) {
-      this.dateRangeControl.setValue(null);
-    } else {
-      this.dateRangeControl.setValue([new Date(value[0]), new Date(value[1])]);
+  public writeValue(value: DatePickerInterface): void {
+    if (value && value.startDate && value.endDate) {
+      console.log("st date: ", value.startDate);
+      console.log("end date: ", value.endDate);
+
+      this.dateRangeControl.setValue([value.startDate, value.endDate]);
+      this.cdRef.detectChanges();
     }
+    setTimeout(() => console.log("datepicker timeout:", this.dateRangeControl.value), 1000);
+    this.cdRef.detectChanges();
+    console.log(this.dateRangeControl.value);
   }
 
   //to register a callback that is expected to execute evry time
   //the native form is updated
-  public registerOnChange(fn: (value: [string, string]) => void): void {
+  public registerOnChange(fn: (value: DatePickerInterface) => void): void {
     this.changed = fn;
   }
   //indicates that a user interacted with a control

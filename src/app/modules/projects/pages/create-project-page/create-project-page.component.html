@@ -4,5 +4,6 @@
     [responsibilityList]="responsibilityList$ | async"
     [teamRolesList]="teamRolesList$ | async"
     (projectAddedEmitter)="projectAdded($event)"
+    (projectCanceled)="onCancel()"
   ></cvgen-project-form>
 </div>
