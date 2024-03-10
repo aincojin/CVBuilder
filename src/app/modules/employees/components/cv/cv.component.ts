@@ -28,13 +28,8 @@ import { ProjectFormComponent } from "../../../../shared/components/project-form
 import { SelectComponent } from "../../../../shared/components/select/select.component";
 import { CvFormInterface } from "../../../../shared/interfaces/cv";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
-import { EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { ProjectDtoInterface, ProjectInterface } from "../../../../shared/interfaces/project";
 import { LANGUAGES_DATA, LEVELS_DATA } from "../../../../shared/constants/languages";
-import { LanguageDtoInterface } from "../../../../shared/interfaces/language";
-import { selectProject } from "../../../../store/projects/projects.reducers";
-import { Observable } from "rxjs";
-import { fetchProject } from "../../../../store/projects/projects.actions";
 import { ProjectsService } from "../../../../shared/services/projects.service";
 
 @Component({
@@ -71,7 +66,6 @@ export class CvComponent {
 
   @Input() public selectedCv: CvFormInterface;
   @Input() public selectedProject: ProjectInterface;
-  @Input() public selectedEmployeeData: EmployeeInterface;
   @Input() public departmentData: BaseEntityInterface[];
   @Input() public specializationData: BaseEntityInterface[];
   @Input() public skillData: BaseEntityInterface[];
@@ -83,7 +77,7 @@ export class CvComponent {
   public cvName: string;
   public languagesData = LANGUAGES_DATA;
   public levelData = LEVELS_DATA;
-  // public cvSaved: boolean = false;
+  public modifiedProject: ProjectDtoInterface;
 
   @Output() cvSavedEmitter: EventEmitter<CvFormInterface> = new EventEmitter<CvFormInterface>();
   @Output() projectSelectedEmitter: EventEmitter<number> = new EventEmitter<number>();
@@ -120,13 +114,12 @@ export class CvComponent {
         this.updateForm();
       }
     }
-    if (changes["selectedProject"] && this.selectedProject) {
-      this.addProject();
+    if (changes["selectedProject"] && changes["selectedProject"].currentValue) {
+      this.modifiedProject = this.projectsService.fromProjectToDto(this.selectedProject);
     }
   }
 
   private updateForm(): void {
-    console.log(this.selectedCv);
     this.languages.clear();
     this.selectedCv.language.forEach(language => {
       this.languages.push(
@@ -136,8 +129,6 @@ export class CvComponent {
         }),
       );
     });
-    console.log(this.languages);
-
     this.baseForm.patchValue({
       firstName: this.selectedCv.firstName,
       lastName: this.selectedCv.lastName,
@@ -150,29 +141,24 @@ export class CvComponent {
     console.log("BaseForm value: ", this.baseForm.getRawValue());
   }
 
-  public getProjectById(projectId: number) {
-    this.projectSelectedEmitter.emit(projectId);
-  }
-
-  public addProject() {
-    if (this.selectedProject) {
-      const modifiedProject = this.projectsService.fromProjectToDto(this.selectedProject);
-      console.log(modifiedProject);
-      this.projects.push(
-        this.fb.group({
-          projectName: modifiedProject.projectName,
-          description: modifiedProject.description,
-          startDate: modifiedProject.startDate,
-          endDate: modifiedProject.endDate,
-          teamSize: modifiedProject.teamSize,
-          techStack: modifiedProject.techStack,
-          responsibilities: modifiedProject.responsibilities,
-          teamRoles: modifiedProject.teamRoles,
-        }),
-      );
-    }
-    console.log(this.projects);
-    console.log(this.baseForm.getRawValue());
+  public addNewProject(project: ProjectInterface) {
+    console.log("PROJECT IS BEING CREATED");
+    this.modifiedProject = this.projectsService.fromProjectToDto(project);
+    console.log(this.modifiedProject);
+    this.projects.push(
+      this.fb.group({
+        id: project.id,
+        projectName: project.projectName,
+        description: project.description,
+        startDate: project.startDate,
+        endDate: project.endDate,
+        teamSize: project.teamSize,
+        techStack: [project.techStack.map(skill => skill.name)],
+        responsibilities: [project.responsibilities.map(resp => resp.name)],
+        teamRoles: [project.teamRoles.map(role => role.name)],
+      }),
+    );
+    console.log("project created:", this.baseForm.getRawValue());
   }
 
   public addLanguage() {
@@ -180,12 +166,15 @@ export class CvComponent {
       name: ["", Validators.required],
       level: ["", Validators.required],
     });
-
     this.languages.push(languageToAdd);
   }
 
   public deleteLanguage(index: number) {
     this.languages.removeAt(index);
+  }
+
+  public selectProject(projectId: number) {
+    this.projectSelectedEmitter.emit(projectId);
   }
 
   public onSave() {

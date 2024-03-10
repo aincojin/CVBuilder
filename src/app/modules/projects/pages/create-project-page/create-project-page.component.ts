@@ -50,9 +50,6 @@ export class CreateProjectPageComponent {
         breadcrumb: { label: "TITLES.CREATE_PROJECT", link: { path: Paths.CreateProject } },
       }),
     );
-    this.store.dispatch(fetchSkills());
-    this.store.dispatch(fetchTeamRoles());
-    this.store.dispatch(fetchResponsibilities());
   }
 
   public projectAdded(newProject: ProjectDtoInterface) {

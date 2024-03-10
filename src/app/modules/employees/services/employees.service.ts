@@ -2,7 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { EmployeeInterface } from "../../../shared/interfaces/employee";
 import { CvDtoInterface, CvFormInterface, CvInterface } from "../../../shared/interfaces/cv";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
-import { Observable, filter, switchMap, map, tap } from "rxjs";
+import { Observable, filter, switchMap, map, tap, take } from "rxjs";
 import { addCv, addNewCv, resetNewCvs } from "../../../store/cvs/cvs.actions";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../../store/state/state";
@@ -26,8 +26,7 @@ export class EmployeesService {
         cvData$.pipe(
           filter(cvList => cvList !== null),
           map(cvList => {
-            console.log("response data: ", responseData);
-            console.log("before modif: ", cvList);
+            console.log("before modif:", cvList);
             return cvList.map(cv => ({
               ...cv,
               employeeId: responseData.id,
@@ -51,18 +50,11 @@ export class EmployeesService {
   public getCvsByEmployeeId(employeeId: number): Observable<CvFormInterface[]> {
     return this.store.select(selectCvList).pipe(
       map(cvList => {
-        // return cvList.filter(cv => cv.employeeId === +employeeId).map(cv => this.fromCvToForm(cv));
-        console.log("service cvlist: ", cvList);
         const filteredCvs = cvList.filter(cv => cv.employeeId === +employeeId);
         console.log("service filtered cvlist: ", filteredCvs);
         const transformedCvs = filteredCvs.map(cv => this.fromCvToForm(cv));
         console.log("service transformed cvlist: ", transformedCvs);
         return transformedCvs;
-      }),
-      tap(transformed => {
-        console.log("Component transformed cvlist: ", transformed);
-        this.store.dispatch(resetNewCvs());
-        transformed.map(cv => this.store.dispatch(addNewCv({ newCv: cv })));
       }),
     );
   }

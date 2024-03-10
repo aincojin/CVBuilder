@@ -14,11 +14,17 @@ import { PageTitleInterface } from "../../../../shared/interfaces/page-title";
 import {
   addToBreadcrumbs,
   deleteFromBreadcrumbs,
+  fetchDepartments,
+  fetchResponsibilities,
+  fetchSkills,
+  fetchSpecializations,
+  fetchTeamRoles,
   setBreadcrumbs,
 } from "../../../../store/core/core.actions";
 import { BreadcrumbsInterface } from "../../../../shared/interfaces/breadcrumbs";
 import { Paths } from "../../../../shared/enums/routes";
 import { resetNewCvs } from "../../../../store/cvs/cvs.actions";
+import { fetchProjects } from "../../../../store/projects/projects.actions";
 
 @Component({
   selector: "cvgen-employees-page",
@@ -42,11 +48,12 @@ export class EmployeesPageComponent {
   breadcrumbs$: Observable<BreadcrumbsInterface[]> = this.store.select(selectBreadcrumbs);
 
   public ngOnInit() {
-    this.store.dispatch(
-      setBreadcrumbs({
-        breadcrumbs: [{ label: "TITLES.EMPLOYEE_TITLE", link: { path: Paths.Employees } }],
-      }),
-    );
+    this.store.dispatch(fetchProjects());
+    this.store.dispatch(fetchDepartments());
+    this.store.dispatch(fetchSkills());
+    this.store.dispatch(fetchSpecializations());
+    this.store.dispatch(fetchTeamRoles());
+    this.store.dispatch(fetchResponsibilities());
   }
   public onBreadcrumbClick(index: number) {
     this.store.dispatch(resetNewCvs());

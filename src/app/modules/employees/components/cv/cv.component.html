@@ -95,21 +95,28 @@
   <nz-dropdown-menu #cvsProjects="nzDropdownMenu">
     <ul nz-menu>
       @for (project of projectData; track project) {
-        <li nz-menu-item (click)="getProjectById(project.id)">{{ project.projectName }}</li>
+        <li nz-menu-item (click)="addNewProject(project)">{{ project.projectName }}</li>
       }
     </ul>
   </nz-dropdown-menu>
-  <!-- TODO -->
+
   <nz-collapse class="tab__projects-collapse" nzAccordion>
     <nz-collapse-panel
       *ngFor="let project of projects.controls"
       [nzHeader]="project.value.projectName"
+      [nzExtra]="extraRemove"
+      (click)="selectProject(project.value.id)"
     >
       <cvgen-project-form
+        [selectedProjectData]="modifiedProject"
         [skillList]="skillData"
         [responsibilityList]="responsibilityList"
         [teamRolesList]="teamRolesList"
       ></cvgen-project-form>
     </nz-collapse-panel>
   </nz-collapse>
+
+  <ng-template #extraRemove>
+    <span nz-icon nzType="delete"></span>
+  </ng-template>
 </div>

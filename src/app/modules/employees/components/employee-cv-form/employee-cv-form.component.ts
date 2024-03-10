@@ -30,7 +30,7 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../../../store/state/state";
 import { CvComponent } from "../cv/cv.component";
 import { selectNewCv, selectNewCvList } from "../../../../store/cvs/cvs.reducers";
-import { deleteNewCv, fetchNewCv, updateNewCv } from "../../../../store/cvs/cvs.actions";
+import { addNewCv, deleteNewCv, fetchNewCv, updateNewCv } from "../../../../store/cvs/cvs.actions";
 import { Observable } from "rxjs";
 import { ProjectInterface } from "../../../../shared/interfaces/project";
 import { selectProject } from "../../../../store/projects/projects.reducers";
@@ -62,6 +62,8 @@ import { fetchProject } from "../../../../store/projects/projects.actions";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeCvFormComponent {
+  private readonly store = inject(Store<AppState>);
+
   @Input() public selectedEmployeeData: EmployeeInterface;
   @Input() public departmentData: BaseEntityInterface[];
   @Input() public specializationData: BaseEntityInterface[];
@@ -73,11 +75,6 @@ export class EmployeeCvFormComponent {
 
   public baseForm: FormGroup;
   public cvName: string;
-
-  //TODO move it up the hierachy, @Input()
-  public projectsData = PROJECT_DATA;
-
-  private readonly store = inject(Store<AppState>);
 
   @Output() cvAddedEmitter: EventEmitter<CvFormInterface> = new EventEmitter<CvFormInterface>();
   @Output() cvListEmitter: EventEmitter<CvFormInterface> = new EventEmitter<CvFormInterface>();
@@ -108,30 +105,26 @@ export class EmployeeCvFormComponent {
       skills: ["tech1", "tech2"],
       language: [],
     };
-    console.log("skills: ", this.skillData);
-    console.log("roles: ", this.teamRolesList);
-    console.log("resp: ", this.responsibilityList);
-
-    this.cvAddedEmitter.emit(newCv);
+    this.store.dispatch(addNewCv({ newCv }));
+    //TODO OR move it to the create page
+    // this.cvAddedEmitter.emit(newCv);
   }
   private generateUniqueCvName(): string {
     const uniqueId = Date.now();
     const uniqueName = `CV_${uniqueId}`;
     return uniqueName;
   }
+
+  public selectCv(cv: CvFormInterface) {
+    this.store.dispatch(fetchNewCv({ newCvName: cv.cvName }));
+  }
+
   public projectIdSelected(projectId: number) {
     this.store.dispatch(fetchProject({ projectId: projectId }));
   }
 
   public saveNewCv(savedCv: CvFormInterface) {
-    savedCv.language.map(lang => {
-      console.log(lang);
-    });
-    console.log("updatedCv: ", savedCv.language);
     this.store.dispatch(updateNewCv({ updatedNewCv: savedCv }));
-  }
-  public selectCv(cv: CvFormInterface) {
-    this.store.dispatch(fetchNewCv({ newCvName: cv.cvName }));
   }
   public onDeleteCv(deletedName: string) {
     this.store.dispatch(deleteNewCv({ deletedCvName: deletedName }));

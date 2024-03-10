@@ -66,9 +66,6 @@ export class EditProjectPageComponent {
     this.store.dispatch(
       setPageTitles({ pageTitle: "TITLES.PROJECT_TITLE", pageSubtitle: "TITLES.EDIT_PROJECT" }),
     );
-    this.store.dispatch(fetchSkills());
-    this.store.dispatch(fetchTeamRoles());
-    this.store.dispatch(fetchResponsibilities());
     this.projectDataTransformed$ = this.projectService.fromProjectToDto(this.selectedProjectData$);
   }
 

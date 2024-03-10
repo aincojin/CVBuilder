@@ -7,6 +7,7 @@ import { ProjectInterface, ProjectDtoInterface } from "../interfaces/project";
 export class ProjectsService {
   public fromProjectToDto(project: ProjectInterface): ProjectDtoInterface {
     const projectDto: ProjectDtoInterface = {
+      id: project.id,
       projectName: project.projectName,
       description: project.description,
       startDate: project.startDate,
@@ -16,6 +17,8 @@ export class ProjectsService {
       responsibilities: project.responsibilities.map(resp => resp.name),
       teamRoles: project.teamRoles.map(role => role.name),
     };
+    console.log(projectDto);
+
     return projectDto;
   }
 }

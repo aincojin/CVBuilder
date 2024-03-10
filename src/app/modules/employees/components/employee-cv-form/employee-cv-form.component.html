@@ -22,15 +22,14 @@
     <cvgen-cv
       *ngIf="(selectedCv$ | async) && cvData"
       [selectedCv]="selectedCv$ | async"
-      [selectedEmployeeData]="selectedEmployeeData"
       [selectedProject]="selectedProject$ | async"
-      (projectSelectedEmitter)="projectIdSelected($event)"
       [departmentData]="departmentData"
       [skillData]="skillData"
       [teamRolesList]="teamRolesList"
       [responsibilityList]="responsibilityList"
       [specializationData]="specializationData"
       [projectData]="projectData"
+      (projectSelectedEmitter)="projectIdSelected($event)"
       (cvSavedEmitter)="saveNewCv($event)"
     ></cvgen-cv>
   </div>

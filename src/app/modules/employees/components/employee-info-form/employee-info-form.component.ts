@@ -53,16 +53,16 @@ export class EmployeeInfoFormComponent {
 
   public ngOnInit(): void {
     this.baseForm = this.fb.group({
-      // firstName: ["", Validators.required],
-      // lastName: ["", Validators.required],
-      // email: ["", [Validators.required, Validators.email]],
-      // specialization: ["", Validators.required],
-      // department: ["", Validators.required],
-      firstName: ["ttt", Validators.required],
-      lastName: ["ttt", Validators.required],
-      email: ["ttt@gmail.com", [Validators.required, Validators.email]],
-      specialization: ["spec1", Validators.required],
-      department: ["dept1", Validators.required],
+      firstName: ["", Validators.required],
+      lastName: ["", Validators.required],
+      email: ["", [Validators.required, Validators.email]],
+      specialization: ["", Validators.required],
+      department: ["", Validators.required],
+      // firstName: ["ttt", Validators.required],
+      // lastName: ["ttt", Validators.required],
+      // email: ["ttt@gmail.com", [Validators.required, Validators.email]],
+      // specialization: ["spec1", Validators.required],
+      // department: ["dept1", Validators.required],
     });
     if (this.selectedEmployeeData) {
       this.updateForm();

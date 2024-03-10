@@ -21,10 +21,10 @@
     </nz-tab>
   </nz-tabset>
   <nz-button-group class="tabs__actions">
-    <button nz-button type="submit" [nzType]="'default'" (click)="onCancel()">
+    <button nz-button type="reset" [nzType]="'default'" (click)="onCancel()">
       {{ "BUTTON.CANCEL" | translate }}
     </button>
-    <button nz-button type="reset" [nzType]="'primary'" (click)="onSubmit()">
+    <button nz-button type="submit" [nzType]="'primary'" (click)="onSubmit()">
       {{ "BUTTON.SUBMIT" | translate }}
     </button>
   </nz-button-group>

@@ -13,7 +13,7 @@ import { ProjectInterface } from "../../../../shared/interfaces/project";
 import { Paths } from "../../../../shared/enums/routes";
 import { selectIsLoading, selectProjectList } from "../../../../store/projects/projects.reducers";
 import { fetchProjects } from "../../../../store/projects/projects.actions";
-import { setPageTitles } from "../../../../store/core/core.actions";
+import { setBreadcrumbs, setPageTitles } from "../../../../store/core/core.actions";
 
 @Component({
   selector: "cvgen-project-list-page",
@@ -36,6 +36,11 @@ export class ProjectListPageComponent implements OnInit {
   public ngOnInit(): void {
     this.store.dispatch(
       setPageTitles({ pageTitle: "TITLES.PROJECT_TITLE", pageSubtitle: "TITLES.PROJECT_LIST" }),
+    );
+    this.store.dispatch(
+      setBreadcrumbs({
+        breadcrumbs: [{ label: "TITLES.PROJECT_TITLE", link: { path: Paths.Projects } }],
+      }),
     );
     this.store.dispatch(fetchProjects());
   }

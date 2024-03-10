@@ -1,5 +1,12 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+  inject,
+} from "@angular/core";
 import { NzTabsModule } from "ng-zorro-antd/tabs";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { EmployeeCvFormComponent } from "../../components/employee-cv-form/employee-cv-form.component";
@@ -9,7 +16,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { fetchEmployee, updateEmployee } from "../../../../store/employees/employees.actions";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
-import { Observable } from "rxjs";
+import { Observable, map } from "rxjs";
 import { selectEmployee } from "../../../../store/employees/employees.reducers";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
@@ -60,6 +67,7 @@ export class EditEmployeePageComponent implements OnInit {
 
   public employeeId: number;
   public infoFormInvalid: boolean = false;
+  public selectedEmployee: EmployeeInterface;
   // public cvData: CvFormInterface[] = [];
 
   public cvData$: Observable<CvFormInterface[]> = this.store.select(selectNewCvList);
@@ -85,6 +93,7 @@ export class EditEmployeePageComponent implements OnInit {
           },
         }),
       );
+      this.getCvsById();
     });
     this.store.dispatch(
       setPageTitles({
@@ -97,15 +106,16 @@ export class EditEmployeePageComponent implements OnInit {
     this.store.dispatch(fetchSkills());
     this.store.dispatch(fetchSpecializations());
     this.store.dispatch(fetchProjects());
-    this.getCvsById();
   }
 
-  private getCvsById() {
-    //TODO is called twice for some reason
+  private getCvsById(): void {
     this.employeesService
       .getCvsByEmployeeId(this.employeeId)
       .pipe(untilDestroyed(this))
-      .subscribe();
+      .subscribe(transformed => {
+        this.store.dispatch(resetNewCvs());
+        transformed.forEach(cv => this.store.dispatch(addNewCv({ newCv: cv })));
+      });
   }
 
   public updateExisting(updatedEmployee: EmployeeDtoInterface) {

@@ -15,6 +15,9 @@ import { Paths } from "../../../../shared/enums/routes";
 import {
   addToBreadcrumbs,
   deleteFromBreadcrumbs,
+  fetchResponsibilities,
+  fetchSkills,
+  fetchTeamRoles,
   setBreadcrumbs,
 } from "../../../../store/core/core.actions";
 import { BreadcrumbsInterface } from "../../../../shared/interfaces/breadcrumbs";
@@ -42,11 +45,9 @@ export class ProjectsPageComponent {
   breadcrumbs$: Observable<BreadcrumbsInterface[]> = this.store.select(selectBreadcrumbs);
 
   public ngOnInit() {
-    this.store.dispatch(
-      setBreadcrumbs({
-        breadcrumbs: [{ label: "TITLES.PROJECT_TITLE", link: { path: Paths.Projects } }],
-      }),
-    );
+    this.store.dispatch(fetchSkills());
+    this.store.dispatch(fetchTeamRoles());
+    this.store.dispatch(fetchResponsibilities());
   }
 
   public onBreadcrumbClick(index: number) {

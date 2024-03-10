@@ -84,6 +84,7 @@ export class CreateEmployeePageComponent {
   employeeInfoForm: EmployeeInfoFormComponent;
 
   public formInvalid: boolean = false;
+  public cvFormValid: boolean = false;
 
   public ngOnInit(): void {
     this.store.dispatch(fetchProjects());
@@ -107,28 +108,29 @@ export class CreateEmployeePageComponent {
     this.store.dispatch(addNewCv({ newCv: cvFormData }));
     console.log("create page cv added: ", this.employeeInfoForm.baseForm.getRawValue());
   }
-  public cvFormValid: boolean = false;
+
   public onSubmit() {
     if (this.employeeInfoForm.baseForm.invalid) {
       this.formInvalid = true;
-      console.log(this.formInvalid);
+      console.log("formInvalid: ", this.formInvalid);
       console.log("empl info form not sent");
       return;
     } else {
       this.formInvalid = false;
-      console.log(this.formInvalid);
+      console.log("formInvalid: ", this.formInvalid);
       console.log("empl info form sent");
       const newEmployee = this.employeeInfoForm.baseForm.getRawValue();
-      // this.store.dispatch(addEmployee({ newEmployee }));
-      // console.log("adding employee: ", newEmployee);
-      // this.employeesService
-      //   .processResponseData(this.responseData$, this.cvData$)
-      //   .pipe(untilDestroyed(this))
-      //   .subscribe();
-
-      // this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
+      this.store.dispatch(addEmployee({ newEmployee }));
+      console.log("adding employee: ", newEmployee);
+      //adding cvs to the employee officially
+      this.employeesService
+        .processResponseData(this.responseData$, this.cvData$)
+        .pipe(untilDestroyed(this))
+        .subscribe();
+      this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
     }
   }
+
   public onCancel() {
     this.store.dispatch(resetNewCvs());
     this.store.dispatch(deleteFromBreadcrumbs({ index: -2 }));

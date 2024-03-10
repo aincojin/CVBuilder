@@ -77,9 +77,6 @@ export class ProjectFormComponent {
     }
   }
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes["formInvalid"] && changes["formInvalid"].currentValue) {
-      this.projectForm.markAllAsTouched();
-    }
     if (changes["selectedProjectData"] && changes["selectedProjectData"].currentValue) {
       if (this.projectForm) {
         this.updateForm();
@@ -87,11 +84,6 @@ export class ProjectFormComponent {
     }
   }
   private updateForm(): void {
-    console.log("startdate: ", this.selectedProjectData.startDate);
-    console.log("enddate: ", this.selectedProjectData.endDate);
-    const dateFromString = new Date(this.selectedProjectData.endDate);
-    console.log(typeof dateFromString, dateFromString);
-
     this.projectForm.patchValue({
       projectName: this.selectedProjectData.projectName,
       datePicker: {
@@ -114,17 +106,13 @@ export class ProjectFormComponent {
       endDate: datePicker ? datePicker.endDate : null,
       teamSize: +this.projectForm.get("teamSize").value,
     };
-    console.log(newProject);
-    console.log("touched/invalid", this.projectForm.touched, this.projectForm.invalid);
 
     if (this.projectForm.invalid) {
       this.projectForm.markAllAsTouched();
       console.log("proj form not sent");
-
       return;
     } else {
       console.log("proj form sent");
-
       this.projectAddedEmitter.emit(newProject);
       this.projectUpdatedEmitter.emit(newProject);
       this.projectForm.reset();

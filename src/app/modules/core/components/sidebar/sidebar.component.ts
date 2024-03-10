@@ -55,7 +55,7 @@ export class SidebarComponent {
   public toProjects() {
     this.store.dispatch(
       setBreadcrumbs({
-        breadcrumbs: [{ label: "TITLES.PROJECTS_TITLE", link: { path: Paths.Projects } }],
+        breadcrumbs: [{ label: "TITLES.PROJECT_TITLE", link: { path: Paths.Projects } }],
       }),
     );
     this.router.navigate(["/main/projects"]);

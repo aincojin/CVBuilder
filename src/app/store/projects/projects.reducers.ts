@@ -1,11 +1,9 @@
 import { createFeature, createReducer, on } from "@ngrx/store";
 import { ProjectStateInterface } from "../state/projectState";
 import {
-  addNewProject,
   addProject,
   addProjectError,
   addProjectSuccess,
-  fetchNewProject,
   fetchProject,
   fetchProjectError,
   fetchProjectSuccess,
@@ -84,20 +82,6 @@ const projectFeature = createFeature({
       project: null,
       error,
     })),
-
-    on(addNewProject, (state, { newProject }) => ({
-      ...state,
-      newProjectList: [...state.newProjectList, newProject],
-    })),
-    on(fetchNewProject, (state, { newProjectName }) => {
-      const selectedNewProject = state.newProjectList.find(
-        selectedProject => selectedProject.projectName === newProjectName,
-      );
-      return {
-        ...state,
-        newCv: selectedNewProject,
-      };
-    }),
   ),
 });
 
