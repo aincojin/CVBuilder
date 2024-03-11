@@ -127,7 +127,7 @@ export class CreateEmployeePageComponent {
         .processResponseData(this.responseData$, this.cvData$)
         .pipe(untilDestroyed(this))
         .subscribe();
-      this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
+      // this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
     }
   }
 
