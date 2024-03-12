@@ -31,12 +31,16 @@ const employeeFeature = createFeature({
     on(fetchEmployeesSuccess, (state, { employeeList }) => ({
       ...state,
       employeeList,
+      employee: null,
+      responseData: null,
       error: null,
       isLoading: false,
     })),
     on(fetchEmployeesError, (state, { error }) => ({
       ...state,
       employeeList: null,
+      responseData: null,
+      employee: null,
       error,
       isLoading: false,
     })),
@@ -45,11 +49,13 @@ const employeeFeature = createFeature({
     on(fetchEmployeeSuccess, (state, { employee }) => ({
       ...state,
       employee,
+      responseData: null,
       error: null,
     })),
     on(fetchEmployeeError, (state, { error }) => ({
       ...state,
       employee: null,
+      responseData: null,
       error,
     })),
 
@@ -62,6 +68,7 @@ const employeeFeature = createFeature({
     })),
     on(addEmployeeError, (state, { error }) => ({
       ...state,
+      responseData: null,
       error,
     })),
 
@@ -74,12 +81,14 @@ const employeeFeature = createFeature({
         ...state,
         employeeList: updatedEmployeeList,
         employee: updatedEmployee,
+        responseData: null,
         error: null,
       };
     }),
     on(updateEmployeeError, (state, { error }) => ({
       ...state,
       employee: null,
+      responseData: null,
       error,
     })),
   ),

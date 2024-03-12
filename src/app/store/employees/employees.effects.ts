@@ -14,7 +14,7 @@ import {
 import { concatMap, filter, map, mergeMap, switchMap, take, tap } from "rxjs";
 import { EmployeeInterface } from "../../shared/interfaces/employee";
 import { Store } from "@ngrx/store";
-import { addCv } from "../cvs/cvs.actions";
+import { addCv, resetNewCvs } from "../cvs/cvs.actions";
 import { AppState } from "../state/state";
 import { selectResponseData } from "./employees.reducers";
 import { selectNewCvList } from "../cvs/cvs.reducers";
@@ -65,9 +65,11 @@ export class EmployeesEffects {
             responseData$
               .pipe(
                 filter(responseData => responseData !== null),
+                tap(data => console.log(data)),
                 switchMap(responseData =>
                   cvData$.pipe(
                     filter(cvList => cvList !== null),
+                    tap(data => console.log(data)),
                     map(cvList => {
                       console.log("before modif:", cvList);
                       return cvList.map(cv => ({
@@ -85,6 +87,7 @@ export class EmployeesEffects {
                         console.log("modif cvsProjects", modifiedCv.cvsProjects);
 
                         this.store.dispatch(addCv({ cv: modifiedCv }));
+                        this.store.dispatch(resetNewCvs());
                       });
                     }),
                   ),
