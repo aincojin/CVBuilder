@@ -31,6 +31,7 @@ import {
   fetchDepartments,
   fetchSkills,
   fetchSpecializations,
+  popFromBreadcrumbs,
   setPageTitles,
 } from "../../../../store/core/core.actions";
 import { Paths } from "../../../../shared/enums/routes";
@@ -145,7 +146,7 @@ export class EditEmployeePageComponent implements OnInit {
   }
   public onCancel() {
     this.store.dispatch(resetNewCvs());
-    this.store.dispatch(deleteFromBreadcrumbs({ index: -2 }));
+    this.store.dispatch(popFromBreadcrumbs());
     this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
   }
 }

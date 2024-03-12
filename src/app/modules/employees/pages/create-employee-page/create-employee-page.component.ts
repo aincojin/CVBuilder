@@ -30,6 +30,7 @@ import {
   fetchSkills,
   fetchSpecializations,
   fetchTeamRoles,
+  popFromBreadcrumbs,
   setPageTitles,
 } from "../../../../store/core/core.actions";
 import { EmployeeInterface } from "../../../../shared/interfaces/employee";
@@ -123,17 +124,17 @@ export class CreateEmployeePageComponent {
       this.store.dispatch(addEmployee({ newEmployee }));
       console.log("adding employee: ", newEmployee);
       //adding cvs to the employee officially
-      this.employeesService
-        .processResponseData(this.responseData$, this.cvData$)
-        .pipe(untilDestroyed(this))
-        .subscribe();
-      // this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
+      // this.employeesService
+      //   .processResponseData(this.responseData$, this.cvData$)
+      //   .pipe(untilDestroyed(this))
+      //   .subscribe();
+      this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
     }
   }
 
   public onCancel() {
     this.store.dispatch(resetNewCvs());
-    this.store.dispatch(deleteFromBreadcrumbs({ index: -2 }));
+    this.store.dispatch(popFromBreadcrumbs());
     this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
   }
 }

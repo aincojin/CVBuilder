@@ -18,6 +18,7 @@ import {
   fetchTeamRoles,
   fetchTeamRolesError,
   fetchTeamRolesSuccess,
+  popFromBreadcrumbs,
   setBreadcrumbs,
   setPageTitles,
 } from "./core.actions";
@@ -52,6 +53,10 @@ const coreFeature = createFeature({
     on(deleteFromBreadcrumbs, (state, { index }) => ({
       ...state,
       breadcrumbs: state.breadcrumbs.slice(0, index + 1),
+    })),
+    on(popFromBreadcrumbs, state => ({
+      ...state,
+      breadcrumbs: state.breadcrumbs.slice(0, -1),
     })),
 
     on(fetchSpecializations, state => ({ ...state })),

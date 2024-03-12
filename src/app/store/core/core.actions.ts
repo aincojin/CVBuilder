@@ -10,6 +10,7 @@ export enum CoreActions {
   SET_BREADCRUMBS = "[Core] Set Breadcrumbs",
   ADD_TO_BREADCRUMBS = "[Core] Add To Breadcrumbs",
   DELETE_FROM_BREADCRUMBS = "[Core] Delete From Breadcrumbs",
+  POP_FROM_BREADCRUMBS = "[Core] Pop From Breadcrumbs",
 
   GET_SPECIALIZATIONS = "[Core] Get Specializations",
   GET_SPECIALIZATIONS_SUCCESS = "[Core] Get Specializations Success",
@@ -49,6 +50,7 @@ export const deleteFromBreadcrumbs = createAction(
   CoreActions.DELETE_FROM_BREADCRUMBS,
   props<{ index: number }>(),
 );
+export const popFromBreadcrumbs = createAction(CoreActions.DELETE_FROM_BREADCRUMBS);
 
 export const fetchSpecializations = createAction(CoreActions.GET_SPECIALIZATIONS);
 export const fetchSpecializationsSuccess = createAction(

@@ -11,6 +11,7 @@ import {
   fetchResponsibilities,
   fetchSkills,
   fetchTeamRoles,
+  popFromBreadcrumbs,
   setPageTitles,
 } from "../../../../store/core/core.actions";
 import { AppState } from "../../../../store/state/state";
@@ -75,7 +76,7 @@ export class EditProjectPageComponent {
   }
 
   public onCancel() {
-    this.store.dispatch(deleteFromBreadcrumbs({ index: -2 }));
+    this.store.dispatch(popFromBreadcrumbs());
     this.router.navigate([Paths.ProjectList], { relativeTo: this.activatedRoute });
   }
 }
