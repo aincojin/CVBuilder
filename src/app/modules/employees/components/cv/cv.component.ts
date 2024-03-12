@@ -91,7 +91,7 @@ export class CvComponent {
       department: [null, Validators.required],
       skills: [null, Validators.required],
       language: this.fb.array([], Validators.required),
-      projects: this.fb.array([]),
+      cvsProjects: this.fb.array([]),
     });
     console.log("cv init: ", this.baseForm.getRawValue());
 
@@ -105,22 +105,49 @@ export class CvComponent {
   }
 
   public get projects() {
-    return this.baseForm.get("projects") as FormArray;
+    return this.baseForm.get("cvsProjects") as FormArray;
   }
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes["selectedCv"] && changes["selectedCv"].currentValue) {
       if (this.baseForm) {
+        console.log("CHANGING THE CVFORM");
         this.updateForm();
       }
     }
     if (changes["selectedProject"] && changes["selectedProject"].currentValue) {
       this.modifiedProject = this.projectsService.fromProjectToDto(this.selectedProject);
+
+      console.log(this.selectedCv.cvsProjects);
+    }
+  }
+
+  private updateProjects() {
+    if (this.selectedCv.cvsProjects) {
+      this.selectedCv.cvsProjects.forEach(project => {
+        this.projects.push(
+          this.fb.group({
+            projectName: [project.projectName],
+            description: [project.description],
+            startDate: [project.startDate],
+            endDate: [project.endDate],
+            teamSize: [project.teamSize],
+            techStack: [project.techStack],
+            responsibilities: [project.responsibilities],
+            teamRoles: [project.teamRoles],
+          }),
+        );
+      });
+    } else {
+      console.log("no cvsProjects in selectedCv");
     }
   }
 
   private updateForm(): void {
     this.languages.clear();
+    this.projects.clear();
+    console.log(this.selectedCv);
+
     this.selectedCv.language.forEach(language => {
       this.languages.push(
         this.fb.group({
@@ -129,6 +156,11 @@ export class CvComponent {
         }),
       );
     });
+    this.updateProjects();
+
+    console.log(this.selectedCv.cvsProjects);
+    console.log(this.selectedCv.language);
+
     this.baseForm.patchValue({
       firstName: this.selectedCv.firstName,
       lastName: this.selectedCv.lastName,
@@ -137,6 +169,7 @@ export class CvComponent {
       department: this.selectedCv.department,
       skills: this.selectedCv.skills,
       language: this.selectedCv.language,
+      cvsProjects: this.selectedCv.cvsProjects,
     });
     console.log("BaseForm value: ", this.baseForm.getRawValue());
   }
@@ -147,7 +180,6 @@ export class CvComponent {
     console.log(this.modifiedProject);
     this.projects.push(
       this.fb.group({
-        id: project.id,
         projectName: project.projectName,
         description: project.description,
         startDate: project.startDate,
@@ -158,7 +190,13 @@ export class CvComponent {
         teamRoles: [project.teamRoles.map(role => role.name)],
       }),
     );
-    console.log("project created:", this.baseForm.getRawValue());
+    console.log("project created:", this.projects.controls);
+  }
+
+  public deleteProject(index: number) {
+    console.log("projects before deletion: ", this.projects.controls);
+    this.projects.removeAt(index);
+    console.log("projects after deletion: ", this.projects.controls);
   }
 
   public addLanguage() {
@@ -173,13 +211,16 @@ export class CvComponent {
     this.languages.removeAt(index);
   }
 
-  public selectProject(projectId: number) {
-    this.projectSelectedEmitter.emit(projectId);
+  //TODO the project is selected on collapse
+  public selectProject(project: ProjectDtoInterface) {
+    console.log(project);
+    this.modifiedProject = project;
+    // this.projectSelectedEmitter.emit(projectId);
   }
 
   public onSave() {
     console.log("saving cv: ", this.baseForm.getRawValue());
-    console.log(this.baseForm.controls["projects"]);
+    console.log(this.baseForm.controls["cvsProjects"]);
 
     if (this.baseForm.invalid) {
       console.log("cv form not saved");
@@ -189,7 +230,13 @@ export class CvComponent {
       const savedCv: CvFormInterface = {
         ...this.baseForm.getRawValue(),
         cvName: this.selectedCv.cvName,
+        projects: this.projects.value,
       };
+      console.log(savedCv);
+
+      const { cvsProjects, ...savedModifiedCv } = savedCv;
+      console.log(savedModifiedCv);
+
       console.log("savedcv: ", savedCv);
       this.cvSavedEmitter.emit(savedCv);
     }

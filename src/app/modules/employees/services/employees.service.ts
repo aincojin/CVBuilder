@@ -15,38 +15,6 @@ import { selectCvList } from "../../../store/cvs/cvs.reducers";
 export class EmployeesService {
   private readonly store = inject(Store<AppState>);
 
-  public processResponseData(
-    responseData$: Observable<EmployeeInterface>,
-    cvData$: Observable<CvFormInterface[]>,
-  ): Observable<CvDtoInterface[]> {
-    return responseData$.pipe(
-      untilDestroyed(this),
-      filter(responseData => responseData !== null),
-      switchMap(responseData =>
-        cvData$.pipe(
-          filter(cvList => cvList !== null),
-          map(cvList => {
-            console.log("before modif:", cvList);
-            return cvList.map(cv => ({
-              ...cv,
-              employeeId: responseData.id,
-              language: cv.language.map(language => ({
-                name: { name: language.name },
-                level: { name: language.level },
-              })),
-            }));
-          }),
-          tap(modifiedCvList => {
-            console.log("modif:", modifiedCvList);
-            modifiedCvList.forEach(modifiedCv => {
-              this.store.dispatch(addCv({ cv: modifiedCv }));
-            });
-          }),
-        ),
-      ),
-    );
-  }
-
   public getCvsByEmployeeId(employeeId: number): Observable<CvFormInterface[]> {
     return this.store.select(selectCvList).pipe(
       map(cvList => {
@@ -81,3 +49,34 @@ export class EmployeesService {
     };
   }
 }
+// public processResponseData(
+//   responseData$: Observable<EmployeeInterface>,
+//   cvData$: Observable<CvFormInterface[]>,
+// ): Observable<CvDtoInterface[]> {
+//   return responseData$.pipe(
+//     tap(data => console.log("sss: ", data)),
+//     filter(responseData => responseData !== null),
+//     switchMap(responseData =>
+//       cvData$.pipe(
+//         filter(cvList => cvList !== null),
+//         map(cvList => {
+//           console.log("before modif:", cvList);
+//           return cvList.map(cv => ({
+//             ...cv,
+//             employeeId: responseData.id,
+//             language: cv.language.map(language => ({
+//               name: { name: language.name },
+//               level: { name: language.level },
+//             })),
+//           }));
+//         }),
+//         tap(modifiedCvList => {
+//           console.log("modif:", modifiedCvList);
+//           modifiedCvList.map(modifiedCv => {
+//             this.store.dispatch(addCv({ cv: modifiedCv }));
+//           });
+//         }),
+//       ),
+//     ),
+//   );
+// }

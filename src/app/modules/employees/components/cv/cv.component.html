@@ -47,14 +47,12 @@
       </div>
       <div class="tab__form-array-wrapper">
         <button class="tab__list-add-btn" nz-button (click)="addLanguage()">
-          <p>
-            Add a Language
-            <span nz-icon nzType="plus" nzTheme="outline"></span>
-          </p>
+          <nz-form-label nzRequired> Add a Language </nz-form-label>
+          <span nz-icon nzType="plus" nzTheme="outline"></span>
         </button>
 
         <div class="tab__form-array" formArrayName="language">
-          @for (lang of languages.controls; let index = $index; track index) {
+          @for (lang of languages.controls; let index = $index; track lang) {
             <div class="tab__from-group" [formGroupName]="index">
               <div class="tab__form-control">
                 <cvgen-select
@@ -85,38 +83,46 @@
 </div>
 <div class="tab__projects">
   <nz-button-group class="tab__projects-actions">
-    <button class="tab__projects-add-btn" nz-button [nzType]="'primary'">
+    <!-- <button class="tab__projects-add-btn" nz-button nz [nzType]="'primary'">
       {{ "BUTTON.ADD_PROJECT" | translate }}
-    </button>
+    </button> -->
+    <nz-form-label nzRequired class="tab__projects-add-btn">
+      {{ "BUTTON.ADD_PROJECT" | translate }}
+    </nz-form-label>
     <button nz-button nz-dropdown [nzDropdownMenu]="cvsProjects" nzPlacement="bottomRight">
       <span nz-icon nzType="ellipsis"></span>
     </button>
   </nz-button-group>
   <nz-dropdown-menu #cvsProjects="nzDropdownMenu">
     <ul nz-menu>
-      @for (project of projectData; track project) {
+      @for (project of projectData; let index = $index; track index) {
         <li nz-menu-item (click)="addNewProject(project)">{{ project.projectName }}</li>
       }
     </ul>
   </nz-dropdown-menu>
 
   <nz-collapse class="tab__projects-collapse" nzAccordion>
-    <nz-collapse-panel
-      *ngFor="let project of projects.controls"
-      [nzHeader]="project.value.projectName"
-      [nzExtra]="extraRemove"
-      (click)="selectProject(project.value.id)"
-    >
-      <cvgen-project-form
-        [selectedProjectData]="modifiedProject"
-        [skillList]="skillData"
-        [responsibilityList]="responsibilityList"
-        [teamRolesList]="teamRolesList"
-      ></cvgen-project-form>
-    </nz-collapse-panel>
+    @for (project of projects.controls; let index = $index; track project) {
+      <nz-collapse-panel
+        [nzHeader]="project.value.projectName"
+        [nzExtra]="extraRemove"
+        (nzActiveChange)="selectProject(project.value)"
+      >
+        <cvgen-project-form
+          [selectedProjectData]="modifiedProject"
+          [skillList]="skillData"
+          [responsibilityList]="responsibilityList"
+          [teamRolesList]="teamRolesList"
+        ></cvgen-project-form>
+      </nz-collapse-panel>
+      <ng-template #extraRemove>
+        <span
+          class="tab__menu-item--delete"
+          nz-icon
+          nzType="delete"
+          (click)="deleteProject(index)"
+        ></span>
+      </ng-template>
+    }
   </nz-collapse>
-
-  <ng-template #extraRemove>
-    <span nz-icon nzType="delete"></span>
-  </ng-template>
 </div>

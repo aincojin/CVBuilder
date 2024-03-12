@@ -12,7 +12,7 @@ import {
 } from "./cvs.actions";
 import { CvInterface } from "../../shared/interfaces/cv";
 import { Injectable, inject } from "@angular/core";
-import { switchMap, map, concatMap, mergeMap } from "rxjs";
+import { switchMap, map, concatMap, mergeMap, tap } from "rxjs";
 
 @Injectable()
 export class CvsEffects {
@@ -46,9 +46,10 @@ export class CvsEffects {
       ofType(addCv),
       concatMap(action =>
         this.cvsApiService.addCv(action.cv).pipe(
-          map(addedCv => {
-            return addCvSuccess({ addedCv });
+          tap(addedCv => {
+            console.log("Added CV:", addedCv); // Log the added CV
           }),
+          map(addedCv => addCvSuccess({ addedCv })),
         ),
       ),
     ),
