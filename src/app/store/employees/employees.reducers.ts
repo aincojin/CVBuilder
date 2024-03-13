@@ -81,7 +81,7 @@ const employeeFeature = createFeature({
         ...state,
         employeeList: updatedEmployeeList,
         employee: updatedEmployee,
-        responseData: null,
+        responseData: updatedEmployee,
         error: null,
       };
     }),

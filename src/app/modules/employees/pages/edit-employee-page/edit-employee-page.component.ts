@@ -16,7 +16,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { fetchEmployee, updateEmployee } from "../../../../store/employees/employees.actions";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
-import { Observable, map } from "rxjs";
+import { Observable, map, mergeMap, tap } from "rxjs";
 import { selectEmployee } from "../../../../store/employees/employees.reducers";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
@@ -68,7 +68,6 @@ export class EditEmployeePageComponent implements OnInit {
 
   public employeeId: number;
   public infoFormInvalid: boolean = false;
-  public selectedEmployee: EmployeeInterface;
   // public cvData: CvFormInterface[] = [];
 
   public cvData$: Observable<CvFormInterface[]> = this.store.select(selectNewCvList);

@@ -6,7 +6,6 @@ import { BreadcrumbsInterface } from "../../shared/interfaces/breadcrumbs";
 export enum CoreActions {
   SET_PAGE_TITLES = "[Core] Set Page Title",
 
-  //TODO breadcrumbs
   SET_BREADCRUMBS = "[Core] Set Breadcrumbs",
   ADD_TO_BREADCRUMBS = "[Core] Add To Breadcrumbs",
   DELETE_FROM_BREADCRUMBS = "[Core] Delete From Breadcrumbs",

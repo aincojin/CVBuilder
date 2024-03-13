@@ -55,7 +55,7 @@ export class InputComponent implements ControlValueAccessor {
       this.touched();
     }
   }
-  //TODO the hell..
+  //TODO read more
   public ngDoCheck(): void {
     if (this.ngControl.control.touched) {
       this.textControl.markAsTouched();
@@ -63,11 +63,9 @@ export class InputComponent implements ControlValueAccessor {
     this.cdRef.markForCheck();
   }
 
-  //TODO do a normal prefill tf is this it doesnt even work properly
   public writeValue(value: string): void {
     this.textControl.setValue(value);
     this.cdRef.detectChanges();
-    // console.log(this.textControl.value);
     setTimeout(() => console.log(this.textControl.value), 1000);
   }
 

@@ -11,7 +11,6 @@ import {
   updateProject,
   updateProjectSuccess,
 } from "./projects.actions";
-import { ProjectInterface } from "../../shared/interfaces/project";
 import { switchMap, map, concatMap, mergeMap } from "rxjs";
 
 @Injectable()
@@ -23,16 +22,9 @@ export class ProjectsEffects {
     this.actions$.pipe(
       ofType(fetchProjects),
       switchMap(() =>
-        this.projectsApiService.fetchProjects().pipe(
-          map(projectList => {
-            const modifiedProjectList: ProjectInterface[] = projectList.map(project => ({
-              ...project,
-              // startDate: this.formatDate(project.startDate),
-              // endDate: this.formatDate(project.endDate),
-            })) as ProjectInterface[];
-            return fetchProjectsSuccess({ projectList: modifiedProjectList });
-          }),
-        ),
+        this.projectsApiService
+          .fetchProjects()
+          .pipe(map(projectList => fetchProjectsSuccess({ projectList: projectList }))),
       ),
     ),
   );
@@ -41,11 +33,9 @@ export class ProjectsEffects {
     this.actions$.pipe(
       ofType(fetchProject),
       switchMap(action =>
-        this.projectsApiService.fetchProject(action.projectId).pipe(
-          map(project => {
-            return fetchProjectSuccess({ project });
-          }),
-        ),
+        this.projectsApiService
+          .fetchProject(action.projectId)
+          .pipe(map(project => fetchProjectSuccess({ project }))),
       ),
     ),
   );
@@ -75,12 +65,4 @@ export class ProjectsEffects {
       ),
     ),
   );
-
-  //TODO i dont set the time so everything after T is redundant
-  //so..maybe better to leave it here?..
-
-  // private formatDate(date: string): string {
-  //   const modifiedDate = new Date(date).toISOString().split("T")[0];
-  //   return modifiedDate.toString();
-  // }
 }
