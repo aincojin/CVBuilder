@@ -96,7 +96,7 @@ export class EmployeeCvFormComponent {
       // skills: [],
       // language: [],
       cvName: uniqueCvName,
-      cvsProjects: [],
+      projects: [],
       firstName: "test",
       lastName: "test",
       email: "test@gmail.com",

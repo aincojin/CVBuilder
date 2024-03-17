@@ -11,25 +11,28 @@ import {
   updateEmployee,
   updateEmployeeSuccess,
 } from "./employees.actions";
-import { concatMap, filter, map, mergeMap, switchMap, take, tap } from "rxjs";
+import { concatMap, filter, map, mergeMap, switchMap, take, tap, withLatestFrom } from "rxjs";
 import { EmployeeInterface } from "../../shared/interfaces/employee";
 import { Store } from "@ngrx/store";
-import { addCv, resetNewCvs, updateCv } from "../cvs/cvs.actions";
+import { addCv, deleteCv, resetNewCvs, updateCv } from "../cvs/cvs.actions";
 import { AppState } from "../state/state";
 import { selectResponseData } from "./employees.reducers";
 import { selectNewCvList } from "../cvs/cvs.reducers";
-import { CvDtoInterface } from "../../shared/interfaces/cv";
+import { CvDtoInterface, CvFormInterface, CvInterface } from "../../shared/interfaces/cv";
+import { CvsService } from "../../shared/services/cvs.service";
+import { modifyCvsForAddition } from "../../shared/utils/mappers/cvs.mappers";
 
 @Injectable()
 export class EmployeesEffects {
   private readonly actions$ = inject(Actions);
   private readonly employeesApiService = inject(EmployeesApiService);
+  private readonly cvsSharedService = inject(CvsService);
   private readonly store = inject(Store<AppState>);
 
   getEmployeeList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchEmployees),
-      switchMap(() =>
+      concatMap(() =>
         this.employeesApiService
           .fetchEmployees()
           .pipe(map(employeeList => fetchEmployeesSuccess({ employeeList }))),
@@ -57,32 +60,20 @@ export class EmployeesEffects {
         this.employeesApiService.addEmployee(action.newEmployee).pipe(
           map(addedEmployee => addEmployeeSuccess({ addedEmployee })),
           tap(() => {
-            const responseData$ = this.store.select(selectResponseData);
-            const cvData$ = this.store.select(selectNewCvList);
-            responseData$
+            this.store
+              .select(selectResponseData)
               .pipe(
                 filter(responseData => responseData !== null),
-                tap(data => console.log(data)),
                 switchMap(responseData =>
-                  cvData$.pipe(
+                  this.store.select(selectNewCvList).pipe(
                     filter(cvList => cvList !== null),
-                    tap(data => console.log(data)),
                     map(cvList => {
-                      console.log("before modif:", cvList);
-                      // TODO modify language in addCv
-                      return cvList.map(cv => ({
-                        ...cv,
-                        employeeId: responseData.id,
-                        language: cv.language.map(language => ({
-                          name: { name: language.name },
-                          level: { name: language.level },
-                        })),
-                      }));
-                    }),
-                    tap(modifiedCvList => {
-                      console.log("modif:", modifiedCvList);
-                      modifiedCvList.forEach(modifiedCv => {
-                        console.log("modif cvsProjects", modifiedCv.cvsProjects);
+                      const employeeId = responseData.id;
+                      // const modifiedCvList = this.cvsSharedService.cvFormToCvDto(cvList, employeeId)
+                      // const modifiedCvList = modifyCvsForAddition(responseData, cvList);
+                      cvList.forEach(cv => {
+                        const modifiedCv = this.cvsSharedService.cvFormToCvDto(cv, employeeId);
+                        console.log("Modified CV projects:", modifiedCv.projects);
                         this.store.dispatch(addCv({ cv: modifiedCv }));
                         this.store.dispatch(resetNewCvs());
                       });
@@ -101,49 +92,82 @@ export class EmployeesEffects {
   updateEmployee$ = createEffect(() =>
     this.actions$.pipe(
       ofType(updateEmployee),
-      mergeMap(action =>
+      concatMap(action =>
         this.employeesApiService.updateEmployee(action.employee, action.employeeId).pipe(
           map(updatedEmployee => {
             return updateEmployeeSuccess({ updatedEmployee });
           }),
-          tap(() => {
-            const responseData$ = this.store.select(selectResponseData);
-            const cvData$ = this.store.select(selectNewCvList);
-            responseData$
-              .pipe(
-                filter(responseData => responseData != null),
-                tap(data => console.log(data)),
-                switchMap(responseData =>
-                  cvData$.pipe(
-                    map(cvData => {
-                      responseData.cvs.forEach(response => {
-                        filter(cvData => cvData != null), tap(data => console.log(data));
-                        const cvToUpdate = cvData.find(cv => cv.cvName === response.cvName);
-                        const updatedCv: CvDtoInterface = {
-                          ...cvToUpdate,
-                          employeeId: response.id,
-                          language: cvToUpdate.language.map(language => ({
-                            level: { name: language.level },
-                            name: { name: language.name },
-                          })),
-                        };
-
-                        if (updatedCv) {
-                          console.log(updatedCv);
-                          this.store.dispatch(updateCv({ cv: updatedCv, cvId: response.id }));
-                        } else {
-                          console.log("no cv to update");
-                        }
-                      });
-                    }),
-                  ),
-                ),
-                take(1),
-              )
-              .subscribe();
-          }),
         ),
       ),
+      tap(() => {
+        this.store
+          .select(selectResponseData)
+          .pipe(
+            filter(responseData => responseData != null),
+            switchMap(responseData =>
+              this.store.select(selectNewCvList).pipe(
+                filter(cvData => cvData != null),
+                tap(data => console.log(data)),
+                map(cvData => {
+                  console.log("responseData:", responseData);
+                  console.log("cvData:", cvData);
+                  if (responseData.cvs.length === 0) {
+                    console.log("no cvs in response");
+                    cvData.forEach(cv => this.addCvToStore(cv, responseData.id));
+                  } else {
+                    console.log("are cvs in response", cvData);
+                    const cvToDelete = responseData.cvs.filter(
+                      responseCv => !cvData.some(cv => cv.cvName === responseCv.cvName),
+                    );
+                    cvToDelete.forEach(cv => {
+                      console.log("Deleting CV:", cv);
+                      this.deleteCvFromStore(cv.id);
+                    });
+
+                    cvData.forEach(cv => {
+                      let formCvId: number;
+                      const foundCv = responseData.cvs.find(responseCv => {
+                        if (cv.cvName === responseCv.cvName) {
+                          formCvId = responseCv.id;
+                          return true;
+                        } else {
+                          return false;
+                        }
+                      });
+                      if (foundCv) {
+                        this.updateCvInStore(cv, responseData.id, formCvId);
+                      } else {
+                        console.log("not found(adding to the store)");
+                        this.addCvToStore(cv, responseData.id);
+                      }
+                    });
+                  }
+                }),
+              ),
+            ),
+            take(1),
+          )
+          .subscribe();
+      }),
     ),
   );
+
+  public addCvToStore(cv: CvFormInterface, employeeId: number) {
+    console.log("addCvsToStore: ", cv, employeeId);
+    const addedCv: CvDtoInterface = this.cvsSharedService.cvFormToCvDto(cv, employeeId);
+    console.log(addedCv.cvName);
+    this.store.dispatch(addCv({ cv: addedCv }));
+  }
+
+  public updateCvInStore(cv: CvFormInterface, employeeId: number, cvId: number) {
+    console.log("updateCvsToStore: ", cv, employeeId);
+    const updatedCv: CvDtoInterface = this.cvsSharedService.cvFormToCvDto(cv, employeeId);
+    console.log(updatedCv.cvName);
+    this.store.dispatch(updateCv({ cv: updatedCv, cvId: cvId }));
+  }
+
+  public deleteCvFromStore(cvId: number) {
+    console.log("deleteCvFromStore: ", cvId);
+    this.store.dispatch(deleteCv({ cvId: cvId }));
+  }
 }

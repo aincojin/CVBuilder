@@ -24,13 +24,17 @@ import {
   selectSpecializations,
   selectDepartments,
   selectSkills,
+  selectResponsibilities,
+  selectTeamRoles,
 } from "../../../../store/core/core.reducers";
 import {
   addToBreadcrumbs,
   deleteFromBreadcrumbs,
   fetchDepartments,
+  fetchResponsibilities,
   fetchSkills,
   fetchSpecializations,
+  fetchTeamRoles,
   popFromBreadcrumbs,
   setPageTitles,
 } from "../../../../store/core/core.actions";
@@ -76,6 +80,9 @@ export class EditEmployeePageComponent implements OnInit {
   public specializationList$: Observable<BaseEntityInterface[]> =
     this.store.select(selectSpecializations);
   public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
+  public teamRolesList$: Observable<BaseEntityInterface[]> = this.store.select(selectTeamRoles);
+  public responsibilityList$: Observable<BaseEntityInterface[]> =
+    this.store.select(selectResponsibilities);
   public projectData$: Observable<ProjectInterface[]> = this.store.select(selectProjectList);
 
   @ViewChild(EmployeeInfoFormComponent, { static: true })
@@ -105,6 +112,8 @@ export class EditEmployeePageComponent implements OnInit {
     this.store.dispatch(fetchDepartments());
     this.store.dispatch(fetchSkills());
     this.store.dispatch(fetchSpecializations());
+    this.store.dispatch(fetchTeamRoles());
+    this.store.dispatch(fetchResponsibilities());
     this.store.dispatch(fetchProjects());
   }
 
@@ -141,6 +150,7 @@ export class EditEmployeePageComponent implements OnInit {
         updateEmployee({ employee: updatedEmployee, employeeId: this.employeeId }),
       );
       console.log("updated employee: ", updatedEmployee);
+      this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
     }
   }
   public onCancel() {

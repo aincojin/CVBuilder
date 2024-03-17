@@ -74,7 +74,7 @@ export class SelectComponent implements OnInit {
   }
 
   public writeValue(value: string | BaseEntityInterface): void {
-    setTimeout(() => console.log(this.selectControl.value), 1000);
+    // setTimeout(() => console.log(this.selectControl.value), 1000);
     // console.log(value);
     if (typeof value === "string") {
       // If value is already a string, directly set it as the value

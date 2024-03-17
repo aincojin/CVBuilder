@@ -23,6 +23,10 @@ export enum CvsActions {
   UPDATE_CV = "[Cvs] Update Cv",
   UPDATE_CV_SUCCESS = "[CVS] Update Cv Success",
   UPDATE_CV_ERROR = "[CVS] Update Cv Error",
+
+  DELETE_CV = "[Cvs] Delete Cv",
+  DELETE_CV_SUCCESS = "[Cvs] Delete Cv Success",
+  DELETE_CV_ERROR = "[Cvs] Delete Cv Error",
 }
 
 export const fetchCvs = createAction(CvsActions.GET_CVS);
@@ -52,6 +56,13 @@ export const updateCvSuccess = createAction(
   props<{ updatedCv: CvInterface }>(),
 );
 export const updateCvError = createAction(CvsActions.UPDATE_CV_ERROR);
+
+export const deleteCv = createAction(CvsActions.DELETE_CV, props<{ cvId: number }>());
+export const deleteCvSuccess = createAction(
+  CvsActions.DELETE_CV_SUCCESS,
+  props<{ deletedCv: CvInterface }>(),
+);
+export const deleteCvError = createAction(CvsActions.DELETE_CV_ERROR);
 
 export const addNewCv = createAction(CvsActions.ADD_NEW_CV, props<{ newCv: CvFormInterface }>());
 export const resetNewCvs = createAction(CvsActions.RESET_NEW_CVS);

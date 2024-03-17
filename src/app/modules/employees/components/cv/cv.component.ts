@@ -91,7 +91,7 @@ export class CvComponent {
       department: [null, Validators.required],
       skills: [null, Validators.required],
       language: this.fb.array([], Validators.required),
-      cvsProjects: this.fb.array([]),
+      projects: this.fb.array([], Validators.required),
     });
     console.log("cv init: ", this.baseForm.getRawValue());
 
@@ -105,7 +105,7 @@ export class CvComponent {
   }
 
   public get projects() {
-    return this.baseForm.get("cvsProjects") as FormArray;
+    return this.baseForm.get("projects") as FormArray;
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -117,14 +117,13 @@ export class CvComponent {
     }
     if (changes["selectedProject"] && changes["selectedProject"].currentValue) {
       this.modifiedProject = this.projectsService.fromProjectToDto(this.selectedProject);
-
-      console.log(this.selectedCv.cvsProjects);
+      console.log(this.selectedCv.projects);
     }
   }
 
   private updateProjects() {
-    if (this.selectedCv.cvsProjects) {
-      this.selectedCv.cvsProjects.forEach(project => {
+    if (this.selectedCv.projects) {
+      this.selectedCv.projects.forEach(project => {
         this.projects.push(
           this.fb.group({
             projectName: [project.projectName],
@@ -139,7 +138,7 @@ export class CvComponent {
         );
       });
     } else {
-      console.log("no cvsProjects in selectedCv");
+      console.log("no projects in selectedCv");
     }
   }
 
@@ -158,7 +157,7 @@ export class CvComponent {
     });
     this.updateProjects();
 
-    console.log(this.selectedCv.cvsProjects);
+    console.log(this.selectedCv.projects);
     console.log(this.selectedCv.language);
 
     this.baseForm.patchValue({
@@ -169,7 +168,7 @@ export class CvComponent {
       department: this.selectedCv.department,
       skills: this.selectedCv.skills,
       language: this.selectedCv.language,
-      cvsProjects: this.selectedCv.cvsProjects,
+      projects: this.selectedCv.projects,
     });
     console.log("BaseForm value: ", this.baseForm.getRawValue());
   }
@@ -211,16 +210,14 @@ export class CvComponent {
     this.languages.removeAt(index);
   }
 
-  //TODO the project is selected on collapse
   public selectProject(project: ProjectDtoInterface) {
     console.log(project);
     this.modifiedProject = project;
-    // this.projectSelectedEmitter.emit(projectId);
   }
 
   public onSave() {
     console.log("saving cv: ", this.baseForm.getRawValue());
-    console.log(this.baseForm.controls["cvsProjects"]);
+    console.log(this.baseForm.controls["projects"]);
 
     if (this.baseForm.invalid) {
       console.log("cv form not saved");
@@ -233,9 +230,6 @@ export class CvComponent {
         projects: this.projects.value,
       };
       console.log(savedCv);
-
-      const { cvsProjects, ...savedModifiedCv } = savedCv;
-      console.log(savedModifiedCv);
 
       console.log("savedcv: ", savedCv);
       this.cvSavedEmitter.emit(savedCv);

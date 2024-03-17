@@ -29,7 +29,7 @@ export interface CvDtoInterface {
   department: string;
   specialization: string;
   language: LanguageDtoInterface[];
-  cvsProjects: ProjectDtoInterface[];
+  projects: ProjectDtoInterface[];
 }
 
 export interface CvFormInterface {
@@ -41,5 +41,5 @@ export interface CvFormInterface {
   department: string;
   specialization: string;
   language: LanguageFormInterface[];
-  cvsProjects: ProjectDtoInterface[];
+  projects: ProjectDtoInterface[];
 }

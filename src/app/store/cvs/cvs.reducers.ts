@@ -5,6 +5,9 @@ import {
   addCvError,
   addCvSuccess,
   addNewCv,
+  deleteCv,
+  deleteCvError,
+  deleteCvSuccess,
   deleteNewCv,
   fetchCv,
   fetchCvError,
@@ -19,6 +22,7 @@ import {
   updateCvSuccess,
   updateNewCv,
 } from "./cvs.actions";
+import { CvInterface } from "../../shared/interfaces/cv";
 
 const initialState: CvStateInterface = {
   newCvList: [],
@@ -67,9 +71,13 @@ const cvFeature = createFeature({
 
     on(updateCv, state => ({ ...state })),
     on(updateCvSuccess, (state, { updatedCv }) => {
-      const updatedCvList = state.cvList.map(cv =>
-        cv.id === updatedCv.id ? { ...updatedCv } : cv,
-      );
+      let updatedCvList: CvInterface[];
+      const existingCvIndex = state.cvList.findIndex(cv => cv.id === updatedCv.id);
+      if (existingCvIndex !== -1) {
+        updatedCvList = state.cvList.map(cv => (cv.id === updatedCv.id ? { ...updatedCv } : cv));
+      } else {
+        updatedCvList = [...state.cvList, updatedCv];
+      }
       return {
         ...state,
         cvList: updatedCvList,
@@ -78,6 +86,21 @@ const cvFeature = createFeature({
       };
     }),
     on(updateCvError, state => ({
+      ...state,
+      cv: null,
+    })),
+
+    on(deleteCv, state => ({ ...state })),
+    on(deleteCvSuccess, (state, { deletedCv }) => {
+      const updatedCvList: CvInterface[] = state.cvList.filter(cv => cv.id !== deletedCv.id);
+      return {
+        ...state,
+        cvList: updatedCvList,
+        cv: deletedCv,
+        error: null,
+      };
+    }),
+    on(deleteCvError, state => ({
       ...state,
       cv: null,
     })),
@@ -115,6 +138,7 @@ const cvFeature = createFeature({
       return {
         ...state,
         newCvList: updatedNewCvList,
+        newCv: null,
       };
     }),
   ),

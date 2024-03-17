@@ -7,6 +7,7 @@ import { addCv, addNewCv, resetNewCvs } from "../../../store/cvs/cvs.actions";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../../store/state/state";
 import { selectCvList } from "../../../store/cvs/cvs.reducers";
+import { CvsService } from "../../../shared/services/cvs.service";
 
 @UntilDestroy()
 @Injectable({
@@ -14,69 +15,17 @@ import { selectCvList } from "../../../store/cvs/cvs.reducers";
 })
 export class EmployeesService {
   private readonly store = inject(Store<AppState>);
+  private readonly cvsSharedService = inject(CvsService);
 
   public getCvsByEmployeeId(employeeId: number): Observable<CvFormInterface[]> {
     return this.store.select(selectCvList).pipe(
       map(cvList => {
         const filteredCvs = cvList.filter(cv => cv.employeeId === +employeeId);
         console.log("service filtered cvlist: ", filteredCvs);
-        const transformedCvs = filteredCvs.map(cv => this.fromCvToForm(cv));
+        const transformedCvs = filteredCvs.map(cv => this.cvsSharedService.cvToCvForm(cv));
         console.log("service transformed cvlist: ", transformedCvs);
         return transformedCvs;
       }),
     );
   }
-
-  public fromCvToForm(cv: CvInterface): CvFormInterface {
-    return {
-      cvName: cv.cvName,
-      language: cv.language.map(language => ({
-        level: language.level.name,
-        name: language.name.name,
-      })),
-      skills: cv.skills.map(skill => skill.name),
-      firstName: cv.firstName,
-      lastName: cv.lastName,
-      email: cv.email,
-      department: cv.department.name,
-      specialization: cv.specialization.name,
-      cvsProjects: cv.cvsProjects.map(project => ({
-        ...project,
-        techStack: project.techStack.map(skill => skill.name),
-        responsibilities: project.responsibilities.map(resp => resp.name),
-        teamRoles: project.teamRoles.map(role => role.name),
-      })),
-    };
-  }
 }
-// public processResponseData(
-//   responseData$: Observable<EmployeeInterface>,
-//   cvData$: Observable<CvFormInterface[]>,
-// ): Observable<CvDtoInterface[]> {
-//   return responseData$.pipe(
-//     tap(data => console.log("sss: ", data)),
-//     filter(responseData => responseData !== null),
-//     switchMap(responseData =>
-//       cvData$.pipe(
-//         filter(cvList => cvList !== null),
-//         map(cvList => {
-//           console.log("before modif:", cvList);
-//           return cvList.map(cv => ({
-//             ...cv,
-//             employeeId: responseData.id,
-//             language: cv.language.map(language => ({
-//               name: { name: language.name },
-//               level: { name: language.level },
-//             })),
-//           }));
-//         }),
-//         tap(modifiedCvList => {
-//           console.log("modif:", modifiedCvList);
-//           modifiedCvList.map(modifiedCv => {
-//             this.store.dispatch(addCv({ cv: modifiedCv }));
-//           });
-//         }),
-//       ),
-//     ),
-//   );
-// }

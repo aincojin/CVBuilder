@@ -85,15 +85,15 @@ export class DatePickerComponent {
   //sets the value to the native(html) form control
   public writeValue(value: DatePickerInterface): void {
     if (value && value.startDate && value.endDate) {
-      console.log("st date: ", value.startDate);
-      console.log("end date: ", value.endDate);
+      // console.log("st date: ", value.startDate);
+      // console.log("end date: ", value.endDate);
 
       this.dateRangeControl.setValue([value.startDate, value.endDate]);
       this.cdRef.detectChanges();
     }
-    setTimeout(() => console.log("datepicker timeout:", this.dateRangeControl.value), 1000);
+    // setTimeout(() => console.log("datepicker timeout:", this.dateRangeControl.value), 1000);
     this.cdRef.detectChanges();
-    console.log(this.dateRangeControl.value);
+    // console.log(this.dateRangeControl.value);
   }
 
   //to register a callback that is expected to execute evry time

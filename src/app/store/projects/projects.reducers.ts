@@ -16,9 +16,6 @@ import {
 } from "./projects.actions";
 
 const initialState: ProjectStateInterface = {
-  newProject: null,
-  newProjectList: [],
-
   projectList: [],
   project: null,
   error: null,

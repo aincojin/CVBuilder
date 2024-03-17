@@ -1,8 +1,10 @@
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, act, createEffect, ofType } from "@ngrx/effects";
 import { CvsApiService } from "../../shared/services/api/cvs.api.service";
 import {
   addCv,
   addCvSuccess,
+  deleteCv,
+  deleteCvSuccess,
   fetchCv,
   fetchCvSuccess,
   fetchCvs,
@@ -62,6 +64,19 @@ export class CvsEffects {
         this.cvsApiService.updateCv(action.cv, action.cvId).pipe(
           map(updatedCv => {
             return updateCvSuccess({ updatedCv });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  deleteCv$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deleteCv),
+      switchMap(action =>
+        this.cvsApiService.deleteCv(action.cvId).pipe(
+          map(deletedCv => {
+            return deleteCvSuccess({ deletedCv });
           }),
         ),
       ),

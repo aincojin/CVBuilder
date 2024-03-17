@@ -29,4 +29,9 @@ export class CvsApiService {
     const endpoint = `${API_URL}/cvs/${cvId}`;
     return this.http.put<CvInterface>(endpoint, updatedCvData);
   }
+
+  public deleteCv(cvId: number): Observable<CvInterface> {
+    const endpoint = `${API_URL}/cvs/${cvId}`;
+    return this.http.delete<CvInterface>(endpoint);
+  }
 }
