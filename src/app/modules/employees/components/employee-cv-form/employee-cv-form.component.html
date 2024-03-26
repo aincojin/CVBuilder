@@ -20,7 +20,7 @@
   </div>
   <div class="tab__content">
     <cvgen-cv
-      *ngIf="(selectedCv$ | async) && cvData"
+      *ngIf="selectedCv$ | async"
       [selectedCv]="selectedCv$ | async"
       [selectedProject]="selectedProject$ | async"
       [departmentData]="departmentData"

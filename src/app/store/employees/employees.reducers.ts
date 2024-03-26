@@ -18,7 +18,6 @@ import {
 const initialState: EmployeeStateInterface = {
   employeeList: [],
   employee: null,
-  responseData: null,
   error: null,
   isLoading: false,
 };
@@ -32,14 +31,12 @@ const employeeFeature = createFeature({
       ...state,
       employeeList,
       employee: null,
-      responseData: null,
       error: null,
       isLoading: false,
     })),
     on(fetchEmployeesError, (state, { error }) => ({
       ...state,
       employeeList: null,
-      responseData: null,
       employee: null,
       error,
       isLoading: false,
@@ -49,13 +46,11 @@ const employeeFeature = createFeature({
     on(fetchEmployeeSuccess, (state, { employee }) => ({
       ...state,
       employee,
-      responseData: null,
       error: null,
     })),
     on(fetchEmployeeError, (state, { error }) => ({
       ...state,
       employee: null,
-      responseData: null,
       error,
     })),
 
@@ -63,12 +58,10 @@ const employeeFeature = createFeature({
     on(addEmployeeSuccess, (state, { addedEmployee }) => ({
       ...state,
       employeeList: [...state.employeeList, addedEmployee],
-      responseData: addedEmployee,
       error: null,
     })),
     on(addEmployeeError, (state, { error }) => ({
       ...state,
-      responseData: null,
       error,
     })),
 
@@ -81,14 +74,12 @@ const employeeFeature = createFeature({
         ...state,
         employeeList: updatedEmployeeList,
         employee: updatedEmployee,
-        responseData: updatedEmployee,
         error: null,
       };
     }),
     on(updateEmployeeError, (state, { error }) => ({
       ...state,
       employee: null,
-      responseData: null,
       error,
     })),
   ),
@@ -100,5 +91,4 @@ export const {
   selectEmployeeList,
   selectEmployee,
   selectIsLoading,
-  selectResponseData,
 } = employeeFeature;

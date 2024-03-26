@@ -137,8 +137,6 @@ export class CvComponent {
           }),
         );
       });
-    } else {
-      console.log("no projects in selectedCv");
     }
   }
 
@@ -156,9 +154,6 @@ export class CvComponent {
       );
     });
     this.updateProjects();
-
-    console.log(this.selectedCv.projects);
-    console.log(this.selectedCv.language);
 
     this.baseForm.patchValue({
       firstName: this.selectedCv.firstName,
@@ -217,8 +212,6 @@ export class CvComponent {
 
   public onSave() {
     console.log("saving cv: ", this.baseForm.getRawValue());
-    console.log(this.baseForm.controls["projects"]);
-
     if (this.baseForm.invalid) {
       console.log("cv form not saved");
       this.baseForm.markAllAsTouched();
