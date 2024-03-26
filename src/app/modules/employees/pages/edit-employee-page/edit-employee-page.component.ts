@@ -120,6 +120,7 @@ export class EditEmployeePageComponent implements OnInit {
 
   private getCvsById(): void {
     console.log("outside");
+    this.store.dispatch(resetNewCvs());
     this.allCvs$.pipe(untilDestroyed(this), skip(1)).subscribe((cvList: CvInterface[]) => {
       this.employeesService.getCvsByEmployeeId(cvList, this.employeeId);
     });
