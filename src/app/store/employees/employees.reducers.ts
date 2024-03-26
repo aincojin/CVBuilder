@@ -19,6 +19,7 @@ const initialState: EmployeeStateInterface = {
   employeeList: [],
   employee: null,
   error: null,
+  responseData: null,
   isLoading: false,
 };
 
@@ -59,6 +60,7 @@ const employeeFeature = createFeature({
       ...state,
       employeeList: [...state.employeeList, addedEmployee],
       error: null,
+      responseData: addedEmployee,
     })),
     on(addEmployeeError, (state, { error }) => ({
       ...state,
@@ -74,6 +76,7 @@ const employeeFeature = createFeature({
         ...state,
         employeeList: updatedEmployeeList,
         employee: updatedEmployee,
+        responseData: updatedEmployee,
         error: null,
       };
     }),
@@ -91,4 +94,5 @@ export const {
   selectEmployeeList,
   selectEmployee,
   selectIsLoading,
+  selectResponseData,
 } = employeeFeature;

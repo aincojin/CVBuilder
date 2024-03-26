@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { CvDtoInterface, CvFormInterface, CvInterface } from "../../shared/interfaces/cv";
+import { ErrorInterface } from "../../shared/interfaces/error";
 
 export enum CvsActions {
   ADD_NEW_CV = "[Cvs] Add New Cv",
@@ -34,18 +35,24 @@ export const fetchCvsSuccess = createAction(
   CvsActions.GET_CVS_SUCCESS,
   props<{ cvList: CvInterface[] }>(),
 );
-export const fetchCvsError = createAction(CvsActions.GET_CVS_ERROR);
+export const fetchCvsError = createAction(
+  CvsActions.GET_CVS_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const fetchCv = createAction(CvsActions.GET_CV, props<{ cvId: number }>());
 export const fetchCvSuccess = createAction(CvsActions.GET_CV_SUCCESS, props<{ cv: CvInterface }>());
-export const fetchCvError = createAction(CvsActions.GET_CV_ERROR);
+export const fetchCvError = createAction(
+  CvsActions.GET_CV_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const addCv = createAction(CvsActions.ADD_CV, props<{ cv: CvDtoInterface }>());
 export const addCvSuccess = createAction(
   CvsActions.ADD_CV_SUCCESS,
   props<{ addedCv: CvInterface }>(),
 );
-export const addCvError = createAction(CvsActions.ADD_CV_ERROR);
+export const addCvError = createAction(CvsActions.ADD_CV_ERROR, props<{ error: ErrorInterface }>());
 
 export const updateCv = createAction(
   CvsActions.UPDATE_CV,
@@ -55,14 +62,20 @@ export const updateCvSuccess = createAction(
   CvsActions.UPDATE_CV_SUCCESS,
   props<{ updatedCv: CvInterface }>(),
 );
-export const updateCvError = createAction(CvsActions.UPDATE_CV_ERROR);
+export const updateCvError = createAction(
+  CvsActions.UPDATE_CV_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const deleteCv = createAction(CvsActions.DELETE_CV, props<{ cvId: number }>());
 export const deleteCvSuccess = createAction(
   CvsActions.DELETE_CV_SUCCESS,
   props<{ deletedCv: CvInterface }>(),
 );
-export const deleteCvError = createAction(CvsActions.DELETE_CV_ERROR);
+export const deleteCvError = createAction(
+  CvsActions.DELETE_CV_ERROR,
+  props<{ error: ErrorInterface }>(),
+);
 
 export const addNewCv = createAction(CvsActions.ADD_NEW_CV, props<{ newCv: CvFormInterface }>());
 export const resetNewCvs = createAction(CvsActions.RESET_NEW_CVS);

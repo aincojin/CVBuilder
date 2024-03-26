@@ -3,20 +3,29 @@ import { ProjectsApiService } from "../../shared/services/api/projects.api.servi
 import { Injectable, inject } from "@angular/core";
 import {
   addProject,
+  addProjectError,
   addProjectSuccess,
   fetchProject,
   fetchProjectSuccess,
   fetchProjects,
   fetchProjectsSuccess,
   updateProject,
+  updateProjectError,
   updateProjectSuccess,
 } from "./projects.actions";
-import { switchMap, map, concatMap, mergeMap } from "rxjs";
+import { switchMap, map, concatMap, mergeMap, catchError, of } from "rxjs";
+import { ErrorInterface } from "../../shared/interfaces/error";
+import { updateEmployeeError } from "../employees/employees.actions";
+import { NotificationsService } from "../../shared/services/notifications.service";
+import { PROJECT_SUCCESS_MESSAGES } from "../../shared/constants/successMessages";
 
 @Injectable()
 export class ProjectsEffects {
   private readonly actions$ = inject(Actions);
   private readonly projectsApiService = inject(ProjectsApiService);
+  private readonly notificationService = inject(NotificationsService);
+
+  private messageList = PROJECT_SUCCESS_MESSAGES;
 
   getProjectList$ = createEffect(() =>
     this.actions$.pipe(
@@ -46,10 +55,15 @@ export class ProjectsEffects {
       concatMap(action =>
         this.projectsApiService.addProject(action.newProject).pipe(
           map(addedProject => {
+            this.notificationService.successMessage(this.messageList.added);
             return addProjectSuccess({ addedProject });
           }),
         ),
       ),
+      catchError((error: ErrorInterface) => {
+        this.notificationService.errorMessage(error.message);
+        return of(addProjectError({ error: error }));
+      }),
     ),
   );
 
@@ -59,10 +73,15 @@ export class ProjectsEffects {
       mergeMap(action =>
         this.projectsApiService.updateProject(action.project, action.projectId).pipe(
           map(updatedProject => {
+            this.notificationService.successMessage(this.messageList.updated);
             return updateProjectSuccess({ updatedProject });
           }),
         ),
       ),
+      catchError((error: ErrorInterface) => {
+        this.notificationService.errorMessage(error.message);
+        return of(updateProjectError({ error: error }));
+      }),
     ),
   );
 }

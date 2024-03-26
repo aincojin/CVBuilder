@@ -35,6 +35,8 @@ import { Observable } from "rxjs";
 import { ProjectInterface } from "../../../../shared/interfaces/project";
 import { selectProject } from "../../../../store/projects/projects.reducers";
 import { fetchProject } from "../../../../store/projects/projects.actions";
+import { NotificationsService } from "../../../../shared/services/notifications.service";
+import { FORM_NOTIFICATIONS } from "../../../../shared/constants/successMessages";
 
 @Component({
   selector: "cvgen-employee-cv-form",
@@ -63,6 +65,7 @@ import { fetchProject } from "../../../../store/projects/projects.actions";
 })
 export class EmployeeCvFormComponent {
   private readonly store = inject(Store<AppState>);
+  private readonly notificationService = inject(NotificationsService);
 
   @Input() public selectedEmployeeData: EmployeeInterface;
   @Input() public departmentData: BaseEntityInterface[];
@@ -75,6 +78,7 @@ export class EmployeeCvFormComponent {
 
   public baseForm: FormGroup;
   public cvName: string;
+  public messageList = FORM_NOTIFICATIONS;
 
   @Output() cvAddedEmitter: EventEmitter<CvFormInterface> = new EventEmitter<CvFormInterface>();
   @Output() cvListEmitter: EventEmitter<CvFormInterface> = new EventEmitter<CvFormInterface>();
@@ -125,6 +129,7 @@ export class EmployeeCvFormComponent {
 
   public saveNewCv(savedCv: CvFormInterface) {
     this.store.dispatch(updateNewCv({ updatedNewCv: savedCv }));
+    this.notificationService.successMessage(this.messageList.valid);
   }
   public onDeleteCv(deletedName: string) {
     this.store.dispatch(deleteNewCv({ deletedCvName: deletedName }));

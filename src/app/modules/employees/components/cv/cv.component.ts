@@ -31,6 +31,8 @@ import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
 import { ProjectDtoInterface, ProjectInterface } from "../../../../shared/interfaces/project";
 import { LANGUAGES_DATA, LEVELS_DATA } from "../../../../shared/constants/languages";
 import { ProjectsService } from "../../../../shared/services/projects.service";
+import { NotificationsService } from "../../../../shared/services/notifications.service";
+import { FORM_NOTIFICATIONS } from "../../../../shared/constants/successMessages";
 
 @Component({
   selector: "cvgen-cv",
@@ -60,6 +62,7 @@ import { ProjectsService } from "../../../../shared/services/projects.service";
 export class CvComponent {
   private readonly fb = inject(FormBuilder);
   private readonly projectsService = inject(ProjectsService);
+  private readonly notificationService = inject(NotificationsService);
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly store = inject(Store<AppState>);
@@ -77,6 +80,7 @@ export class CvComponent {
   public cvName: string;
   public languagesData = LANGUAGES_DATA;
   public levelData = LEVELS_DATA;
+  public messageList = FORM_NOTIFICATIONS;
   public modifiedProject: ProjectDtoInterface;
 
   @Output() cvSavedEmitter: EventEmitter<CvFormInterface> = new EventEmitter<CvFormInterface>();
@@ -215,6 +219,7 @@ export class CvComponent {
     if (this.baseForm.invalid) {
       console.log("cv form not saved");
       this.baseForm.markAllAsTouched();
+      this.notificationService.errorMessage(this.messageList.invalid);
       return;
     } else {
       const savedCv: CvFormInterface = {

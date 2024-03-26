@@ -3,6 +3,8 @@ import { inject } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 import { catchError, throwError, switchMap } from "rxjs";
 import { AuthApiService } from "../services/api/auth.api.service";
+import { NotificationsService } from "../services/notifications.service";
+import { AUTH_MESSAGES } from "../constants/successMessages";
 
 export const tokenInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
@@ -10,6 +12,10 @@ export const tokenInterceptor: HttpInterceptorFn = (
 ) => {
   const cookieService = inject(CookieService);
   const authApiService = inject(AuthApiService);
+  const notificationService = inject(NotificationsService);
+
+  const errorList = AUTH_MESSAGES;
+
   const token = cookieService.get("access_token");
   if (token) {
     req = req.clone({
@@ -20,6 +26,7 @@ export const tokenInterceptor: HttpInterceptorFn = (
   }
   return next(req).pipe(
     catchError(error => {
+      notificationService.errorMessage(errorList[error.status]);
       if (error.status === 401) {
         return handleUnauthorizedError(req, next, authApiService, cookieService);
       } else if (error.status === 403) {

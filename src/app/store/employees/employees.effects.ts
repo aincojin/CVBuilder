@@ -3,15 +3,28 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { EmployeesApiService } from "../../shared/services/api/employees.api.service";
 import {
   addEmployee,
+  addEmployeeError,
   addEmployeeSuccess,
   fetchEmployee,
   fetchEmployeeSuccess,
   fetchEmployees,
   fetchEmployeesSuccess,
   updateEmployee,
+  updateEmployeeError,
   updateEmployeeSuccess,
 } from "./employees.actions";
-import { concatMap, filter, map, mergeMap, switchMap, take, tap, withLatestFrom } from "rxjs";
+import {
+  catchError,
+  concatMap,
+  filter,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  take,
+  tap,
+  withLatestFrom,
+} from "rxjs";
 import { EmployeeInterface } from "../../shared/interfaces/employee";
 import { Store } from "@ngrx/store";
 import { addCv, deleteCv, resetNewCvs, updateCv } from "../cvs/cvs.actions";
@@ -21,13 +34,19 @@ import { selectNewCvList } from "../cvs/cvs.reducers";
 import { CvDtoInterface, CvFormInterface, CvInterface } from "../../shared/interfaces/cv";
 import { CvsService } from "../../shared/services/cvs.service";
 import { modifyCvsForAddition } from "../../shared/utils/mappers/cvs.mappers";
+import { ErrorInterface } from "../../shared/interfaces/error";
+import { NotificationsService } from "../../shared/services/notifications.service";
+import { EMPLOYEE_SUCCESS_MESSAGES } from "../../shared/constants/successMessages";
 
 @Injectable()
 export class EmployeesEffects {
   private readonly actions$ = inject(Actions);
   private readonly employeesApiService = inject(EmployeesApiService);
   private readonly cvsSharedService = inject(CvsService);
+  private readonly notificationService = inject(NotificationsService);
   private readonly store = inject(Store<AppState>);
+
+  public messageList = EMPLOYEE_SUCCESS_MESSAGES;
 
   getEmployeeList$ = createEffect(() =>
     this.actions$.pipe(
@@ -58,7 +77,10 @@ export class EmployeesEffects {
       ofType(addEmployee),
       concatMap(action =>
         this.employeesApiService.addEmployee(action.newEmployee).pipe(
-          map(addedEmployee => addEmployeeSuccess({ addedEmployee })),
+          map(addedEmployee => {
+            this.notificationService.errorMessage(this.messageList.added);
+            return addEmployeeSuccess({ addedEmployee });
+          }),
           tap(() => {
             this.store
               .select(selectResponseData)
@@ -69,13 +91,11 @@ export class EmployeesEffects {
                     filter(cvList => cvList !== null),
                     map(cvList => {
                       const employeeId = responseData.id;
-                      // const modifiedCvList = this.cvsSharedService.cvFormToCvDto(cvList, employeeId)
-                      // const modifiedCvList = modifyCvsForAddition(responseData, cvList);
                       cvList.forEach(cv => {
                         const modifiedCv = this.cvsSharedService.cvFormToCvDto(cv, employeeId);
                         console.log("Modified CV projects:", modifiedCv.projects);
                         this.store.dispatch(addCv({ cv: modifiedCv }));
-                        this.store.dispatch(resetNewCvs());
+                        // this.store.dispatch(resetNewCvs());
                       });
                     }),
                   ),
@@ -86,6 +106,10 @@ export class EmployeesEffects {
           }),
         ),
       ),
+      catchError((error: ErrorInterface) => {
+        this.notificationService.errorMessage(error.message);
+        return of(addEmployeeError({ error: error }));
+      }),
     ),
   );
 
@@ -95,6 +119,7 @@ export class EmployeesEffects {
       concatMap(action =>
         this.employeesApiService.updateEmployee(action.employee, action.employeeId).pipe(
           map(updatedEmployee => {
+            this.notificationService.successMessage(this.messageList.updated);
             return updateEmployeeSuccess({ updatedEmployee });
           }),
         ),
@@ -148,6 +173,10 @@ export class EmployeesEffects {
             take(1),
           )
           .subscribe();
+      }),
+      catchError((error: ErrorInterface) => {
+        this.notificationService.errorMessage(error.message);
+        return of(updateEmployeeError({ error: error }));
       }),
     ),
   );
