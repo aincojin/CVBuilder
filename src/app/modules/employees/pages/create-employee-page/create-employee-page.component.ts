@@ -1,19 +1,12 @@
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-  ViewChild,
-  inject,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, ViewChild, inject } from "@angular/core";
 import { NzTabsModule } from "ng-zorro-antd/tabs";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { EmployeeCvFormComponent } from "../../components/employee-cv-form/employee-cv-form.component";
 import { EmployeeInfoFormComponent } from "../../components/employee-info-form/employee-info-form.component";
 import { TranslateModule } from "@ngx-translate/core";
 import { Store } from "@ngrx/store";
-import { Observable, filter, map, switchMap, tap } from "rxjs";
+import { Observable } from "rxjs";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
 import {
   selectDepartments,
@@ -24,7 +17,6 @@ import {
 } from "../../../../store/core/core.reducers";
 import {
   addToBreadcrumbs,
-  deleteFromBreadcrumbs,
   fetchDepartments,
   fetchResponsibilities,
   fetchSkills,
@@ -33,22 +25,18 @@ import {
   popFromBreadcrumbs,
   setPageTitles,
 } from "../../../../store/core/core.actions";
-import { EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { addEmployee } from "../../../../store/employees/employees.actions";
 import { Paths } from "../../../../shared/enums/routes";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AppState } from "../../../../store/state/state";
 import { CvFormInterface } from "../../../../shared/interfaces/cv";
-import { addCv, addNewCv, resetNewCvs } from "../../../../store/cvs/cvs.actions";
+import { addNewCv, resetNewCvs } from "../../../../store/cvs/cvs.actions";
 import { selectNewCvList } from "../../../../store/cvs/cvs.reducers";
-import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
-import { selectResponseData } from "../../../../store/employees/employees.reducers";
 import { EmployeesService } from "../../services/employees.service";
 import { fetchProjects } from "../../../../store/projects/projects.actions";
-import { ProjectDtoInterface, ProjectInterface } from "../../../../shared/interfaces/project";
+import { ProjectInterface } from "../../../../shared/interfaces/project";
 import { selectProjectList } from "../../../../store/projects/projects.reducers";
 
-@UntilDestroy()
 @Component({
   selector: "cvgen-create-employee-page",
   standalone: true,
@@ -79,7 +67,6 @@ export class CreateEmployeePageComponent {
   public specializationList$: Observable<BaseEntityInterface[]> =
     this.store.select(selectSpecializations);
   public departmentList$: Observable<BaseEntityInterface[]> = this.store.select(selectDepartments);
-  public responseData$: Observable<EmployeeInterface> = this.store.select(selectResponseData);
 
   @ViewChild(EmployeeInfoFormComponent, { static: true })
   employeeInfoForm: EmployeeInfoFormComponent;
@@ -118,16 +105,10 @@ export class CreateEmployeePageComponent {
       return;
     } else {
       this.formInvalid = false;
-      console.log("formInvalid: ", this.formInvalid);
       console.log("empl info form sent");
       const newEmployee = this.employeeInfoForm.baseForm.getRawValue();
       this.store.dispatch(addEmployee({ newEmployee }));
       console.log("adding employee: ", newEmployee);
-      //adding cvs to the employee officially
-      // this.employeesService
-      //   .processResponseData(this.responseData$, this.cvData$)
-      //   .pipe(untilDestroyed(this))
-      //   .subscribe();
       this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
     }
   }

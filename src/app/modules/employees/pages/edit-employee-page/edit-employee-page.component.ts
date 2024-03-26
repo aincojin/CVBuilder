@@ -16,7 +16,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { fetchEmployee, updateEmployee } from "../../../../store/employees/employees.actions";
 import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
-import { Observable, map, mergeMap, tap } from "rxjs";
+import { Observable, map, mergeMap, skip, tap } from "rxjs";
 import { selectEmployee } from "../../../../store/employees/employees.reducers";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
@@ -41,9 +41,9 @@ import {
 import { Paths } from "../../../../shared/enums/routes";
 import { AppState } from "../../../../store/state/state";
 import { EmployeesService } from "../../services/employees.service";
-import { CvFormInterface } from "../../../../shared/interfaces/cv";
+import { CvFormInterface, CvInterface } from "../../../../shared/interfaces/cv";
 import { addNewCv, fetchCvs, resetNewCvs } from "../../../../store/cvs/cvs.actions";
-import { selectNewCvList } from "../../../../store/cvs/cvs.reducers";
+import { selectCvList, selectNewCvList } from "../../../../store/cvs/cvs.reducers";
 import { ProjectInterface } from "../../../../shared/interfaces/project";
 import { selectProjectList } from "../../../../store/projects/projects.reducers";
 import { fetchProjects } from "../../../../store/projects/projects.actions";
@@ -84,6 +84,7 @@ export class EditEmployeePageComponent implements OnInit {
   public responsibilityList$: Observable<BaseEntityInterface[]> =
     this.store.select(selectResponsibilities);
   public projectData$: Observable<ProjectInterface[]> = this.store.select(selectProjectList);
+  public allCvs$: Observable<CvInterface[]> = this.store.select(selectCvList);
 
   @ViewChild(EmployeeInfoFormComponent, { static: true })
   employeeInfoForm: EmployeeInfoFormComponent;
@@ -118,19 +119,16 @@ export class EditEmployeePageComponent implements OnInit {
   }
 
   private getCvsById(): void {
-    this.employeesService
-      .getCvsByEmployeeId(this.employeeId)
-      .pipe(untilDestroyed(this))
-      .subscribe(transformed => {
-        this.store.dispatch(resetNewCvs());
-        transformed.forEach(cv => this.store.dispatch(addNewCv({ newCv: cv })));
-      });
+    console.log("outside");
+    this.allCvs$.pipe(untilDestroyed(this), skip(1)).subscribe((cvList: CvInterface[]) => {
+      this.employeesService.getCvsByEmployeeId(cvList, this.employeeId);
+    });
   }
 
-  public updateExisting(updatedEmployee: EmployeeDtoInterface) {
-    this.store.dispatch(updateEmployee({ employeeId: this.employeeId, employee: updatedEmployee }));
-    this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
-  }
+  // public updateExisting(updatedEmployee: EmployeeDtoInterface) {
+  //   this.store.dispatch(updateEmployee({ employeeId: this.employeeId, employee: updatedEmployee }));
+  //   this.router.navigate([Paths.EmployeeList], { relativeTo: this.activatedRoute });
+  // }
 
   public cvAdded(cvFormData: CvFormInterface) {
     this.store.dispatch(addNewCv({ newCv: cvFormData }));

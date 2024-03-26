@@ -68,10 +68,13 @@ export class EmployeeInfoFormComponent {
       this.updateForm();
     }
   }
-  public ngOnChanges(changes: SimpleChanges) {
-    if (changes["formInvalid"] && changes["formInvalid"].currentValue) {
+  public ngDoCheck() {
+    if (this.formInvalid) {
       this.baseForm.markAllAsTouched();
     }
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
     if (changes["selectedEmployeeData"] && changes["selectedEmployeeData"].currentValue) {
       if (this.baseForm) {
         this.updateForm();
