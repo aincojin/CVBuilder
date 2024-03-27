@@ -26,13 +26,10 @@ export const tokenInterceptor: HttpInterceptorFn = (
   }
   return next(req).pipe(
     catchError(error => {
-      notificationService.errorMessage(errorList[error.status]);
       if (error.status === 401) {
         return handleUnauthorizedError(req, next, authApiService, cookieService);
-      } else if (error.status === 403) {
-        return handleForbiddenError(error);
       }
-      return throwError(() => error);
+      return throwError(() => notificationService.errorMessage(errorList[error.status]));
     }),
   );
 };
@@ -59,9 +56,4 @@ const handleUnauthorizedError = (
       return throwError(() => refreshError);
     }),
   );
-};
-
-const handleForbiddenError = error => {
-  console.log("403:(");
-  return throwError(() => error);
 };

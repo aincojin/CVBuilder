@@ -1,8 +1,12 @@
 import { FormMessageInterface, SuccessMessageInterface } from "../interfaces/notifications";
 
-export const FORM_NOTIFICATIONS: FormMessageInterface = {
+export const CV_FORM_NOTIFICATIONS: FormMessageInterface = {
   valid: "Cv was saved!",
   invalid: "Cv wasn`t saved. Seems, some fields are invalid",
+};
+export const EMPLOYEE_FORM_NOTIFICATIONS: FormMessageInterface = {
+  valid: "Employee info is valid",
+  invalid: "Employee info is invalid",
 };
 export const EMPLOYEE_SUCCESS_MESSAGES: SuccessMessageInterface = {
   updated: "Employee successfully updated!",

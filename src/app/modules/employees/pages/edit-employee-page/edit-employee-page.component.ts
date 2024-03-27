@@ -1,35 +1,19 @@
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-  inject,
-} from "@angular/core";
-import { NzTabsModule } from "ng-zorro-antd/tabs";
-import { NzButtonModule } from "ng-zorro-antd/button";
-import { EmployeeCvFormComponent } from "../../components/employee-cv-form/employee-cv-form.component";
-import { EmployeeInfoFormComponent } from "../../components/employee-info-form/employee-info-form.component";
-import { TranslateModule } from "@ngx-translate/core";
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Store } from "@ngrx/store";
-import { fetchEmployee, updateEmployee } from "../../../../store/employees/employees.actions";
-import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
-import { Observable, map, mergeMap, skip, tap } from "rxjs";
-import { selectEmployee } from "../../../../store/employees/employees.reducers";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
+import { Store } from "@ngrx/store";
+import { TranslateModule } from "@ngx-translate/core";
+import { NzButtonModule } from "ng-zorro-antd/button";
+import { NzTabsModule } from "ng-zorro-antd/tabs";
+import { Observable, skip } from "rxjs";
+import { Paths } from "../../../../shared/enums/routes";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
-import {
-  selectSpecializations,
-  selectDepartments,
-  selectSkills,
-  selectResponsibilities,
-  selectTeamRoles,
-} from "../../../../store/core/core.reducers";
+import { CvFormInterface, CvInterface } from "../../../../shared/interfaces/cv";
+import { EmployeeInterface } from "../../../../shared/interfaces/employee";
+import { ProjectInterface } from "../../../../shared/interfaces/project";
 import {
   addToBreadcrumbs,
-  deleteFromBreadcrumbs,
   fetchDepartments,
   fetchResponsibilities,
   fetchSkills,
@@ -38,15 +22,25 @@ import {
   popFromBreadcrumbs,
   setPageTitles,
 } from "../../../../store/core/core.actions";
-import { Paths } from "../../../../shared/enums/routes";
-import { AppState } from "../../../../store/state/state";
-import { EmployeesService } from "../../services/employees.service";
-import { CvFormInterface, CvInterface } from "../../../../shared/interfaces/cv";
+import {
+  selectDepartments,
+  selectResponsibilities,
+  selectSkills,
+  selectSpecializations,
+  selectTeamRoles,
+} from "../../../../store/core/core.reducers";
 import { addNewCv, fetchCvs, resetNewCvs } from "../../../../store/cvs/cvs.actions";
 import { selectCvList, selectNewCvList } from "../../../../store/cvs/cvs.reducers";
-import { ProjectInterface } from "../../../../shared/interfaces/project";
-import { selectProjectList } from "../../../../store/projects/projects.reducers";
+import { fetchEmployee, updateEmployee } from "../../../../store/employees/employees.actions";
+import { selectEmployee } from "../../../../store/employees/employees.reducers";
 import { fetchProjects } from "../../../../store/projects/projects.actions";
+import { selectProjectList } from "../../../../store/projects/projects.reducers";
+import { AppState } from "../../../../store/state/state";
+import { EmployeeCvFormComponent } from "../../components/employee-cv-form/employee-cv-form.component";
+import { EmployeeInfoFormComponent } from "../../components/employee-info-form/employee-info-form.component";
+import { EmployeesService } from "../../services/employees.service";
+import { NotificationsService } from "../../../../shared/services/notifications.service";
+import { EMPLOYEE_FORM_NOTIFICATIONS } from "../../../../shared/constants/successMessages";
 
 @UntilDestroy()
 @Component({
@@ -69,9 +63,11 @@ export class EditEmployeePageComponent implements OnInit {
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly store = inject(Store<AppState>);
   private readonly employeesService = inject(EmployeesService);
+  private readonly notificationService = inject(NotificationsService);
 
   public employeeId: number;
   public infoFormInvalid: boolean = false;
+  public messageList = EMPLOYEE_FORM_NOTIFICATIONS;
   // public cvData: CvFormInterface[] = [];
 
   public cvData$: Observable<CvFormInterface[]> = this.store.select(selectNewCvList);
@@ -139,7 +135,7 @@ export class EditEmployeePageComponent implements OnInit {
   public onSubmit() {
     if (this.employeeInfoForm.baseForm.invalid) {
       this.infoFormInvalid = true;
-      console.log("empl info form not sent");
+      this.notificationService.errorMessage(this.messageList.invalid);
       return;
     } else {
       this.infoFormInvalid = false;

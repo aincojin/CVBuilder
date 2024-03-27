@@ -66,7 +66,6 @@ export class InputComponent implements ControlValueAccessor {
   public writeValue(value: string): void {
     this.textControl.setValue(value);
     this.cdRef.detectChanges();
-    // setTimeout(() => console.log(this.textControl.value), 1000);
   }
 
   public registerOnChange(fn: (value: string) => void): void {

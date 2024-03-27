@@ -1,6 +1,10 @@
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { ProjectsApiService } from "../../shared/services/api/projects.api.service";
 import { Injectable, inject } from "@angular/core";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { catchError, concatMap, map, mergeMap, of, switchMap } from "rxjs";
+import { PROJECT_SUCCESS_MESSAGES } from "../../shared/constants/successMessages";
+import { ErrorInterface } from "../../shared/interfaces/error";
+import { ProjectsApiService } from "../../shared/services/api/projects.api.service";
+import { NotificationsService } from "../../shared/services/notifications.service";
 import {
   addProject,
   addProjectError,
@@ -13,11 +17,6 @@ import {
   updateProjectError,
   updateProjectSuccess,
 } from "./projects.actions";
-import { switchMap, map, concatMap, mergeMap, catchError, of } from "rxjs";
-import { ErrorInterface } from "../../shared/interfaces/error";
-import { updateEmployeeError } from "../employees/employees.actions";
-import { NotificationsService } from "../../shared/services/notifications.service";
-import { PROJECT_SUCCESS_MESSAGES } from "../../shared/constants/successMessages";
 
 @Injectable()
 export class ProjectsEffects {

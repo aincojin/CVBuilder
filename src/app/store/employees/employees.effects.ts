@@ -1,6 +1,16 @@
 import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Store } from "@ngrx/store";
+import { catchError, concatMap, map, of, switchMap, withLatestFrom } from "rxjs";
+import { EMPLOYEE_SUCCESS_MESSAGES } from "../../shared/constants/successMessages";
+import { CvDtoInterface, CvFormInterface } from "../../shared/interfaces/cv";
+import { ErrorInterface } from "../../shared/interfaces/error";
 import { EmployeesApiService } from "../../shared/services/api/employees.api.service";
+import { CvsService } from "../../shared/services/cvs.service";
+import { NotificationsService } from "../../shared/services/notifications.service";
+import { addCv, deleteCv, updateCv } from "../cvs/cvs.actions";
+import { selectNewCvList } from "../cvs/cvs.reducers";
+import { AppState } from "../state/state";
 import {
   addEmployee,
   addEmployeeError,
@@ -13,30 +23,6 @@ import {
   updateEmployeeError,
   updateEmployeeSuccess,
 } from "./employees.actions";
-import {
-  catchError,
-  concatMap,
-  filter,
-  map,
-  mergeMap,
-  of,
-  switchMap,
-  take,
-  tap,
-  withLatestFrom,
-} from "rxjs";
-import { EmployeeInterface } from "../../shared/interfaces/employee";
-import { Store } from "@ngrx/store";
-import { addCv, deleteCv, resetNewCvs, updateCv } from "../cvs/cvs.actions";
-import { AppState } from "../state/state";
-import { selectResponseData } from "./employees.reducers";
-import { selectNewCvList } from "../cvs/cvs.reducers";
-import { CvDtoInterface, CvFormInterface, CvInterface } from "../../shared/interfaces/cv";
-import { CvsService } from "../../shared/services/cvs.service";
-import { modifyCvsForAddition } from "../../shared/utils/mappers/cvs.mappers";
-import { ErrorInterface } from "../../shared/interfaces/error";
-import { NotificationsService } from "../../shared/services/notifications.service";
-import { EMPLOYEE_SUCCESS_MESSAGES } from "../../shared/constants/successMessages";
 
 @Injectable()
 export class EmployeesEffects {
@@ -77,32 +63,16 @@ export class EmployeesEffects {
       ofType(addEmployee),
       concatMap(action =>
         this.employeesApiService.addEmployee(action.newEmployee).pipe(
-          map(addedEmployee => {
-            this.notificationService.errorMessage(this.messageList.added);
-            return addEmployeeSuccess({ addedEmployee });
-          }),
-          tap(() => {
-            this.store
-              .select(selectResponseData)
-              .pipe(
-                filter(responseData => responseData !== null),
-                switchMap(responseData =>
-                  this.store.select(selectNewCvList).pipe(
-                    filter(cvList => cvList !== null),
-                    map(cvList => {
-                      const employeeId = responseData.id;
-                      cvList.forEach(cv => {
-                        const modifiedCv = this.cvsSharedService.cvFormToCvDto(cv, employeeId);
-                        console.log("Modified CV projects:", modifiedCv.projects);
-                        this.store.dispatch(addCv({ cv: modifiedCv }));
-                        // this.store.dispatch(resetNewCvs());
-                      });
-                    }),
-                  ),
-                ),
-                take(1),
-              )
-              .subscribe();
+          withLatestFrom(this.store.select(selectNewCvList)),
+          switchMap(([responseData, cvData]) => {
+            const employeeId = responseData.id;
+            cvData.forEach(cv => {
+              const modifiedCv = this.cvsSharedService.cvFormToCvDto(cv, employeeId);
+              console.log("Modified CV projects:", modifiedCv.projects);
+              this.store.dispatch(addCv({ cv: modifiedCv }));
+            });
+            this.notificationService.successMessage(this.messageList.added);
+            return of(addEmployeeSuccess({ addedEmployee: responseData }));
           }),
         ),
       ),
@@ -118,62 +88,46 @@ export class EmployeesEffects {
       ofType(updateEmployee),
       concatMap(action =>
         this.employeesApiService.updateEmployee(action.employee, action.employeeId).pipe(
-          map(updatedEmployee => {
+          withLatestFrom(this.store.select(selectNewCvList)),
+          switchMap(([responseData, cvData]) => {
+            console.log("responseData:", responseData);
+            console.log("cvData:", cvData);
+            if (responseData.cvs.length === 0) {
+              console.log("no cvs in response");
+              cvData.forEach(cv => this.addCvToStore(cv, responseData.id));
+            } else {
+              console.log("are cvs in response", cvData);
+              const cvToDelete = responseData.cvs.filter(
+                responseCv => !cvData.some(cv => cv.cvName === responseCv.cvName),
+              );
+              cvToDelete.forEach(cv => {
+                console.log("Deleting CV:", cv);
+                this.deleteCvFromStore(cv.id);
+              });
+
+              cvData.forEach(cv => {
+                let formCvId: number = null;
+                const foundCv = responseData.cvs.find(responseCv => {
+                  if (cv.cvName === responseCv.cvName) {
+                    formCvId = responseCv.id;
+                    return true;
+                  } else {
+                    return false;
+                  }
+                });
+                if (foundCv) {
+                  this.updateCvInStore(cv, responseData.id, formCvId);
+                } else {
+                  console.log("not found(adding to the store)");
+                  this.addCvToStore(cv, responseData.id);
+                }
+              });
+            }
             this.notificationService.successMessage(this.messageList.updated);
-            return updateEmployeeSuccess({ updatedEmployee });
+            return of(updateEmployeeSuccess({ updatedEmployee: responseData }));
           }),
         ),
       ),
-      tap(() => {
-        this.store
-          .select(selectResponseData)
-          .pipe(
-            filter(responseData => responseData != null),
-            switchMap(responseData =>
-              this.store.select(selectNewCvList).pipe(
-                filter(cvData => cvData != null),
-                tap(data => console.log(data)),
-                map(cvData => {
-                  console.log("responseData:", responseData);
-                  console.log("cvData:", cvData);
-                  if (responseData.cvs.length === 0) {
-                    console.log("no cvs in response");
-                    cvData.forEach(cv => this.addCvToStore(cv, responseData.id));
-                  } else {
-                    console.log("are cvs in response", cvData);
-                    const cvToDelete = responseData.cvs.filter(
-                      responseCv => !cvData.some(cv => cv.cvName === responseCv.cvName),
-                    );
-                    cvToDelete.forEach(cv => {
-                      console.log("Deleting CV:", cv);
-                      this.deleteCvFromStore(cv.id);
-                    });
-
-                    cvData.forEach(cv => {
-                      let formCvId: number;
-                      const foundCv = responseData.cvs.find(responseCv => {
-                        if (cv.cvName === responseCv.cvName) {
-                          formCvId = responseCv.id;
-                          return true;
-                        } else {
-                          return false;
-                        }
-                      });
-                      if (foundCv) {
-                        this.updateCvInStore(cv, responseData.id, formCvId);
-                      } else {
-                        console.log("not found(adding to the store)");
-                        this.addCvToStore(cv, responseData.id);
-                      }
-                    });
-                  }
-                }),
-              ),
-            ),
-            take(1),
-          )
-          .subscribe();
-      }),
       catchError((error: ErrorInterface) => {
         this.notificationService.errorMessage(error.message);
         return of(updateEmployeeError({ error: error }));

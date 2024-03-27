@@ -1,5 +1,10 @@
-import { Actions, act, createEffect, ofType } from "@ngrx/effects";
+import { Injectable, inject } from "@angular/core";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { catchError, concatMap, map, of, switchMap, tap } from "rxjs";
+import { CvInterface } from "../../shared/interfaces/cv";
+import { ErrorInterface } from "../../shared/interfaces/error";
 import { CvsApiService } from "../../shared/services/api/cvs.api.service";
+import { NotificationsService } from "../../shared/services/notifications.service";
 import {
   addCv,
   addCvError,
@@ -15,12 +20,6 @@ import {
   updateCvError,
   updateCvSuccess,
 } from "./cvs.actions";
-import { CvInterface } from "../../shared/interfaces/cv";
-import { Injectable, inject } from "@angular/core";
-import { switchMap, map, concatMap, mergeMap, tap, catchError, of } from "rxjs";
-import { ErrorInterface } from "../../shared/interfaces/error";
-import { updateEmployeeError } from "../employees/employees.actions";
-import { NotificationsService } from "../../shared/services/notifications.service";
 
 @Injectable()
 export class CvsEffects {
@@ -71,7 +70,7 @@ export class CvsEffects {
   updateCv$ = createEffect(() =>
     this.actions$.pipe(
       ofType(updateCv),
-      mergeMap(action =>
+      concatMap(action =>
         this.cvsApiService.updateCv(action.cv, action.cvId).pipe(
           map(updatedCv => {
             return updateCvSuccess({ updatedCv });

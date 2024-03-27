@@ -32,7 +32,7 @@ import { ProjectDtoInterface, ProjectInterface } from "../../../../shared/interf
 import { LANGUAGES_DATA, LEVELS_DATA } from "../../../../shared/constants/languages";
 import { ProjectsService } from "../../../../shared/services/projects.service";
 import { NotificationsService } from "../../../../shared/services/notifications.service";
-import { FORM_NOTIFICATIONS } from "../../../../shared/constants/successMessages";
+import { CV_FORM_NOTIFICATIONS } from "../../../../shared/constants/successMessages";
 
 @Component({
   selector: "cvgen-cv",
@@ -80,7 +80,7 @@ export class CvComponent {
   public cvName: string;
   public languagesData = LANGUAGES_DATA;
   public levelData = LEVELS_DATA;
-  public messageList = FORM_NOTIFICATIONS;
+  public messageList = CV_FORM_NOTIFICATIONS;
   public modifiedProject: ProjectDtoInterface;
 
   @Output() cvSavedEmitter: EventEmitter<CvFormInterface> = new EventEmitter<CvFormInterface>();
@@ -217,7 +217,6 @@ export class CvComponent {
   public onSave() {
     console.log("saving cv: ", this.baseForm.getRawValue());
     if (this.baseForm.invalid) {
-      console.log("cv form not saved");
       this.baseForm.markAllAsTouched();
       this.notificationService.errorMessage(this.messageList.invalid);
       return;
@@ -227,8 +226,6 @@ export class CvComponent {
         cvName: this.selectedCv.cvName,
         projects: this.projects.value,
       };
-      console.log(savedCv);
-
       console.log("savedcv: ", savedCv);
       this.cvSavedEmitter.emit(savedCv);
     }
