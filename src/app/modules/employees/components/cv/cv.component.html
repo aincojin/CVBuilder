@@ -108,6 +108,8 @@
           [selectedProjectData]="modifiedProject"
           [skillList]="skillData"
           [responsibilityList]="responsibilityList"
+          [projectIndex]="index"
+          (projectEmitter)="updateExistingProject(index, $event)"
           [teamRolesList]="teamRolesList"
         ></cvgen-project-form>
       </nz-collapse-panel>

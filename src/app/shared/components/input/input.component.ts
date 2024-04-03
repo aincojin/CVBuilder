@@ -55,7 +55,6 @@ export class InputComponent implements ControlValueAccessor {
       this.touched();
     }
   }
-  //TODO read more
   public ngDoCheck(): void {
     if (this.ngControl.control.touched) {
       this.textControl.markAsTouched();
@@ -65,7 +64,6 @@ export class InputComponent implements ControlValueAccessor {
 
   public writeValue(value: string): void {
     this.textControl.setValue(value);
-    this.cdRef.detectChanges();
   }
 
   public registerOnChange(fn: (value: string) => void): void {

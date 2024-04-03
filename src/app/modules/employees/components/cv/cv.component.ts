@@ -119,10 +119,6 @@ export class CvComponent {
         this.updateForm();
       }
     }
-    if (changes["selectedProject"] && changes["selectedProject"].currentValue) {
-      this.modifiedProject = this.projectsService.fromProjectToDto(this.selectedProject);
-      console.log(this.selectedCv.projects);
-    }
   }
 
   private updateProjects() {
@@ -142,6 +138,11 @@ export class CvComponent {
         );
       });
     }
+  }
+
+  public updateExistingProject(index: number, project: ProjectDtoInterface) {
+    this.projects.at(index).patchValue(project);
+    this.modifiedProject = project;
   }
 
   private updateForm(): void {
@@ -174,8 +175,6 @@ export class CvComponent {
 
   public addNewProject(project: ProjectInterface) {
     console.log("PROJECT IS BEING CREATED");
-    this.modifiedProject = this.projectsService.fromProjectToDto(project);
-    console.log(this.modifiedProject);
     this.projects.push(
       this.fb.group({
         projectName: project.projectName,

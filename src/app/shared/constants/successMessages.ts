@@ -8,6 +8,10 @@ export const EMPLOYEE_FORM_NOTIFICATIONS: FormMessageInterface = {
   valid: "Employee info is valid",
   invalid: "Employee info is invalid",
 };
+export const PROJECT_FORM_NOTIFICATIONS: FormMessageInterface = {
+  valid: "Project form is valid",
+  invalid: "Project form is invalid. Changes won't be saved",
+};
 export const EMPLOYEE_SUCCESS_MESSAGES: SuccessMessageInterface = {
   updated: "Employee successfully updated!",
   added: "Employee successfully added!",

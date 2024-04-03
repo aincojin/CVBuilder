@@ -59,9 +59,7 @@ export class SelectComponent implements OnInit {
   }
   public ngDoCheck(): void {
     if (this.ngControl.control.touched) {
-      // console.log("select touched", this.selectControl.touched);
       this.selectControl.markAsTouched();
-      // console.log(this.selectControl);
     } else {
       this.selectControl.markAsPristine();
     }
@@ -74,21 +72,12 @@ export class SelectComponent implements OnInit {
   }
 
   public writeValue(value: string | BaseEntityInterface): void {
-    // setTimeout(() => console.log(this.selectControl.value), 1000);
-    // console.log(value);
     if (typeof value === "string") {
-      // If value is already a string, directly set it as the value
       this.selectControl.setValue(value);
     } else if (value && typeof value === "object" && value.hasOwnProperty("name")) {
-      // If value is an object with 'name' property, extract 'name' and set it as the value
       this.selectControl.setValue(value.name);
     }
   }
-  // public writeValue(value: string): void {
-  //   this.selectControl.setValue(value);
-  //   setTimeout(() => console.log(this.selectControl.value), 1000);
-  //   console.log(value);
-  // }
 
   public registerOnChange(fn: (value: string) => void): void {
     this.changed = fn;

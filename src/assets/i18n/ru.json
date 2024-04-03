@@ -34,6 +34,10 @@
     "MAXLENGTH": "Слишком много символов",
     "IS_NUMERIC": "Введите число"
   },
+  "NOTIFICATION_LABEL": {
+    "SUCCESS": "Успешное выполнение",
+    "ERROR": "Ошибка"
+  },
   "BUTTON": {
     "LOG_IN": "Войти",
     "SUBMIT": "Подтвердить",

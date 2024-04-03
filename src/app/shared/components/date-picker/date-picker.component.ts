@@ -89,10 +89,8 @@ export class DatePickerComponent {
       // console.log("end date: ", value.endDate);
 
       this.dateRangeControl.setValue([value.startDate, value.endDate]);
-      this.cdRef.detectChanges();
     }
     // setTimeout(() => console.log("datepicker timeout:", this.dateRangeControl.value), 1000);
-    this.cdRef.detectChanges();
     // console.log(this.dateRangeControl.value);
   }
 

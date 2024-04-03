@@ -21,6 +21,9 @@ import { Paths } from "../../enums/routes";
 import { BaseEntityInterface } from "../../interfaces/base-entity";
 import { MultiselectComponent } from "../multiselect/multiselect.component";
 import { IsNumericValidator } from "../../validators/is-numeric";
+import { NotificationsService } from "../../services/notifications.service";
+import { FormMessageInterface } from "../../interfaces/notifications";
+import { PROJECT_FORM_NOTIFICATIONS } from "../../constants/successMessages";
 
 @Component({
   selector: "cvgen-project-form",
@@ -42,21 +45,22 @@ import { IsNumericValidator } from "../../validators/is-numeric";
 })
 export class ProjectFormComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly router = inject(Router);
-  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly notificationService = inject(NotificationsService);
 
   @Input() public selectedProjectData: ProjectDtoInterface;
   @Input() public skillList: BaseEntityInterface[];
   @Input() public responsibilityList: BaseEntityInterface[];
   @Input() public teamRolesList: BaseEntityInterface[];
+  @Input() public projectIndex: number;
 
   public projectForm: FormGroup;
+  public notificationList: FormMessageInterface = PROJECT_FORM_NOTIFICATIONS;
 
-  @Output() projectAddedEmitter: EventEmitter<ProjectDtoInterface> =
+  @Output() projectEmitter: EventEmitter<ProjectDtoInterface> =
     new EventEmitter<ProjectDtoInterface>();
 
-  @Output() projectUpdatedEmitter: EventEmitter<ProjectDtoInterface> =
-    new EventEmitter<ProjectDtoInterface>();
+  // @Output() projectUpdatedEmitter: EventEmitter<ProjectDtoInterface> =
+  //   new EventEmitter<ProjectDtoInterface>();
 
   @Output() projectCanceled: EventEmitter<void> = new EventEmitter<void>();
 
@@ -109,17 +113,17 @@ export class ProjectFormComponent {
 
     if (this.projectForm.invalid) {
       this.projectForm.markAllAsTouched();
-      console.log("proj form not sent");
+      this.notificationService.errorMessage(this.notificationList.invalid);
       return;
     } else {
       console.log("proj form sent");
-      this.projectAddedEmitter.emit(newProject);
-      this.projectUpdatedEmitter.emit(newProject);
-      this.projectForm.reset();
+      this.projectEmitter.emit(newProject);
+      // this.projectForm.reset();
     }
   }
 
   public onCancel() {
+    this.updateForm();
     this.projectCanceled.emit();
   }
 }

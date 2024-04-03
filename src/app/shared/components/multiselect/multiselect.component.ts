@@ -59,10 +59,6 @@ export class MultiselectComponent implements OnInit {
       });
   }
   public ngDoCheck(): void {
-    // if (this.selectControl.touched) {
-    //   console.log("multiselect touched: ", this.selectControl.touched);
-    // }
-
     if (this.ngControl.control.touched) {
       this.selectControl.markAsTouched();
     } else {
@@ -73,8 +69,6 @@ export class MultiselectComponent implements OnInit {
 
   public writeValue(value: string[]): void {
     this.selectControl.setValue(value);
-    // setTimeout(() => console.log(this.selectControl.value), 1000);
-    // console.log(value);
   }
 
   public registerOnChange(fn: (value: string[]) => void): void {
