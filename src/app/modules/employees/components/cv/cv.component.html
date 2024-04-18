@@ -81,22 +81,19 @@
   </form>
 </div>
 <div class="tab__projects">
-  <nz-button-group class="tab__projects-actions">
-    <nz-form-label nzRequired class="tab__projects-add-btn">
-      {{ "BUTTON.ADD_PROJECT" | translate }}
-    </nz-form-label>
-    <button nz-button nz-dropdown [nzDropdownMenu]="cvsProjects" nzPlacement="bottomRight">
-      <span nz-icon nzType="ellipsis"></span>
-    </button>
-  </nz-button-group>
-  <nz-dropdown-menu #cvsProjects="nzDropdownMenu">
-    <ul nz-menu>
-      @for (project of projectData; let index = $index; track index) {
-        <li nz-menu-item (click)="addNewProject(project)">{{ project.projectName }}</li>
-      }
-    </ul>
-  </nz-dropdown-menu>
-
+  <ng-container [formGroup]="projectSelectForm">
+    <cvgen-input
+      [label]="'NEW_PROJECT_NAME'"
+      inputType="text"
+      formControlName="newName"
+    ></cvgen-input>
+    <cvgen-select
+      [label]="'PROJECTS'"
+      formControlName="originalProject"
+      [listOfOptions]="projectData"
+    ></cvgen-select>
+    <button (click)="addNewProject()">+</button>
+  </ng-container>
   <nz-collapse class="tab__projects-collapse" nzAccordion>
     @for (project of projects.controls; let index = $index; track project) {
       <nz-collapse-panel
