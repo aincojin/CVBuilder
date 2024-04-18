@@ -4,8 +4,8 @@
     <nz-select nzAllowClear="true" [formControl]="selectControl" (nzBlur)="onSelectBlur()">
       <nz-option
         *ngFor="let item of listOfOptions"
-        [nzLabel]="item.name"
-        [nzValue]="item.name"
+        [nzLabel]="item | selectItemsDisplay"
+        [nzValue]="item | selectItemsDisplay"
       ></nz-option>
     </nz-select>
     <div class="error-wrapper" *ngIf="selectControl.touched">
