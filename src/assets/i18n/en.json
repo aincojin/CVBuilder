@@ -25,7 +25,9 @@
     "TECH_STACK": "Tech Stack",
     "ROLES": "Roles",
     "DESCRIPTION": "Description",
-    "RESPONSIBILITIES": "Responsibilities"
+    "RESPONSIBILITIES": "Responsibilities",
+    "NEW_PROJECT_NAME": "New Name",
+    "PROJECT_SELECTION": "Select Project"
   },
   "VALIDATION_ERROR": {
     "REQUIRED": "Please, specify the field",

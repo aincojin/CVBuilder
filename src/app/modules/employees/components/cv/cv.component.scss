@@ -47,6 +47,14 @@
   }
   .tab__projects {
     @include flex-container(flex-end, center, column);
+    .tab__projects-controls {
+      width: 40%;
+      @include flex-container(flex-start, center, column);
+      margin-bottom: 20px;
+      .tab__projects-control {
+        width: 30%;
+      }
+    }
     .tab__projects-collapse {
       width: 100%;
       margin: 10px 0 20px 0;
@@ -56,8 +64,5 @@
         }
       }
     }
-  }
-  .tab__projects-actions {
-    @include flex-container(initial, flex-end);
   }
 }
