@@ -15,6 +15,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { BaseEntityInterface } from "../../interfaces/base-entity";
 import { VALIDATION_ERR } from "../../constants/errors.const";
 import { ValidationErrorPipe } from "../../pipes/validation-error.pipe";
+import { SelectItemsDisplayPipe } from "../../pipes/select-items-display.pipe";
 
 @UntilDestroy()
 @Component({
@@ -27,16 +28,17 @@ import { ValidationErrorPipe } from "../../pipes/validation-error.pipe";
     TranslateModule,
     NzSelectModule,
     ValidationErrorPipe,
+    SelectItemsDisplayPipe,
   ],
   templateUrl: "./select.component.html",
   styleUrl: "./select.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent implements OnInit {
+export class SelectComponent<T> implements OnInit {
   @Input() public label: string;
-  @Input() public listOfOptions: BaseEntityInterface[];
+  @Input() public listOfOptions: readonly T[] = [];
 
-  public changed: (value: string) => void;
+  public changed: (value: T) => void;
   public touched: () => void;
   public selectControl = new FormControl();
   public validationErr = VALIDATION_ERR;
@@ -48,20 +50,16 @@ export class SelectComponent implements OnInit {
     ngControl.valueAccessor = this;
   }
   ngOnInit(): void {
-    this.selectControl.valueChanges
-      .pipe(untilDestroyed(this))
-      .subscribe((selectedOptions: string) => {
-        console.log("Selected options: ", selectedOptions);
-        if (this.changed) {
-          this.changed(selectedOptions);
-        }
-      });
+    this.selectControl.valueChanges.pipe(untilDestroyed(this)).subscribe((selectedOptions: T) => {
+      console.log("Selected options: ", selectedOptions);
+      if (this.changed) {
+        this.changed(selectedOptions);
+      }
+    });
   }
   public ngDoCheck(): void {
     if (this.ngControl.control.touched) {
       this.selectControl.markAsTouched();
-    } else {
-      this.selectControl.markAsPristine();
     }
     this.cdRef.markForCheck();
   }
@@ -70,16 +68,16 @@ export class SelectComponent implements OnInit {
       this.touched();
     }
   }
-
-  public writeValue(value: string | BaseEntityInterface): void {
-    if (typeof value === "string") {
+  public writeValue(value: T): void {
+    if (value && value.hasOwnProperty("name")) {
+      const nameValue = (value as BaseEntityInterface).name;
+      this.selectControl.setValue(nameValue);
+    } else {
       this.selectControl.setValue(value);
-    } else if (value && typeof value === "object" && value.hasOwnProperty("name")) {
-      this.selectControl.setValue(value.name);
     }
   }
 
-  public registerOnChange(fn: (value: string) => void): void {
+  public registerOnChange(fn: (value: T) => void): void {
     this.changed = fn;
   }
   public registerOnTouched(fn: () => void): void {

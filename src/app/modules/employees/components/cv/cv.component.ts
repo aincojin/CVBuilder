@@ -7,7 +7,14 @@ import {
   SimpleChanges,
   inject,
 } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../../../store/state/state";
@@ -77,6 +84,7 @@ export class CvComponent {
   @Input() public projectData: ProjectInterface[];
 
   public baseForm: FormGroup;
+  public projectSelectForm: FormGroup;
   public cvName: string;
   public languagesData = LANGUAGES_DATA;
   public levelData = LEVELS_DATA;
@@ -102,6 +110,10 @@ export class CvComponent {
     if (this.selectedCv) {
       this.updateForm();
     }
+    this.projectSelectForm = this.fb.group({
+      newName: ["", Validators.required],
+      originalProject: [null, Validators.required],
+    });
   }
 
   public get languages() {
@@ -173,18 +185,25 @@ export class CvComponent {
     console.log("BaseForm value: ", this.baseForm.getRawValue());
   }
 
-  public addNewProject(project: ProjectInterface) {
+  public addNewProject() {
     console.log("PROJECT IS BEING CREATED");
+    const originalProjectName: string = this.projectSelectForm.get("originalProject").value;
+    const originalProject: ProjectInterface = this.projectData.find(
+      project => project.projectName === originalProjectName,
+    );
+    const newProjectName: string = this.projectSelectForm.get("newName").value;
+    console.log(originalProject);
+
     this.projects.push(
       this.fb.group({
-        projectName: project.projectName,
-        description: project.description,
-        startDate: project.startDate,
-        endDate: project.endDate,
-        teamSize: project.teamSize,
-        techStack: [project.techStack.map(skill => skill.name)],
-        responsibilities: [project.responsibilities.map(resp => resp.name)],
-        teamRoles: [project.teamRoles.map(role => role.name)],
+        projectName: newProjectName,
+        description: originalProject.description,
+        startDate: originalProject.startDate,
+        endDate: originalProject.endDate,
+        teamSize: originalProject.teamSize,
+        techStack: [originalProject.techStack.map(skill => skill.name)],
+        responsibilities: [originalProject.responsibilities.map(resp => resp.name)],
+        teamRoles: [originalProject.teamRoles.map(role => role.name)],
       }),
     );
     console.log("project created:", this.projects.controls);

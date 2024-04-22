@@ -25,7 +25,9 @@
     "TECH_STACK": "Стек технологий",
     "ROLES": "Роли",
     "DESCRIPTION": "Описание",
-    "RESPONSIBILITIES": "Задачи"
+    "RESPONSIBILITIES": "Задачи",
+    "NEW_PROJECT_NAME": "Новое Имя",
+    "PROJECT_SELECTION": "Выберите Проект"
   },
   "VALIDATION_ERROR": {
     "REQUIRED": "Пожалуйста, заполните поле",
