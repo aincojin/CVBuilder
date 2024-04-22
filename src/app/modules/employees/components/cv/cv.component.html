@@ -93,12 +93,7 @@
         formControlName="originalProject"
         [listOfOptions]="projectData"
       ></cvgen-select>
-      <button
-        nz-button
-        nzType="primary"
-        [disabled]="!projectSelectForm.valid"
-        (click)="addNewProject()"
-      >
+      <button nz-button nzType="primary" (click)="addNewProject()">
         Add Project <span nz-icon nzType="plus"></span>
       </button>
     </div>
