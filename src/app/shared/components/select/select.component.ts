@@ -60,8 +60,6 @@ export class SelectComponent<T> implements OnInit {
   public ngDoCheck(): void {
     if (this.ngControl.control.touched) {
       this.selectControl.markAsTouched();
-    } else {
-      this.selectControl.markAsPristine();
     }
     this.cdRef.markForCheck();
   }
@@ -70,13 +68,12 @@ export class SelectComponent<T> implements OnInit {
       this.touched();
     }
   }
-  public writeValue(value: T | BaseEntityInterface): void {
-    // this.selectControl.setValue(value);
-    if (typeof value === "string") {
-      this.selectControl.setValue(value);
-    } else if (value && typeof value === "object" && value.hasOwnProperty("name")) {
-      const nameValue = (value as any).name; // Type assertion
+  public writeValue(value: T): void {
+    if (value && value.hasOwnProperty("name")) {
+      const nameValue = (value as BaseEntityInterface).name;
       this.selectControl.setValue(nameValue);
+    } else {
+      this.selectControl.setValue(value);
     }
   }
 
