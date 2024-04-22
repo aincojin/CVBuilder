@@ -23,7 +23,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { NzFormModule } from "ng-zorro-antd/form";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
 import { SelectComponent } from "../../../../shared/components/select/select.component";
-import { EmployeeInterface } from "../../../../shared/interfaces/employee";
+import { EmployeeDtoInterface, EmployeeInterface } from "../../../../shared/interfaces/employee";
 import { MultiselectComponent } from "../../../../shared/components/multiselect/multiselect.component";
 import { CvFormInterface, CvInterface } from "../../../../shared/interfaces/cv";
 import { Store } from "@ngrx/store";
@@ -37,6 +37,7 @@ import { selectProject } from "../../../../store/projects/projects.reducers";
 import { fetchProject } from "../../../../store/projects/projects.actions";
 import { NotificationsService } from "../../../../shared/services/notifications.service";
 import { CV_FORM_NOTIFICATIONS } from "../../../../shared/constants/successMessages";
+import { EmployeesService } from "../../services/employees.service";
 
 @Component({
   selector: "cvgen-employee-cv-form",
@@ -66,8 +67,10 @@ import { CV_FORM_NOTIFICATIONS } from "../../../../shared/constants/successMessa
 export class EmployeeCvFormComponent {
   private readonly store = inject(Store<AppState>);
   private readonly notificationService = inject(NotificationsService);
+  private readonly employeesService = inject(EmployeesService);
 
   @Input() public selectedEmployeeData: EmployeeInterface;
+  @Input() public addedEmployeeData: EmployeeDtoInterface;
   @Input() public departmentData: BaseEntityInterface[];
   @Input() public specializationData: BaseEntityInterface[];
   @Input() public skillData: BaseEntityInterface[];
@@ -89,29 +92,24 @@ export class EmployeeCvFormComponent {
 
   public addCv() {
     const uniqueCvName = this.generateUniqueCvName();
+    console.log(this.addedEmployeeData);
+
+    let employeeData: EmployeeDtoInterface = this.selectedEmployeeData
+      ? this.employeesService.transformToDto(this.selectedEmployeeData)
+      : this.addedEmployeeData;
+
     const newCv: CvFormInterface = {
-      // cvName: uniqueCvName,
-      // cvsProjects: [],
-      // firstName: "",
-      // lastName: "",
-      // email: "",
-      // department: "",
-      // specialization: "",
-      // skills: [],
-      // language: [],
       cvName: uniqueCvName,
       projects: [],
-      firstName: "test",
-      lastName: "test",
-      email: "test@gmail.com",
-      department: "dept1",
-      specialization: "spec1",
-      skills: ["tech1", "tech2"],
+      firstName: employeeData.firstName,
+      lastName: employeeData.lastName,
+      email: employeeData.email,
+      department: employeeData.department,
+      specialization: employeeData.specialization,
+      skills: [],
       language: [],
     };
     this.store.dispatch(addNewCv({ newCv }));
-    //TODO OR move it to the create page
-    // this.cvAddedEmitter.emit(newCv);
   }
   private generateUniqueCvName(): string {
     const uniqueId = Date.now();
