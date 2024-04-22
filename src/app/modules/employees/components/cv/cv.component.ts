@@ -7,17 +7,7 @@ import {
   SimpleChanges,
   inject,
 } from "@angular/core";
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Store } from "@ngrx/store";
-import { AppState } from "../../../../store/state/state";
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { TranslateModule } from "@ngx-translate/core";
 import { NzButtonModule } from "ng-zorro-antd/button";
@@ -37,9 +27,9 @@ import { CvFormInterface } from "../../../../shared/interfaces/cv";
 import { BaseEntityInterface } from "../../../../shared/interfaces/base-entity";
 import { ProjectDtoInterface, ProjectInterface } from "../../../../shared/interfaces/project";
 import { LANGUAGES_DATA, LEVELS_DATA } from "../../../../shared/constants/languages";
-import { ProjectsService } from "../../../../shared/services/projects.service";
 import { NotificationsService } from "../../../../shared/services/notifications.service";
 import { CV_FORM_NOTIFICATIONS } from "../../../../shared/constants/successMessages";
+import { EmployeesService } from "../../services/employees.service";
 
 @Component({
   selector: "cvgen-cv",
@@ -68,11 +58,8 @@ import { CV_FORM_NOTIFICATIONS } from "../../../../shared/constants/successMessa
 })
 export class CvComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly projectsService = inject(ProjectsService);
   private readonly notificationService = inject(NotificationsService);
-  private readonly router = inject(Router);
-  private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly store = inject(Store<AppState>);
+  private readonly employeesService = inject(EmployeesService);
 
   @Input() public selectedCv: CvFormInterface;
   @Input() public selectedProject: ProjectInterface;
@@ -127,8 +114,8 @@ export class CvComponent {
   public ngOnChanges(changes: SimpleChanges) {
     if (changes["selectedCv"] && changes["selectedCv"].currentValue) {
       if (this.baseForm) {
-        console.log("CHANGING THE CVFORM");
         this.updateForm();
+        this.employeesService.clearProjectSelectForm(this.projectSelectForm);
       }
     }
   }
@@ -161,7 +148,6 @@ export class CvComponent {
     this.languages.clear();
     this.projects.clear();
     console.log(this.selectedCv);
-
     this.selectedCv.language.forEach(language => {
       this.languages.push(
         this.fb.group({
@@ -186,14 +172,10 @@ export class CvComponent {
   }
 
   public addNewProject() {
-    console.log("PROJECT IS BEING CREATED");
-    const originalProjectName: string = this.projectSelectForm.get("originalProject").value;
     const originalProject: ProjectInterface = this.projectData.find(
-      project => project.projectName === originalProjectName,
+      project => project.projectName === this.projectSelectForm.get("originalProject").value,
     );
     const newProjectName: string = this.projectSelectForm.get("newName").value;
-    console.log(originalProject);
-
     this.projects.push(
       this.fb.group({
         projectName: newProjectName,
@@ -207,12 +189,11 @@ export class CvComponent {
       }),
     );
     console.log("project created:", this.projects.controls);
+    this.employeesService.clearProjectSelectForm(this.projectSelectForm);
   }
 
   public deleteProject(index: number) {
-    console.log("projects before deletion: ", this.projects.controls);
     this.projects.removeAt(index);
-    console.log("projects after deletion: ", this.projects.controls);
   }
 
   public addLanguage() {
@@ -233,7 +214,6 @@ export class CvComponent {
   }
 
   public onSave() {
-    console.log("saving cv: ", this.baseForm.getRawValue());
     if (this.baseForm.invalid) {
       this.baseForm.markAllAsTouched();
       this.notificationService.errorMessage(this.messageList.invalid);
